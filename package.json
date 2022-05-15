@@ -18,7 +18,8 @@
     "lint:eslint": "eslint \"src/**/*.{vue,ts,tsx}\" --fix",
     "lint:prettier": "prettier --write  \"src/**/*.{js,json,tsx,css,less,scss,vue,html,md}\"",
     "lint": "pnpm lint:eslint && pnpm lint:prettier",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "commit": "cz"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^1.1.4",
@@ -47,6 +48,7 @@
     "@vitejs/plugin-vue": "^2.3.3",
     "@vue/eslint-config-prettier": "^7.0.0",
     "@vue/eslint-config-typescript": "^10.0.0",
+    "commitizen": "^4.2.4",
     "eslint": "^8.15.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^8.7.1",

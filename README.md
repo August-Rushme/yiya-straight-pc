@@ -1,6 +1,6 @@
 ## ⚡️ 简介
 
-神州牙都会医生PC端
+神州牙都会医生 PC 端
 
 ## 特性
 
@@ -44,10 +44,10 @@
 4. pnpm 版本 7.x
 
 # 克隆项目
-git clone https://github.com/un-pany/v3-admin-vite.git
+git clone https://github.com/August-Rushme/yiya-straight-pc.git
 
 # 进入项目目录
-cd v3-admin-vite
+cd yiya-straight-pc
 
 # 安装依赖
 pnpm i
@@ -101,4 +101,3 @@ pnpm lint
 - `types` 类型定义文件更改
 - `wip` 开发中
 - `mod` 不确定分类的修改
-

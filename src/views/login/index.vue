@@ -81,7 +81,7 @@ const state = reactive({
     <ThemeSwitch class="theme-switch" />
     <div class="login-card">
       <div class="title">
-        <img src="https://oss-augustrush.oss-cn-shenzhen.aliyuncs.com/yayiImage/logo.png" />
+        <img src="@/assets/layout/3.png" />
       </div>
       <div class="content">
         <el-form ref="loginFormDom" :model="state.loginForm" :rules="state.loginRules" @keyup.enter="state.handleLogin">

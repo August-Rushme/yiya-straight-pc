@@ -4,6 +4,7 @@ import { useRouter } from "vue-router"
 import { useUserStore } from "@/store/modules/user"
 // import { User, Lock, Key } from "@element-plus/icons-vue"
 import ThemeSwitch from "@/components/ThemeSwitch/index.vue"
+import message from "@/utils/message"
 
 interface ILoginForm {
   /** admin 或 editor */
@@ -53,6 +54,7 @@ const state = reactive({
             router.push({ path: "/" }).catch((err) => {
               console.warn(err)
             })
+            message.success("登录成功")
           })
           .catch(() => {
             state.loading = false

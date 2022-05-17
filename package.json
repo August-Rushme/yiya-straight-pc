@@ -1,6 +1,6 @@
 {
   "name": "yiya-straight-pc",
-  "version": "3.1.6",
+  "version": "1.0.0",
   "description": "yiya-straight-pc，基于 Vue3、TypeScript、Element-Plus、Pinia 和 Vite 等主流技术.",
   "author": {
     "name": "pany"

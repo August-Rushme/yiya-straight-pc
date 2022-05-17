@@ -2,7 +2,7 @@
 import { reactive, ref } from "vue"
 import { useRouter } from "vue-router"
 import { useUserStore } from "@/store/modules/user"
-import { User, Lock, Key } from "@element-plus/icons-vue"
+// import { User, Lock, Key } from "@element-plus/icons-vue"
 import ThemeSwitch from "@/components/ThemeSwitch/index.vue"
 
 interface ILoginForm {
@@ -22,10 +22,11 @@ const state = reactive({
   loading: false,
   /** 验证码图片 URL */
   codeUrl: "",
+  isKeepPassword: true,
   /** 登录表单 */
   loginForm: {
     username: "admin",
-    password: "12345678",
+    password: "admin123",
     code: "abcd"
   } as ILoginForm,
   /** 登录表单校验规则 */
@@ -79,50 +80,72 @@ const state = reactive({
 <template>
   <div class="login-container">
     <ThemeSwitch class="theme-switch" />
+
     <div class="login-card">
       <div class="title">
-        <img src="@/assets/layout/3.png" />
+        <svg
+          class="titleIcon"
+          width="340"
+          height="90"
+          viewBox="0 0 424 90"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M14 0H394C410.569 0 424 13.4315 424 30V30C424 46.5685 410.569 60 394 60H14V0Z" fill="#0F6BF4" />
+          <path d="M0 15C0 6.71573 6.71573 0 15 0V0V60H0V15Z" fill="#0F6BF4" />
+          <rect y="59" width="15" height="15" fill="#0F6BF4" />
+          <g filter="url(#filter0_b_0_1)">
+            <path d="M0 75C0 66.7157 6.71573 60 15 60V60V90V90C6.71573 90 0 83.2843 0 75V75Z" fill="#478DF5" />
+          </g>
+          <defs>
+            <filter
+              id="filter0_b_0_1"
+              x="-4"
+              y="56"
+              width="23"
+              height="38"
+              filterUnits="userSpaceOnUse"
+              color-interpolation-filters="sRGB"
+            >
+              <feFlood flood-opacity="0" result="BackgroundImageFix" />
+              <feGaussianBlur in="BackgroundImage" stdDeviation="2" />
+              <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_0_1" />
+              <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur_0_1" result="shape" />
+            </filter>
+          </defs>
+        </svg>
+
+        <h2>神州牙都会</h2>
       </div>
       <div class="content">
         <el-form ref="loginFormDom" :model="state.loginForm" :rules="state.loginRules" @keyup.enter="state.handleLogin">
-          <el-form-item prop="username">
-            <el-input
-              v-model="state.loginForm.username"
-              placeholder="用户名"
-              type="text"
-              tabindex="1"
-              :prefix-icon="User"
-              size="large"
-            />
+          <el-form-item prop="username" label="账号:" class="username">
+            <el-input v-model="state.loginForm.username" placeholder="用户名" type="text" tabindex="1" size="large" />
           </el-form-item>
-          <el-form-item prop="password">
+          <el-form-item prop="password" label="密码:" class="password">
             <el-input
               v-model="state.loginForm.password"
               placeholder="密码"
               type="password"
               tabindex="2"
-              :prefix-icon="Lock"
               size="large"
               show-password
             />
           </el-form-item>
-          <el-form-item prop="code">
-            <el-input
-              v-model="state.loginForm.code"
-              placeholder="验证码"
-              type="text"
-              tabindex="3"
-              :prefix-icon="Key"
-              maxlength="4"
-              size="large"
-            />
-            <span class="show-code">
-              <img :src="state.codeUrl" @click="state.createCode" />
-            </span>
-          </el-form-item>
-          <el-button :loading="state.loading" type="primary" size="large" @click.prevent="state.handleLogin">
+          <div class="account-control">
+            <el-checkbox v-model="state.isKeepPassword">记住密码</el-checkbox>
+            <el-link type="primary" :underline="false">忘记密码</el-link>
+          </div>
+          <el-button
+            class="loginBtn"
+            :loading="state.loading"
+            type="primary"
+            size="large"
+            @click.prevent="state.handleLogin"
+          >
             登 录
           </el-button>
+          <div class="bottom">Copyright 2022 神州牙都会 | 后台管理系统</div>
         </el-form>
       </div>
     </div>
@@ -136,6 +159,7 @@ const state = reactive({
   align-items: center;
   width: 100%;
   min-height: 100%;
+  margin: 0 5px;
   .theme-switch {
     position: fixed;
     top: 5%;
@@ -143,22 +167,44 @@ const state = reactive({
     cursor: pointer;
   }
   .login-card {
-    width: 480px;
+    width: 360px;
     border-radius: 20px;
     box-shadow: 0 0 10px #dcdfe6;
     background-color: #fff;
-    overflow: hidden;
+
     .title {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 150px;
-      img {
-        height: 100%;
+      height: 60px;
+      position: relative;
+      margin-top: 12px;
+      .titleIcon {
+        margin-left: -12px;
       }
+      h2 {
+        margin-top: -75px;
+        margin-left: 110px;
+        color: white;
+        position: absolute;
+      }
+    }
+    .account-control {
+      margin-top: 30px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .bottom {
+      margin-top: 50px;
+      text-align: center;
+      color: gray;
+      font-size: 12px;
     }
     .content {
       padding: 20px 50px 50px 50px;
+      .username {
+        margin-top: 40px;
+      }
+      .password {
+        margin-top: 40px;
+      }
       .show-code {
         position: absolute;
         right: 0px;
@@ -173,7 +219,7 @@ const state = reactive({
       }
       .el-button {
         width: 100%;
-        margin-top: 10px;
+        margin-top: 40px;
       }
     }
   }

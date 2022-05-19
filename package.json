@@ -21,6 +21,11 @@
     "prepare": "husky install",
     "commit": "cz"
   },
+  "config": {
+    "commitizen": {
+      "path": "cz-customizable"
+    }
+  },
   "dependencies": {
     "@element-plus/icons-vue": "^1.1.4",
     "axios": "^0.27.2",
@@ -38,6 +43,7 @@
     "vue-router": "^4.0.15"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.0.0",
     "@types/js-cookie": "^3.0.2",
     "@types/lodash-es": "^4.17.6",
     "@types/node": "^17.0.32",
@@ -49,6 +55,8 @@
     "@vue/eslint-config-prettier": "^7.0.0",
     "@vue/eslint-config-typescript": "^10.0.0",
     "commitizen": "^4.2.4",
+    "commitlint-config-cz": "^0.13.3",
+    "cz-customizable": "^6.3.0",
     "eslint": "^8.15.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^8.7.1",

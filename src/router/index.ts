@@ -65,6 +65,29 @@ export const constantRoutes: Array<RouteRecordRaw> = [
  */
 export const asyncRoutes: Array<RouteRecordRaw> = [
   {
+    path: "/system",
+    component: Layout,
+    redirect: "/system/user",
+    name: "System",
+    meta: {
+      title: "人事管理",
+      icon: "personnel",
+      roles: ["admin"], // 可以在根路由中设置角色
+      alwaysShow: true
+    },
+    children: [
+      {
+        path: "user",
+        component: () => import("@/views/system/user/index.vue"),
+        name: "User",
+        meta: {
+          title: "用户管理",
+          roles: ["admin"]
+        }
+      }
+    ]
+  },
+  {
     path: "/:pathMatch(.*)*", // 必须将 'ErrorPage' 路由放在最后, Must put the 'ErrorPage' route at the end
     component: Layout,
     redirect: "/404",

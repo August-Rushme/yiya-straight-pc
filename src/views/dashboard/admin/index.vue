@@ -1,3 +1,5 @@
 <template>
-  <div class="app-container">Admin 权限可见</div>
+  <div class="app-container">
+    <el-card> 首页 </el-card>
+  </div>
 </template>

@@ -41,7 +41,7 @@ specifiers:
   vue-tsc: ^0.34.13
 
 dependencies:
-  '@element-plus/icons-vue': 1.1.4_vue@3.2.33
+  '@element-plus/icons-vue': 1.1.4
   axios: 0.27.2
   dayjs: 1.11.2
   element-plus: 2.2.0_vue@3.2.33
@@ -116,6 +116,12 @@ packages:
   /@ctrl/tinycolor/3.4.1:
     resolution: {integrity: sha512-ej5oVy6lykXsvieQtqZxCOaLT+xD4+QNarq78cIYISHmZXshCvROLudpQN3lfL8G0NL7plMSSK+zlyvCaIJ4Iw==}
     engines: {node: '>=10'}
+    dev: false
+
+  /@element-plus/icons-vue/1.1.4:
+    resolution: {integrity: sha512-Iz/nHqdp1sFPmdzRwHkEQQA3lKvoObk8azgABZ81QUOpW9s/lUyQVUSh0tNtEPZXQlKwlSh7SPgoVxzrE0uuVQ==}
+    peerDependencies:
+      vue: ^3.2.0
     dev: false
 
   /@element-plus/icons-vue/1.1.4_vue@3.2.33:

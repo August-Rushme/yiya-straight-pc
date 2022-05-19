@@ -12,7 +12,7 @@ html {
 
 body {
   height: 100%;
-  background-color: #f0f2f5; // 全局背景色
+  background-color: #f5f7fe; // 全局背景色
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial,
@@ -39,4 +39,20 @@ a:hover {
 
 div:focus {
   outline: none;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 8px;
+  background-color: #ebeef5;
+}
+::-webkit-scrollbar-thumb {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #ccc;
+}
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 1);
 }

@@ -4,7 +4,7 @@ import "@/router/permission"
 import store from "./store"
 import App from "./App.vue"
 import ElementPlus from "element-plus"
-import loadSvg from "@/icons"
+import loadSvg, { iconRegister } from "@/icons"
 import * as directives from "@/directives"
 
 import "uno.css"
@@ -18,6 +18,8 @@ const app = createApp(App)
 app.use(ElementPlus)
 /** 加载全局 svg */
 loadSvg(app)
+/**注册icon */
+app.use(iconRegister)
 /** 自定义指令 */
 Object.keys(directives).forEach((key) => {
   app.directive(key, (directives as { [key: string]: Directive })[key])

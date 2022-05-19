@@ -1,18 +1,18 @@
 module.exports = {
   types: [
-    { value: "feat", name: "feat 🍄:    新增新的特性" },
-    { value: "fix", name: "fix 🐛:    修复 BUG" },
-    { value: "docs", name: "docs 📄:    修改文档、注释" },
+    { value: "feat", name: "feat🍄:    新增新的特性" },
+    { value: "fix", name: "fix🐛:    修复 BUG" },
+    { value: "docs", name: "docs📄:    修改文档、注释" },
     {
       value: "refactor",
-      name: "refactor 🎸:    代码重构，注意和特性、修复区分开"
+      name: "refactor🎸:    代码重构，注意和特性、修复区分开"
     },
-    { value: "perf", name: "perf ⚡:    提升性能" },
-    { value: "test", name: "test 👀:    添加一个测试" },
-    { value: "tool", name: "tool 🚗:    开发工具变动(构建、脚手架工具等)" },
-    { value: "style", name: "style ✂:    对代码格式的修改不影响逻辑" },
-    { value: "revert", name: "revert 🌝:     版本回滚" },
-    { value: "update", name: "update ⬆:    第三方库升级 " }
+    { value: "perf", name: "perf⚡:    提升性能" },
+    { value: "test", name: "test👀:    添加一个测试" },
+    { value: "tool", name: "tool🚗:    开发工具变动(构建、脚手架工具等)" },
+    { value: "style", name: "style✂:    对代码格式的修改不影响逻辑" },
+    { value: "revert", name: "revert🌝:     版本回滚" },
+    { value: "update", name: "update⬆:    第三方库升级 " }
   ],
 
   scopes: [{ name: "组件" }, { name: "样式" }, { name: "文档更改" }, { name: "其它变更" }],

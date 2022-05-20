@@ -21,7 +21,7 @@ module.exports = {
   ticketNumberPrefix: "TICKET-",
   ticketNumberRegExp: "d{1,5}",
   messages: {
-    type: "选择一种你的提交类型:",
+    type: "选择一种提交类型:",
     scope: "选择一个scope (可选):",
     customScope: "Denote the SCOPE of this change:",
     subject: "简要说明:\n",

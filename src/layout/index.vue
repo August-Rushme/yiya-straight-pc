@@ -22,9 +22,9 @@ const classObj = computed(() => {
     mobile: device.value === DeviceType.Mobile
   }
 })
-const showSettings = computed(() => {
-  return settingsStore.showSettings
-})
+// const showSettings = computed(() => {
+//   return settingsStore.showSettings
+// })
 const showTagsView = computed(() => {
   return settingsStore.showTagsView
 })
@@ -54,7 +54,7 @@ onBeforeUnmount(() => {
         <TagsView v-if="showTagsView" />
       </div>
       <AppMain />
-      <RightPanel v-if="showSettings">
+      <RightPanel v-if="false">
         <Settings />
       </RightPanel>
     </div>

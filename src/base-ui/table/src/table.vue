@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineEmits, PropType } from "vue"
+import { PropType } from "vue"
 export interface IPropItem {
   prop?: string | any
   label: string

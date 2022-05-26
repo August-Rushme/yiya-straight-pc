@@ -17,7 +17,7 @@ const props = defineProps({
 
 const store = useSystemStore()
 // 注册事件
-const emit = defineEmits(["editBtnClick", "deleteBtnClick", "checkBtnClick", "newBtnClick"])
+const emit = defineEmits(["editBtnClick", "deleteBtnClick", "checkBtnClick", "newBtnClick", "saveBtnClick"])
 
 const pageInfo = ref<PageInfo>({
   query: "",
@@ -52,6 +52,9 @@ const otherPropSlots = props.contentTableConfig?.propList.filter((item: any) => 
 // 删除/新建/编辑等操作
 const handleEditClick = (item: any) => {
   emit("editBtnClick", item)
+}
+const handleSaveClick = (item: any) => {
+  emit("saveBtnClick", item)
 }
 const handleDeleteClick = (item: any) => {
   emit("deleteBtnClick", item)
@@ -107,11 +110,15 @@ defineExpose({
       <!-- 操作按钮 -->
       <template #handler="scope">
         <div class="handler-btns">
-          <el-button style="font-size: 10px" size="small" type="primary" @click="handleEditClick(scope.row)">
+          <el-button v-if="scope.row.edit" size="default" type="success" @click="handleSaveClick(scope.row)"
+            ><el-icon><check /></el-icon>保存</el-button
+          >
+
+          <el-button v-else style="font-size: 10px" size="default" @click="handleEditClick(scope.row)">
             <el-icon mr1><edit /></el-icon>
             编辑</el-button
           >
-          <el-button style="font-size: 10px" size="small" type="danger" @click="handleDeleteClick(scope.row)">
+          <el-button style="font-size: 10px" size="default" type="danger" @click="handleDeleteClick(scope.row)">
             <el-icon mr1><delete /></el-icon>
             删除</el-button
           >

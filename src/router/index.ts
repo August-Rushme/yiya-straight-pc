@@ -81,7 +81,16 @@ export const asyncRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/system/user/index.vue"),
         name: "User",
         meta: {
-          title: "用户管理",
+          title: "员工管理",
+          roles: ["admin"]
+        }
+      },
+      {
+        path: "role",
+        component: () => import("@/views/system/user/index.vue"),
+        name: "Role",
+        meta: {
+          title: "角色管理",
           roles: ["admin"]
         }
       }

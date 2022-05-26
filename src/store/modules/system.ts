@@ -44,7 +44,8 @@ export const useSystemStore = defineStore({
           enable: true,
           created: "2022-05-18",
           updated: "2022-05-18",
-          status: 1
+          status: 1,
+          edit: false
         },
         {
           username: "张二",
@@ -53,7 +54,8 @@ export const useSystemStore = defineStore({
           enable: true,
           created: "2022-05-18",
           updated: "2022-05-18",
-          status: 1
+          status: 1,
+          edit: false
         },
         {
           username: "张四",
@@ -62,7 +64,8 @@ export const useSystemStore = defineStore({
           enable: true,
           created: "2022-05-18",
           updated: "2022-05-18",
-          status: 1
+          status: 1,
+          edit: false
         },
         {
           username: "张五",
@@ -71,7 +74,8 @@ export const useSystemStore = defineStore({
           enable: true,
           created: "2022-05-18",
           updated: "2022-05-18",
-          status: 1
+          status: 1,
+          edit: false
         },
         {
           username: "张六",
@@ -80,7 +84,8 @@ export const useSystemStore = defineStore({
           enable: true,
           created: "2022-05-18",
           updated: "2022-05-18",
-          status: 1
+          status: 1,
+          edit: false
         },
         {
           username: "张七",
@@ -89,7 +94,8 @@ export const useSystemStore = defineStore({
           enable: true,
           created: "2022-05-18",
           updated: "2022-05-18",
-          status: 1
+          status: 1,
+          edit: false
         }
       ]
     }

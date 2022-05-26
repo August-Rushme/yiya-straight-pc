@@ -114,7 +114,11 @@ const handleDbClick = (row: any) => {
         <el-table-column v-bind="propItem" :align="headerAlign" :show-overflow-tooltip="true">
           <template #default="scope">
             <slot :name="propItem.slotName" :row="scope.row">
-              {{ scope.row[propItem.prop] }}
+              <el-input
+                v-if="scope.row.edit && propItem.slotName !== 'created' && propItem.slotName !== 'updated'"
+                v-model="scope.row[propItem.prop]"
+              />
+              <span v-else> {{ scope.row[propItem.prop] }}</span>
             </slot>
           </template>
         </el-table-column>

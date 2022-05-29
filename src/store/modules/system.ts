@@ -1,17 +1,26 @@
 // import { getPageList } from "@/api/user"
+import { deletePageData, editPageData, getAllRole, getPageList, getUserRole, setUserRole } from "@/api/system"
 import store from "@/store"
+import cache from "@/utils/cache"
+import message from "@/utils/message"
 import { defineStore } from "pinia"
 
 interface ISystemState {
   userList: any[]
   userCount: number
+  roleList: any[]
+  roleCount: number
+  roles: number[]
 }
 export const useSystemStore = defineStore({
   id: "system",
   state: (): ISystemState => {
     return {
       userList: [],
-      userCount: 0
+      userCount: 0,
+      roleList: [],
+      roleCount: 0,
+      roles: []
     }
   },
   getters: {
@@ -27,77 +36,82 @@ export const useSystemStore = defineStore({
     }
   },
   actions: {
-    /** 获取用户列表 */
     // 获取表格数据
     async getPageListAction(payload: any) {
+      const clinicId = cache.getCache("userInfo").clinicId
       // 1.获取pageUrl
-      console.log(payload)
-
+      const pageName: string = payload.pageName
+      payload.pageInfo = { ...payload.pageInfo, clinicId }
+      const pageUrl = `/${pageName}/list`
       // 2.对页面发送请求
-      // const { data: pageResult } = await getPageList(payload)
-      this.userCount = 6
-      this.userList = [
-        {
-          username: "张三",
-          realname: "张三三",
-          cellphone: "13333333333",
-          enable: true,
-          created: "2022-05-18",
-          updated: "2022-05-18",
-          status: 1,
-          edit: false
-        },
-        {
-          username: "张二",
-          realname: "张二二",
-          cellphone: "13333333333",
-          enable: true,
-          created: "2022-05-18",
-          updated: "2022-05-18",
-          status: 1,
-          edit: false
-        },
-        {
-          username: "张四",
-          realname: "张四四",
-          cellphone: "13333333333",
-          enable: true,
-          created: "2022-05-18",
-          updated: "2022-05-18",
-          status: 1,
-          edit: false
-        },
-        {
-          username: "张五",
-          realname: "张五五",
-          cellphone: "13333333333",
-          enable: true,
-          created: "2022-05-18",
-          updated: "2022-05-18",
-          status: 1,
-          edit: false
-        },
-        {
-          username: "张六",
-          realname: "张六六",
-          cellphone: "13333333333",
-          enable: true,
-          created: "2022-05-18",
-          updated: "2022-05-18",
-          status: 1,
-          edit: false
-        },
-        {
-          username: "张七",
-          realname: "张七七",
-          cellphone: "13333333333",
-          enable: true,
-          created: "2022-05-18",
-          updated: "2022-05-18",
-          status: 1,
-          edit: false
-        }
-      ]
+      const { data: res }: any = await getPageList(pageUrl, payload.pageInfo)
+      // 3.将数据存储到state中
+      const { list, total }: { list: any[]; total: number } = res
+      this.$patch({
+        [`${pageName}List`]: list,
+        [`${pageName}Count`]: total
+      })
+    },
+    // 获取全部角色
+    async getAllRoleAction(payload: any) {
+      // const clinicId = cache.getCache("userInfo").clinicId
+      const { data: res }: any = await getAllRole("/role/list", payload)
+      this.$patch({
+        roleList: res.list,
+        roleCount: res.total
+      })
+      return res
+    },
+
+    // 获取用户的角色
+    async getUserRoleAction(userId: number) {
+      this.roles = []
+      const { data: res }: any = await getUserRole(`/user/getUserRole/${userId}`)
+      res.forEach((item: any) => {
+        this.$patch({
+          roles: [...this.roles, item.id]
+        })
+      })
+    },
+    // 分配角色
+    async setUserRoleAction(payload: any) {
+      const res: any = await setUserRole("/user/assignRole", payload)
+      if (res.code !== 200) {
+        return message.error("分配角色失败")
+      }
+      message.success("分配角色成功")
+      // 更新用户的角色
+      this.getUserRoleAction(payload.userId)
+    },
+    // 编辑操作
+    async editPageDataAction(payload: any) {
+      // 1.编辑数据的请求
+      const { pageName, editData } = payload
+      console.log(editData)
+      const pageUrl = `/${pageName}/edit`
+      const res: any = await editPageData(pageUrl, editData)
+      if (res.code !== 200) {
+        return message.error("保存失败")
+      }
+      message.success("保存成功")
+      // 2.请求最新的数据
+      this.getPageListAction({ pageName, pageInfo: { pageNum: 1, pageSize: 6 } })
+    },
+    async deletePageDataAction(payload: any) {
+      // 1.获取pageName和id
+      // pageName -> /user
+      // id -> /user/id
+      const { pageName, id } = payload
+      const pageUrl = `/${pageName}/${id}`
+
+      // 2.调用删除网络请求
+      const res: any = await deletePageData(pageUrl)
+      if (res.code !== 200) {
+        return message.error("删除失败")
+      }
+      message.success("删除成功")
+      // 3.重新请求最新的数据
+      this.getPageListAction({ pageName, pageInfo: { pageNum: 1, pageSize: 6 } })
     }
   }
 })

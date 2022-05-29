@@ -1,8 +1,9 @@
 import { ref } from "vue"
 import PageModal from "@/components/page-modal"
-import message from "@/utils/message"
+import { useSystemStore } from "@/store/modules/system"
 
 type CallbackFn = (item?: any) => void
+const store = useSystemStore()
 const modalTitle = ref("编辑")
 export function usePageModal(newCb?: CallbackFn, editCb?: CallbackFn) {
   const pageModalRef = ref<InstanceType<typeof PageModal>>()
@@ -16,7 +17,6 @@ export function usePageModal(newCb?: CallbackFn, editCb?: CallbackFn) {
     newCb && newCb()
   }
   const handleEditData = (item: any) => {
-    console.log(item)
     modalTitle.value = "编辑"
     item.edit = true
     defaultInfo.value = { ...item }
@@ -25,10 +25,9 @@ export function usePageModal(newCb?: CallbackFn, editCb?: CallbackFn) {
     // }
     editCb && editCb(item)
   }
-  const handleSaveData = (item: any) => {
+  const handleSaveData = (item: any, pageName: string) => {
+    store.editPageDataAction({ editData: item, pageName })
     item.edit = false
-    message.success("保存成功")
-    console.log(item)
   }
   return { pageModalRef, defaultInfo, handleNewData, handleEditData, modalTitle, handleSaveData }
 }

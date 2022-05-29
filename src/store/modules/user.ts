@@ -5,10 +5,12 @@ import { getToken, removeToken, setToken } from "@/utils/cookies"
 import router, { resetRouter } from "@/router"
 import { accountLogin, userInfoRequest } from "@/api/login"
 import { RouteRecordRaw } from "vue-router"
+import cache from "@/utils/cache"
 
 interface IUserState {
   token: string
   roles: string[]
+  userInfo: any
 }
 
 export const useUserStore = defineStore({
@@ -16,7 +18,8 @@ export const useUserStore = defineStore({
   state: (): IUserState => {
     return {
       token: getToken() || "",
-      roles: []
+      roles: [],
+      userInfo: {}
     }
   },
   actions: {
@@ -25,15 +28,19 @@ export const useUserStore = defineStore({
       this.roles = roles
     },
     /** 登录 */
-    login(userInfo: { username: string; password: string }) {
+
+    login(userInfo: { username: string; password: string; buk: string }) {
       return new Promise((resolve, reject) => {
         accountLogin({
-          username: userInfo.username.trim(),
+          buk: userInfo.buk,
+          userName: userInfo.username.trim(),
           password: userInfo.password
         })
           .then((res: any) => {
-            setToken(res.data.accessToken)
-            this.token = res.data.accessToken
+            setToken(res.token)
+            this.token = res.token
+            this.userInfo = res.userInfo
+            cache.setCache("userInfo", res.user)
             resolve(true)
           })
           .catch((error) => {
@@ -44,9 +51,13 @@ export const useUserStore = defineStore({
     /** 获取用户详情 */
     getInfo() {
       return new Promise((resolve, reject) => {
-        userInfoRequest()
+        const id = cache.getCache("userInfo").id
+        userInfoRequest(id)
           .then((res: any) => {
-            this.roles = res.data.user.roles
+            // 遍历获取角色
+            res.data.forEach((item: any) => {
+              this.roles.push(item.code)
+            })
             resolve(res)
           })
           .catch((error) => {

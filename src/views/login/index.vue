@@ -7,7 +7,9 @@ import ThemeSwitch from "@/components/ThemeSwitch/index.vue"
 import message from "@/utils/message"
 
 interface ILoginForm {
-  /** admin 或 editor */
+  /**公司代码 */
+  buk: string
+  /** 用户名 */
   username: string
   /** 密码 */
   password: string
@@ -26,12 +28,14 @@ const state = reactive({
   isKeepPassword: true,
   /** 登录表单 */
   loginForm: {
-    username: "admin",
-    password: "admin123",
+    buk: "",
+    username: "",
+    password: "",
     code: "abcd"
   } as ILoginForm,
   /** 登录表单校验规则 */
   loginRules: {
+    buk: [{ required: true, message: "请输入公司代码", trigger: "blur" }],
     username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
     password: [
       { required: true, message: "请输入密码", trigger: "blur" },
@@ -46,6 +50,7 @@ const state = reactive({
         state.loading = true
         useUserStore()
           .login({
+            buk: state.loginForm.buk,
             username: state.loginForm.username,
             password: state.loginForm.password
           })
@@ -58,7 +63,7 @@ const state = reactive({
           })
           .catch(() => {
             state.loading = false
-            state.createCode()
+            // state.createCode()
             state.loginForm.password = ""
           })
       } else {
@@ -71,7 +76,7 @@ const state = reactive({
     // 先清空验证码的输入
     state.loginForm.code = ""
     // 实际开发中，可替换成自己的地址，这里只是提供一个参考
-    state.codeUrl = `/api/v1/login/code?${Math.random() * 1000}`
+    // state.codeUrl = `/api/v1/login/code?${Math.random() * 1000}`
   }
 })
 
@@ -121,6 +126,9 @@ const state = reactive({
       </div>
       <div class="content">
         <el-form ref="loginFormDom" :model="state.loginForm" :rules="state.loginRules" @keyup.enter="state.handleLogin">
+          <el-form-item prop="buk" label="代码:" class="buk">
+            <el-input v-model="state.loginForm.buk" placeholder="公司代码" type="text" tabindex="1" size="large" />
+          </el-form-item>
           <el-form-item prop="username" label="账号:" class="username">
             <el-input v-model="state.loginForm.username" placeholder="用户名" type="text" tabindex="1" size="large" />
           </el-form-item>

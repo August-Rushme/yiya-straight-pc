@@ -21,6 +21,7 @@ function createService() {
       const apiData = response.data as any
       // 这个 code 是和后端约定的业务 code
       const code = apiData.code
+
       // 如果没有 code, 代表这不是项目后端开发的 api
       if (code === undefined) {
         ElMessage.error("非本系统的接口")
@@ -30,7 +31,7 @@ function createService() {
           case 0:
             // code === 0 代表没有错误
             return apiData
-          case 20000:
+          case 200:
             // code === 20000 代表没有错误
             return apiData
           default:
@@ -79,6 +80,12 @@ function createService() {
         case 505:
           error.message = "HTTP版本不受支持"
           break
+        case 530:
+          error.message = "账号或密码错误"
+          break
+        case 531:
+          error.message = "公司代码不存在"
+          break
         default:
           break
       }
@@ -95,7 +102,7 @@ function createRequestFunction(service: AxiosInstance) {
     const configDefault = {
       headers: {
         // 携带 token
-        "X-Access-Token": getToken(),
+        token: getToken(),
         "Content-Type": get(config, "headers.Content-Type", "application/json")
       },
       timeout: 5000,

@@ -1,7 +1,7 @@
 class Keys {
-  static sidebarStatus = "v3-admin-vite-sidebar-status-key"
-  static token = "v3-admin-vite-token-key"
-  static activeThemeName = "v3-admin-vite-active-theme-name-key"
+  static sidebarStatus = "yiya-straight-pc-sidebar-status"
+  static token = "yayiya-straight-pc-token"
+  static activeThemeName = "yiya-straight-pc-active-theme-name"
 }
 
 export default Keys

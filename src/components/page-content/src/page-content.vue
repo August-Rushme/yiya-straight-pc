@@ -27,15 +27,15 @@ const pageInfo = ref<PageInfo>({
 
 // const pageName = ref(props.pageName)
 
-watch(pageInfo, () => {
-  console.log(pageInfo.value)
+const pageName = ref(props.pageName)
+watch(pageInfo, () => getPageData(pageInfo.value, pageName.value), {
+  deep: true
 })
-watch(pageInfo, () => getPageData(pageInfo.value))
 // 2.发送网络请求
-const getPageData = (pageInfo?: any) => {
-  store.getPageListAction(pageInfo.value)
+const getPageData = (pageInfo?: any, pageName?: any) => {
+  store.getPageListAction({ pageInfo, pageName })
 }
-getPageData(pageInfo.value)
+getPageData(pageInfo.value, pageName.value)
 // footer
 const totalCount = computed(() => store.pageListDataCount(props.pageName))
 
@@ -44,12 +44,11 @@ const dataList = computed(() => store.pageListData(props.pageName))
 // 获取其它动态插槽名
 const otherPropSlots = props.contentTableConfig?.propList.filter((item: any) => {
   if (item.slotName === "handler") return false
-  if (item.slotName === "status") return false
-  if (item.slotName === "create") return false
-  if (item.slotName === "update") return false
+  if (item.slotName === "created") return false
+  if (item.slotName === "updated") return false
   return true
 })
-// 删除/新建/编辑等操作
+// 删除/新建/编辑/保存等操作
 const handleEditClick = (item: any) => {
   emit("editBtnClick", item)
 }
@@ -86,11 +85,6 @@ defineExpose({
         <slot name="handlerHeader" />
       </template>
       <!-- body中的插槽 -->
-      <template #status="scope">
-        <el-button size="small" :type="scope.row.status == 1 ? 'success' : 'danger'">
-          {{ scope.row.status == 1 ? "启用" : "禁用" }}
-        </el-button>
-      </template>
       <template #type="scope">
         <el-tag v-if="scope.row.type == 1" type="success" effect="dark"> 一级 </el-tag>
         <el-tag v-if="scope.row.type == 2" type="warning" effect="dark"> 二级 </el-tag>
@@ -99,12 +93,12 @@ defineExpose({
       <!-- 格式化时间 -->
       <template #created="scope">
         <span>
-          {{ formatUtcTime(scope.row.created) }}
+          {{ formatUtcTime(scope.row.createAt) }}
         </span>
       </template>
       <template #updated="scope">
         <span>
-          {{ formatUtcTime(scope.row.updated) }}
+          {{ formatUtcTime(scope.row.updateAt) }}
         </span>
       </template>
       <!-- 操作按钮 -->

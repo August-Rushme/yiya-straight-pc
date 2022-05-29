@@ -26,7 +26,7 @@ router.beforeEach(async (to: RouteLocationNormalized, _: RouteLocationNormalized
       if (userStore.roles.length === 0) {
         try {
           if (asyncRouteSettings.open) {
-            // 注意：角色必须是一个数组！ 例如: ['admin'] 或 ['developer', 'editor']
+            // 角色必须是一个数组
             await userStore.getInfo()
             const roles = userStore.roles
             // 根据角色生成可访问的 routes（可访问路由 = 常驻路由 + 有访问权限的动态路由）
@@ -41,11 +41,12 @@ router.beforeEach(async (to: RouteLocationNormalized, _: RouteLocationNormalized
             router.addRoute(route)
           })
           // 确保添加路由已完成
-          // 设置 replace: true, 因此导航将不会留下历史记录
+          // 设置 replace: true, W导航将不会留下历史记录
           next({ ...to, replace: true })
         } catch (err: any) {
           // 过程中发生任何错误，都直接重置 token，并重定向到登录页面
           userStore.resetToken()
+          console.error(err)
           ElMessage.error(err.message || "路由守卫过程发生错误")
           next("/login")
           NProgress.done()

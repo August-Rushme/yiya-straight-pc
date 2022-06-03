@@ -1,7 +1,7 @@
 export const contentTableConfig = {
   title: "员工列表",
   propList: [
-    { prop: "nickname", label: "用户名", minWidth: "120" },
+    { prop: "userName", label: "用户名", minWidth: "120" },
     { prop: "name", label: "真实姓名", minWidth: "120" },
     { prop: "tel", label: "手机号码", minWidth: "160" },
     { prop: "status", label: "状态", minWidth: "100", slotName: "status" },

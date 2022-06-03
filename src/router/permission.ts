@@ -1,5 +1,5 @@
 import router from "@/router"
-import { RouteLocationNormalized } from "vue-router"
+import { RouteLocationNormalized, RouteRecordRaw } from "vue-router"
 import { useUserStoreHook } from "@/store/modules/user"
 import { usePermissionStoreHook } from "@/store/modules/permission"
 import { ElMessage } from "element-plus"
@@ -37,7 +37,7 @@ router.beforeEach(async (to: RouteLocationNormalized, _: RouteLocationNormalized
             permissionStore.setRoutes(asyncRouteSettings.defaultRoles)
           }
           // 将'有访问权限的动态路由' 添加到 router 中
-          permissionStore.dynamicRoutes.forEach((route) => {
+          permissionStore.dynamicRoutes.forEach((route: RouteRecordRaw) => {
             router.addRoute(route)
           })
           // 确保添加路由已完成

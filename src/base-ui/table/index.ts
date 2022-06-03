@@ -1,2 +1,2 @@
-import AuTable from "./src/table.vue"
+import AuTable from "./src/au-table.vue"
 export { AuTable }

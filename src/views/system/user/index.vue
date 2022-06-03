@@ -102,7 +102,7 @@ defineExpose({
 })
 </script>
 <template>
-  <div app-container class="user">
+  <div app-container>
     <el-card>
       <page-search
         :searchFormConfig="searchFormConfig"
@@ -110,7 +110,7 @@ defineExpose({
         @queryBtnClick="handleQueryClick"
       />
     </el-card>
-    <el-card mt-5>
+    <el-card class="mt-5">
       <page-content
         :contentTableConfig="contentTableConfig"
         pageName="user"
@@ -135,7 +135,7 @@ defineExpose({
         <!-- 分配角色 -->
         <template #role="scope">
           <el-button size="default" type="warning" style="font-size: 10px" @click="state.handleRoleClick(scope.row)">
-            <el-icon mr1><setting /></el-icon>
+            <el-icon class="mr1"><setting /></el-icon>
             分配角色
           </el-button>
         </template>

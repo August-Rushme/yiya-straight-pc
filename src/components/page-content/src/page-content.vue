@@ -42,7 +42,7 @@ const totalCount = computed(() => store.pageListDataCount(props.pageName))
 // 3.从vuex中获取数据
 const dataList = computed(() => store.pageListData(props.pageName))
 // 获取其它动态插槽名
-const otherPropSlots = props.contentTableConfig?.propList.filter((item: any) => {
+const otherPropSlots: any = props.contentTableConfig?.propList.filter((item: any) => {
   if (item.slotName === "handler") return false
   if (item.slotName === "created") return false
   if (item.slotName === "updated") return false
@@ -72,7 +72,7 @@ defineExpose({
 
 <template>
   <div class="page-content">
-    <au-table
+    <AuTable
       :listData="dataList"
       v-bind="props.contentTableConfig"
       v-model:page="pageInfo"
@@ -121,12 +121,12 @@ defineExpose({
         </div>
       </template>
       <!-- 插入剩余的动态插槽 -->
-      <template v-for="item in otherPropSlots" #[item.slotName]="scope">
+      <template v-for="(item, index) in otherPropSlots" :key="index" #[item.slotName]="scope">
         <template v-if="item.slotName">
           <slot :name="item.slotName" :row="scope.row" />
         </template>
       </template>
-    </au-table>
+    </AuTable>
   </div>
 </template>
 <style lang="scss" scoped>

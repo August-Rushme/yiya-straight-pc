@@ -19,4 +19,5 @@ export interface IForm {
   colLayout?: any
   itemStyle?: any
   title?: string
+  rules?: any
 }

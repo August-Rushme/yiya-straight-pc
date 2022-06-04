@@ -54,6 +54,13 @@ watch(
   },
   { deep: true }
 )
+// watch(
+//   formData,
+//   (newValue) => {
+//     console.log(newValue)
+//   },
+//   { deep: true }
+// )
 // 点击确认按钮的逻辑
 const handleConfirmCick = () => {
   if (Object.keys(props.defaultInfo).length) {

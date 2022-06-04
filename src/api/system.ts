@@ -55,3 +55,12 @@ export function deletePageData(url: string) {
     method: "delete"
   })
 }
+
+// 新增操作
+export function addPageData(url: string, data: any) {
+  return request({
+    url,
+    method: "post",
+    data
+  })
+}

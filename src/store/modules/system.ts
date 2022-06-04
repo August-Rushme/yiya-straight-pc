@@ -1,5 +1,13 @@
 // import { getPageList } from "@/api/user"
-import { deletePageData, editPageData, getAllRole, getPageList, getUserRole, setUserRole } from "@/api/system"
+import {
+  addPageData,
+  deletePageData,
+  editPageData,
+  getAllRole,
+  getPageList,
+  getUserRole,
+  setUserRole
+} from "@/api/system"
 import store from "@/store"
 import cache from "@/utils/cache"
 import message from "@/utils/message"
@@ -97,6 +105,7 @@ export const useSystemStore = defineStore({
       // 2.请求最新的数据
       this.getPageListAction({ pageName, pageInfo: { pageNum: 1, pageSize: 6 } })
     },
+    // 删除操作
     async deletePageDataAction(payload: any) {
       // 1.获取pageName和id
       // pageName -> /user
@@ -111,6 +120,17 @@ export const useSystemStore = defineStore({
       }
       message.success("删除成功")
       // 3.重新请求最新的数据
+      this.getPageListAction({ pageName, pageInfo: { pageNum: 1, pageSize: 6 } })
+    },
+    // 新增操作
+    async addPageDataAction(payload: any) {
+      const { pageName, addData } = payload
+      const pageUrl = `/${pageName}/add`
+      const res: any = await addPageData(pageUrl, addData)
+      if (res.code !== 200) {
+        return message.error("添加失败")
+      }
+      message.success("添加成功")
       this.getPageListAction({ pageName, pageInfo: { pageNum: 1, pageSize: 6 } })
     }
   }

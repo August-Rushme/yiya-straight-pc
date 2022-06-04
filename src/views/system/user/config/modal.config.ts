@@ -3,13 +3,13 @@ import { IForm } from "@/base-ui/form"
 export const modalConfig: IForm = {
   formItems: [
     {
-      field: "username",
+      field: "userName",
       type: "input",
       label: "用户名",
       placeholder: "请输入用户名"
     },
     {
-      field: "realname",
+      field: "name",
       type: "input",
       label: "真实姓名",
       placeholder: "请输入真实姓名"
@@ -22,7 +22,7 @@ export const modalConfig: IForm = {
       isHidden: false
     },
     {
-      field: "cellphone",
+      field: "tel",
       type: "input",
       label: "电话号码",
       placeholder: "请输入电话号码"

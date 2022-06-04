@@ -14,8 +14,10 @@ import { usePageModal } from "@/hooks/use-page-modal"
 import { ElMessageBox } from "element-plus"
 import message from "@/utils/message"
 import { useSystemStore } from "@/store/modules/system"
+import cache from "@/utils/cache"
 
 const store = useSystemStore()
+const userInfo = cache.getCache("userInfo")
 const pageName = "user"
 // pageModal相关的hook逻辑
 // 1.处理密码的逻辑
@@ -55,6 +57,11 @@ getRoleList()
 // 处理用户角色改变
 const handleRoleChange = (value: any) => {
   console.log(value)
+}
+// 添加用户的其他逻辑
+const addOtherInfo = {
+  buk: userInfo.buk,
+  clinicId: userInfo.clinicId
 }
 
 const state = reactive({
@@ -102,7 +109,7 @@ defineExpose({
 })
 </script>
 <template>
-  <div app-container>
+  <div class="app-container">
     <el-card>
       <page-search
         :searchFormConfig="searchFormConfig"
@@ -143,8 +150,9 @@ defineExpose({
     </el-card>
     <page-modal
       :defaultInfo="defaultInfo"
+      :otherInfo="addOtherInfo"
       ref="pageModalRef"
-      pageName="users"
+      pageName="user"
       :pageModalConfig="modalConfig"
       :title="modalTitle"
     />

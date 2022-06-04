@@ -16,6 +16,7 @@
 <script setup lang="ts">
 import { ref, watch } from "vue"
 import AuForm from "@/base-ui/form"
+import { useSystemStore } from "@/store/modules/system"
 
 const props = defineProps({
   pageModalConfig: {
@@ -39,6 +40,8 @@ const props = defineProps({
     default: ""
   }
 })
+
+const store = useSystemStore()
 // 1.绑定属性
 const formData = ref<any>({})
 const modalVisible = ref(false)
@@ -57,6 +60,8 @@ const handleConfirmCick = () => {
     // 编辑
     console.log("编辑")
   } else {
+    store.addPageDataAction({ pageName: props.pageName, addData: { ...formData.value, ...props.otherInfo } })
+    modalVisible.value = false
     // 新建
     console.log("新建")
   }

@@ -11,8 +11,6 @@ import { modalConfig } from "./config/modal.config"
 
 import { usePageSearch } from "@/hooks/use-page-search"
 import { usePageModal } from "@/hooks/use-page-modal"
-import { ElMessageBox } from "element-plus"
-import message from "@/utils/message"
 import { useSystemStore } from "@/store/modules/system"
 import cache from "@/utils/cache"
 
@@ -32,10 +30,8 @@ const editCallback = () => {
 
 const { pageContentRef, handleResetClick, handleQueryClick } = usePageSearch()
 // 调用hook获取公共变量和函数
-const { pageModalRef, defaultInfo, handleNewData, handleEditData, handleSaveData, modalTitle } = usePageModal(
-  newCallback,
-  editCallback
-)
+const { pageModalRef, defaultInfo, handleNewData, handleEditData, handleDeleteData, handleSaveData, modalTitle } =
+  usePageModal(newCallback, editCallback)
 
 // 获取全部角色
 const pageInfo = ref({
@@ -68,19 +64,7 @@ const state = reactive({
   userId: "",
   dialogVisible: false,
   // 删除
-  handleDeleteData: (row: any) => {
-    ElMessageBox.confirm("此操作将永久删除该员工, 是否继续?", "提示", {
-      confirmButtonText: "确定",
-      cancelButtonText: "取消",
-      type: "warning"
-    })
-      .then(() => {
-        store.deletePageDataAction({ pageName, id: row.id })
-      })
-      .catch(() => {
-        message.info("已取消删除")
-      })
-  },
+
   handleStatusChange: (row: any) => {
     const r = window.confirm(`确定${row.status === 1 ? "禁用" : "启用"}该用户吗？`)
     if (r) {
@@ -120,14 +104,14 @@ defineExpose({
     <el-card class="mt-5">
       <page-content
         :contentTableConfig="contentTableConfig"
-        pageName="user"
+        :pageName="pageName"
         @editBtnClick="handleEditData"
-        @saveBtnClick="handleSaveData($event, 'user')"
-        @deleteBtnClick="state.handleDeleteData"
+        @saveBtnClick="handleSaveData($event, pageName)"
+        @deleteBtnClick="handleDeleteData($event, pageName)"
         ref="pageContentRef"
       >
         <template #handlerHeader>
-          <el-button type="primary" size="small" @click="handleNewData"> 添加用户 </el-button>
+          <el-button type="primary" size="small" @click="handleNewData('添加用户')"> 添加用户 </el-button>
         </template>
         <!-- 状态 -->
         <template #status="scope">
@@ -138,6 +122,10 @@ defineExpose({
           >
             {{ scope.row.status == 1 ? "启用" : "禁用" }}
           </el-button>
+        </template>
+        <template #password="scope">
+          <span v-if="!scope.row.edit">******</span>
+          <el-input v-else size="small" v-model="scope.row.password" />
         </template>
         <!-- 分配角色 -->
         <template #role="scope">
@@ -152,7 +140,7 @@ defineExpose({
       :defaultInfo="defaultInfo"
       :otherInfo="addOtherInfo"
       ref="pageModalRef"
-      pageName="user"
+      :pageName="pageName"
       :pageModalConfig="modalConfig"
       :title="modalTitle"
     />

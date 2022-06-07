@@ -1,6 +1,4 @@
 import { IForm } from "@/base-ui/form"
-import { reactive } from "vue"
-
 export const modalConfig: IForm = {
   formItems: [
     {
@@ -66,12 +64,6 @@ export const modalConfig: IForm = {
       ]
     }
   ],
-  rules: reactive({
-    name: [
-      { required: true, message: "请输入用户名", trigger: "blur" },
-      { type: "number", message: "age must be a number" }
-    ]
-  }),
   colLayout: { span: 24 },
   itemStyle: {}
 }

@@ -70,7 +70,7 @@ export const asyncRoutes: Array<RouteRecordRaw> = [
       },
       {
         path: "role",
-        component: () => import("@/views/system/user/index.vue"),
+        component: () => import("@/views/system/role/index.vue"),
         name: "Role",
         meta: {
           title: "角色管理",

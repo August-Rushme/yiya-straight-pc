@@ -3,7 +3,7 @@
     <div class="header">
       <slot name="header" />
     </div>
-    <el-form :label-width="labelWidth" :label-position="labelPosition" :model="formData">
+    <el-form :label-width="labelWidth" :label-position="labelPosition" :model="formData" ref="formRef">
       <el-row>
         <template v-for="item in formItems" :key="item.label">
           <el-col v-bind="colLayout">
@@ -48,79 +48,78 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType, ref, watch } from "vue"
+<script lang="ts" setup>
+import { PropType, ref, watch } from "vue"
+import type { FormInstance } from "element-plus"
 import { IFormItem } from "../types"
 
-export default defineComponent({
-  props: {
-    modelValue: {
-      type: Object,
-      required: true
-    },
-    formItems: {
-      type: Array as PropType<IFormItem[]>,
-      default: () => []
-    },
-    rules: {
-      type: Object,
-      default: () => ({})
-    },
-    labelWidth: {
-      type: String,
-      default: "100px"
-    },
-    itemStyle: {
-      type: Object,
-      default: () => ({ padding: "10px 40px" })
-    },
-    colLayout: {
-      type: Object,
-      default: () => ({
-        xl: 6, // >1920px 4个
-        lg: 8,
-        md: 12,
-        sm: 24,
-        xs: 24
-      })
-    },
-    inline: {
-      type: Boolean,
-      default: false
-    },
-    labelPosition: {
-      type: String,
-      default: "top"
-    }
+const props = defineProps({
+  modelValue: {
+    type: Object,
+    required: true
   },
-  emits: ["update:modelValue"],
-  setup(props, { emit }) {
-    const formData = ref({ ...props.modelValue })
-
-    watch(
-      formData,
-      (newValue) => {
-        console.log(formData.value)
-        emit("update:modelValue", newValue)
-      },
-      {
-        deep: true
-      }
-    )
-
-    /**
-     *处理值变化
-     * @param {any} value 改变的值
-     * @param {string} field 绑定的字段
-     */
-    // const handleValueChange = (value: any, field: string) => {
-    //   emit("update:modelValue", { ...props.modelValue, [field]: value })
-    // }
-
-    return {
-      formData
-    }
+  formItems: {
+    type: Array as PropType<IFormItem[]>,
+    default: () => []
+  },
+  rules: {
+    type: Object,
+    default: () => ({})
+  },
+  labelWidth: {
+    type: String,
+    default: "100px"
+  },
+  itemStyle: {
+    type: Object,
+    default: () => ({ padding: "10px 40px" })
+  },
+  colLayout: {
+    type: Object,
+    default: () => ({
+      xl: 6, // >1920px 4个
+      lg: 8,
+      md: 12,
+      sm: 24,
+      xs: 24
+    })
+  },
+  inline: {
+    type: Boolean,
+    default: false
+  },
+  labelPosition: {
+    type: String,
+    default: "top"
   }
+})
+const emit = defineEmits(["update:modelValue"])
+
+const formRef = ref<FormInstance>()
+const formData = ref({ ...props.modelValue })
+const aaa = 111
+watch(
+  formData,
+  (newValue) => {
+    emit("update:modelValue", newValue)
+  },
+  {
+    deep: true
+  }
+)
+
+/**
+ *处理值变化
+ * @param {any} value 改变的值
+ * @param {string} field 绑定的字段
+ */
+// const handleValueChange = (value: any, field: string) => {
+//   emit("update:modelValue", { ...props.modelValue, [field]: value })
+// }
+defineExpose({
+  formData,
+  formRef,
+  aaa
 })
 </script>
 

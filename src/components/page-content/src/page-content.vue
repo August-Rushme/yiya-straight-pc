@@ -2,7 +2,7 @@
 import { computed, ref, watch } from "vue"
 import { useSystemStore } from "@/store/modules/system"
 import { AuTable } from "@/base-ui/table"
-import { formatUtcTime } from "@/utils/index"
+import { formatDateTime } from "@/utils/index"
 import { PageInfo } from "../types/type"
 const props = defineProps({
   contentTableConfig: {
@@ -28,11 +28,19 @@ const pageInfo = ref<PageInfo>({
 // const pageName = ref(props.pageName)
 
 const pageName = ref(props.pageName)
-watch(pageInfo, () => getPageData(pageInfo.value, pageName.value), {
-  deep: true
-})
+watch(
+  pageInfo,
+  () => {
+    getPageData(pageInfo.value, pageName.value)
+    store.pageNum = pageInfo.value.pageNum
+    store.pageSize = pageInfo.value.pageSize
+  },
+  {
+    deep: true
+  }
+)
 // 2.发送网络请求
-const getPageData = (pageInfo?: any, pageName?: any) => {
+const getPageData = (pageInfo: any = { query: "", pageNum: 1, pageSize: 6 }, pageName?: any) => {
   store.getPageListAction({ pageInfo, pageName })
 }
 getPageData(pageInfo.value, pageName.value)
@@ -90,15 +98,16 @@ defineExpose({
         <el-tag v-if="scope.row.type == 2" type="warning" effect="dark"> 二级 </el-tag>
         <el-tag v-if="scope.row.type == 3" type="danger" effect="dark"> 三级 </el-tag>
       </template>
+
       <!-- 格式化时间 -->
       <template #created="scope">
         <span>
-          {{ formatUtcTime(scope.row.createAt) }}
+          {{ formatDateTime(scope.row.createAt) }}
         </span>
       </template>
       <template #updated="scope">
         <span>
-          {{ formatUtcTime(scope.row.updateAt) }}
+          {{ formatDateTime(scope.row.updateAt) }}
         </span>
       </template>
       <!-- 操作按钮 -->
@@ -108,7 +117,7 @@ defineExpose({
             ><el-icon><check /></el-icon>保存</el-button
           >
 
-          <el-button v-else style="font-size: 10px" size="default" @click="handleEditClick(scope.row)">
+          <el-button v-else style="font-size: 10px" type="primary" size="default" @click="handleEditClick(scope.row)">
             <el-icon mr1><edit /></el-icon>
             编辑</el-button
           >

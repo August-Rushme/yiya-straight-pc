@@ -2,16 +2,16 @@
   <div class="page-search">
     <au-form v-bind="searchFormConfig" v-model:modelValue="formData">
       <template #header>
-        <h1 class="header" flex flex-center>{{ searchFormConfig?.title }}</h1>
+        <h1 class="header flex flex-center">{{ searchFormConfig?.title }}</h1>
       </template>
       <template #footer>
         <div class="handle-btns">
           <el-button @click="handleResetClick">
-            <el-icon mr1><Refresh /></el-icon>
+            <el-icon class="mr1"><Refresh /></el-icon>
             重置</el-button
           >
           <el-button type="primary" @click="handleQueryClick">
-            <el-icon mr1><Search /></el-icon>
+            <el-icon class="mr1"><Search /></el-icon>
             搜索</el-button
           >
         </div>
@@ -42,9 +42,9 @@ const formData = ref(formOriginData)
 
 // 2.优化二: 当用户点击重置
 const handleResetClick = () => {
-  // for (const key in formOriginData) {
-  //   formData.value[`${key}`] = formOriginData[key]
-  // }
+  for (const key in formOriginData) {
+    formData.value[`${key}`] = formOriginData[key]
+  }
   formData.value = formOriginData
   emit("resetBtnClick")
 }

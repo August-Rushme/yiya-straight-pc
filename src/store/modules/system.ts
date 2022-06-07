@@ -19,6 +19,8 @@ interface ISystemState {
   roleList: any[]
   roleCount: number
   roles: number[]
+  pageNum: number
+  pageSize: number
 }
 export const useSystemStore = defineStore({
   id: "system",
@@ -28,7 +30,9 @@ export const useSystemStore = defineStore({
       userCount: 0,
       roleList: [],
       roleCount: 0,
-      roles: []
+      roles: [],
+      pageNum: 1,
+      pageSize: 6
     }
   },
   getters: {
@@ -103,7 +107,7 @@ export const useSystemStore = defineStore({
       }
       message.success("保存成功")
       // 2.请求最新的数据
-      this.getPageListAction({ pageName, pageInfo: { pageNum: 1, pageSize: 6 } })
+      this.getPageListAction({ pageName, pageInfo: { pageNum: this.pageNum, pageSize: this.pageSize } })
     },
     // 删除操作
     async deletePageDataAction(payload: any) {
@@ -120,7 +124,7 @@ export const useSystemStore = defineStore({
       }
       message.success("删除成功")
       // 3.重新请求最新的数据
-      this.getPageListAction({ pageName, pageInfo: { pageNum: 1, pageSize: 6 } })
+      this.getPageListAction({ pageName, pageInfo: { pageNum: this.pageNum, pageSize: this.pageSize } })
     },
     // 新增操作
     async addPageDataAction(payload: any) {
@@ -130,8 +134,9 @@ export const useSystemStore = defineStore({
       if (res.code !== 200) {
         return message.error("添加失败")
       }
-      message.success("添加成功")
-      this.getPageListAction({ pageName, pageInfo: { pageNum: 1, pageSize: 6 } })
+
+      this.getPageListAction({ pageName, pageInfo: { pageNum: this.pageNum, pageSize: this.pageSize } })
+      return res
     }
   }
 })

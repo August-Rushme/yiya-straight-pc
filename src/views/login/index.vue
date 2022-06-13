@@ -28,9 +28,9 @@ const state = reactive({
   isKeepPassword: true,
   /** 登录表单 */
   loginForm: {
-    buk: "",
-    username: "",
-    password: "",
+    buk: "mlqh",
+    username: "a12345678",
+    password: "a12345678",
     code: "abcd"
   } as ILoginForm,
   /** 登录表单校验规则 */
@@ -56,7 +56,7 @@ const state = reactive({
           })
           .then(() => {
             state.loading = false
-            router.push({ path: "/" }).catch((err) => {
+            router.push("/").catch((err) => {
               console.warn(err)
             })
             message.success("登录成功")

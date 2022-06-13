@@ -14,10 +14,16 @@ const permissionStore = usePermissionStoreHook()
 NProgress.configure({ showSpinner: false })
 
 router.beforeEach(async (to: RouteLocationNormalized, _: RouteLocationNormalized, next: any) => {
+  // console.log("to", to)
+  console.log(to.path)
+
   NProgress.start()
   // 判断该用户是否登录
   if (getToken()) {
+    console.log("已登录")
+
     if (to.path === "/login") {
+      console.log("to.path", to.path)
       // 如果登录，并准备进入 login 页面，则重定向到主页
       next({ path: "/" })
       NProgress.done()

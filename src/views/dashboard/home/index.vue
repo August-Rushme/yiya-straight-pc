@@ -1,5 +1,7 @@
+<script lang="ts" setup></script>
+
 <template>
-  <div class="app-container">
+  <div app-container>
     <el-card> 首页 </el-card>
   </div>
 </template>

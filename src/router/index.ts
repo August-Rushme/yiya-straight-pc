@@ -26,15 +26,27 @@ export const constantRoutes: Array<RouteRecordRaw> = [
   {
     path: "/",
     component: Layout,
-    redirect: "/dashboard",
+    redirect: "/dashboard/home",
+    meta: {
+      title: "Dashboard",
+      icon: "dashboard"
+    },
     children: [
       {
-        path: "dashboard",
-        component: () => import("@/views/dashboard/index.vue"),
-        name: "Dashboard",
+        path: "/dashboard/home",
+        component: () => import("@/views/dashboard/home/index.vue"),
+        name: "Home",
         meta: {
           title: "首页",
-          icon: "dashboard"
+          affix: true
+        }
+      },
+      {
+        path: "/dashboard/workbench",
+        component: () => import("@/views/dashboard/workbench/index.vue"),
+        name: "Workbench",
+        meta: {
+          title: "工作台"
         }
       }
     ]
@@ -50,7 +62,6 @@ export const asyncRoutes: Array<RouteRecordRaw> = [
   {
     path: "/system",
     component: Layout,
-    redirect: "/system/user",
     name: "System",
     meta: {
       title: "人事管理",
@@ -60,7 +71,7 @@ export const asyncRoutes: Array<RouteRecordRaw> = [
     },
     children: [
       {
-        path: "user",
+        path: "/system/user",
         component: () => import("@/views/system/user/index.vue"),
         name: "User",
         meta: {
@@ -69,7 +80,7 @@ export const asyncRoutes: Array<RouteRecordRaw> = [
         }
       },
       {
-        path: "role",
+        path: "/system/role",
         component: () => import("@/views/system/role/index.vue"),
         name: "Role",
         meta: {

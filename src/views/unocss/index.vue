@@ -1,12 +1,12 @@
 <template>
-  <div h-full app-container>
-    <div h-full text-center flex select-none all:transition-400>
-      <div ma>
-        <div text-5xl fw100 animate-bounce-alt animate-count-infinite animate-1s>unocss</div>
-        <div op30 dark:op60 text-lg fw300 m1>具有高性能且极具灵活性的即时原子化 CSS 引擎</div>
-        <div m2 flex justify-center text-lg op30 dark:op60 hover="op80" dark:hover="op80" />
+  <div class="h-full text-center flex select-none all:transition-400">
+    <div class="ma">
+      <div text-5xl fw100 animate-bounce-alt animate-count-infinite animate-duration-1s>unocss</div>
+      <div op30 text-lg fw300 m1>The instant on-demand Atomic CSS engine.</div>
+      <div m2 flex justify-center text-2xl op30 hover="op80">
+        <a i-carbon-logo-github text-inherit href="https://github.com/unocss/unocss" target="_blank" />
       </div>
     </div>
-    <div absolute bottom-5 right-0 left-0 text-center op30 dark:op60 fw300>该页面是一个 unocss 的使用案例</div>
   </div>
+  <div absolute bottom-5 right-0 left-0 text-center op30 fw300>on-demand · instant · fully customizable</div>
 </template>

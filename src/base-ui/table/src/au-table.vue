@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineEmits, PropType } from "vue"
+import { PropType } from "vue"
 export interface IPropItem {
   prop?: string | any
   label: string
@@ -88,7 +88,7 @@ const handleDbClick = (row: any) => {
 }
 </script>
 <template>
-  <div class="au-table">
+  <div class="auTable">
     <div class="header">
       <slot name="header">
         <div class="title">{{ title }}</div>
@@ -110,11 +110,15 @@ const handleDbClick = (row: any) => {
       <el-table-column v-if="showSelectColumn" type="selection" align="center" width="60" />
       <el-table-column v-if="showIndexColumn" type="index" label="序号" align="center" width="80" />
 
-      <template v-for="propItem in propList" :key="propItem.prop">
-        <el-table-column v-bind="propItem" :align="headerAlign" :show-overflow-tooltip="true">
+      <template v-for="(item, index) in propList" :key="index">
+        <el-table-column v-bind="item" :align="headerAlign" :show-overflow-tooltip="true">
           <template #default="scope">
-            <slot :name="propItem.slotName" :row="scope.row">
-              {{ scope.row[propItem.prop] }}
+            <slot :name="item.slotName" :row="scope.row">
+              <el-input
+                v-if="scope.row.edit && item.slotName !== 'created' && item.slotName !== 'updated'"
+                v-model="scope.row[item.prop]"
+              />
+              <span v-else> {{ scope.row[item.prop] }}</span>
             </slot>
           </template>
         </el-table-column>
@@ -136,7 +140,7 @@ const handleDbClick = (row: any) => {
           small
         />
         <el-pagination
-          v-if="documentWidth < 500"
+          v-else
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="page.pageNum"

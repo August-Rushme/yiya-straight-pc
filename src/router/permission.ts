@@ -1,5 +1,5 @@
 import router from "@/router"
-import { RouteLocationNormalized } from "vue-router"
+import { RouteLocationNormalized, RouteRecordRaw } from "vue-router"
 import { useUserStoreHook } from "@/store/modules/user"
 import { usePermissionStoreHook } from "@/store/modules/permission"
 import { ElMessage } from "element-plus"
@@ -14,10 +14,16 @@ const permissionStore = usePermissionStoreHook()
 NProgress.configure({ showSpinner: false })
 
 router.beforeEach(async (to: RouteLocationNormalized, _: RouteLocationNormalized, next: any) => {
+  // console.log("to", to)
+  console.log(to.path)
+
   NProgress.start()
   // 判断该用户是否登录
   if (getToken()) {
+    console.log("已登录")
+
     if (to.path === "/login") {
+      console.log("to.path", to.path)
       // 如果登录，并准备进入 login 页面，则重定向到主页
       next({ path: "/" })
       NProgress.done()
@@ -26,7 +32,7 @@ router.beforeEach(async (to: RouteLocationNormalized, _: RouteLocationNormalized
       if (userStore.roles.length === 0) {
         try {
           if (asyncRouteSettings.open) {
-            // 注意：角色必须是一个数组！ 例如: ['admin'] 或 ['developer', 'editor']
+            // 角色必须是一个数组
             await userStore.getInfo()
             const roles = userStore.roles
             // 根据角色生成可访问的 routes（可访问路由 = 常驻路由 + 有访问权限的动态路由）
@@ -37,15 +43,16 @@ router.beforeEach(async (to: RouteLocationNormalized, _: RouteLocationNormalized
             permissionStore.setRoutes(asyncRouteSettings.defaultRoles)
           }
           // 将'有访问权限的动态路由' 添加到 router 中
-          permissionStore.dynamicRoutes.forEach((route) => {
+          permissionStore.dynamicRoutes.forEach((route: RouteRecordRaw) => {
             router.addRoute(route)
           })
           // 确保添加路由已完成
-          // 设置 replace: true, 因此导航将不会留下历史记录
+          // 设置 replace: true, W导航将不会留下历史记录
           next({ ...to, replace: true })
         } catch (err: any) {
           // 过程中发生任何错误，都直接重置 token，并重定向到登录页面
           userStore.resetToken()
+          console.error(err)
           ElMessage.error(err.message || "路由守卫过程发生错误")
           next("/login")
           NProgress.done()

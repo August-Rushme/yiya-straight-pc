@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router"
+import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router"
 const Layout = () => import("@/layout/index.vue")
 
 /** 常驻路由 */
@@ -26,36 +26,31 @@ export const constantRoutes: Array<RouteRecordRaw> = [
   {
     path: "/",
     component: Layout,
-    redirect: "/dashboard",
+    redirect: "/dashboard/home",
+    meta: {
+      title: "Dashboard",
+      icon: "dashboard"
+    },
     children: [
       {
-        path: "dashboard",
-        component: () => import("@/views/dashboard/index.vue"),
-        name: "Dashboard",
+        path: "/dashboard/home",
+        component: () => import("@/views/dashboard/home/index.vue"),
+        name: "Home",
         meta: {
           title: "首页",
-          icon: "dashboard",
           affix: true
+        }
+      },
+      {
+        path: "/dashboard/workbench",
+        component: () => import("@/views/dashboard/workbench/index.vue"),
+        name: "Workbench",
+        meta: {
+          title: "工作台"
         }
       }
     ]
   }
-  // {
-  //   path: "/unocss",
-  //   component: Layout,
-  //   redirect: "/unocss/index",
-  //   children: [
-  //     {
-  //       path: "index",
-  //       component: () => import("@/views/unocss/index.vue"),
-  //       name: "Unocss",
-  //       meta: {
-  //         title: "unocss",
-  //         icon: "unocss"
-  //       }
-  //     }
-  //   ]
-  // }
 ]
 
 /**
@@ -67,7 +62,6 @@ export const asyncRoutes: Array<RouteRecordRaw> = [
   {
     path: "/system",
     component: Layout,
-    redirect: "/system/user",
     name: "System",
     meta: {
       title: "人事管理",
@@ -77,11 +71,20 @@ export const asyncRoutes: Array<RouteRecordRaw> = [
     },
     children: [
       {
-        path: "user",
+        path: "/system/user",
         component: () => import("@/views/system/user/index.vue"),
         name: "User",
         meta: {
-          title: "用户管理",
+          title: "员工管理",
+          roles: ["admin"]
+        }
+      },
+      {
+        path: "/system/role",
+        component: () => import("@/views/system/role/index.vue"),
+        name: "Role",
+        meta: {
+          title: "角色管理",
           roles: ["admin"]
         }
       }
@@ -119,7 +122,7 @@ export const asyncRoutes: Array<RouteRecordRaw> = [
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes: constantRoutes
 })
 

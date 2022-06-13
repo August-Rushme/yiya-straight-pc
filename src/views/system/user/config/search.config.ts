@@ -1,18 +1,12 @@
 import { IForm } from "@/base-ui/form"
 
 export const searchFormConfig: IForm = {
-  title: "高级检索",
+  title: "",
   labelWidth: "120px",
   itemStyle: {
     padding: "10px 20px"
   },
   formItems: [
-    {
-      field: "id",
-      type: "input",
-      label: "id",
-      placeholder: "请输入id"
-    },
     {
       field: "name",
       type: "input",

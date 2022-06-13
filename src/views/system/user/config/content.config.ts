@@ -1,25 +1,27 @@
 export const contentTableConfig = {
-  title: "用户列表",
+  title: "员工列表",
   propList: [
-    { prop: "username", label: "用户名", minWidth: "100" },
-    { prop: "realname", label: "真实姓名", minWidth: "100" },
-    { prop: "cellphone", label: "手机号码", minWidth: "100" },
-    { prop: "enable", label: "状态", minWidth: "100", slotName: "status" },
+    { prop: "userName", label: "用户名", minWidth: "100" },
+    { prop: "password", label: "密码", minWidth: "100", slotName: "password" },
+    { prop: "name", label: "真实姓名", minWidth: "100" },
+    { prop: "tel", label: "手机号码", minWidth: "100" },
+    { prop: "status", label: "状态", minWidth: "100", slotName: "status" },
     {
-      prop: "created",
+      prop: "createAt",
       label: "创建时间",
-      minWidth: "160",
+      minWidth: "120",
       slotName: "created"
     },
     {
-      prop: "updated",
+      prop: "updateAt",
       label: "更新时间",
-      minWidth: "160",
+      minWidth: "120",
       slotName: "updated"
     },
     { label: "操作", minWidth: "280", slotName: "handler" }
   ],
   showFooter: true,
   showSelectColumn: true,
-  showIndexColumn: true
+  showIndexColumn: true,
+  isBorder: false
 }

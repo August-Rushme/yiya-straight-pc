@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed, ref, defineEmits, watch } from "vue"
+import { computed, ref, watch } from "vue"
 import { useSystemStore } from "@/store/modules/system"
 import { AuTable } from "@/base-ui/table"
-import { formatUtcTime } from "@/utils/index"
+import { formatDateTime } from "@/utils/index"
 import { PageInfo } from "../types/type"
 const props = defineProps({
   contentTableConfig: {
@@ -17,7 +17,7 @@ const props = defineProps({
 
 const store = useSystemStore()
 // 注册事件
-const emit = defineEmits(["editBtnClick", "deleteBtnClick", "checkBtnClick", "newBtnClick"])
+const emit = defineEmits(["editBtnClick", "deleteBtnClick", "checkBtnClick", "newBtnClick", "saveBtnClick"])
 
 const pageInfo = ref<PageInfo>({
   query: "",
@@ -27,31 +27,41 @@ const pageInfo = ref<PageInfo>({
 
 // const pageName = ref(props.pageName)
 
-watch(pageInfo, () => {
-  console.log(pageInfo.value)
-})
-watch(pageInfo, () => getPageData(pageInfo.value))
+const pageName = ref(props.pageName)
+watch(
+  pageInfo,
+  () => {
+    getPageData(pageInfo.value, pageName.value)
+    store.pageNum = pageInfo.value.pageNum
+    store.pageSize = pageInfo.value.pageSize
+  },
+  {
+    deep: true
+  }
+)
 // 2.发送网络请求
-const getPageData = (pageInfo?: any) => {
-  store.getPageListAction(pageInfo.value)
+const getPageData = (pageInfo: any = { query: "", pageNum: 1, pageSize: 6 }, pageName?: any) => {
+  store.getPageListAction({ pageInfo, pageName })
 }
-getPageData(pageInfo.value)
+getPageData(pageInfo.value, pageName.value)
 // footer
 const totalCount = computed(() => store.pageListDataCount(props.pageName))
 
 // 3.从vuex中获取数据
 const dataList = computed(() => store.pageListData(props.pageName))
 // 获取其它动态插槽名
-const otherPropSlots = props.contentTableConfig?.propList.filter((item: any) => {
+const otherPropSlots: any = props.contentTableConfig?.propList.filter((item: any) => {
   if (item.slotName === "handler") return false
-  if (item.slotName === "status") return false
-  if (item.slotName === "create") return false
-  if (item.slotName === "update") return false
+  if (item.slotName === "created") return false
+  if (item.slotName === "updated") return false
   return true
 })
-// 删除/新建/编辑等操作
+// 删除/新建/编辑/保存等操作
 const handleEditClick = (item: any) => {
   emit("editBtnClick", item)
+}
+const handleSaveClick = (item: any) => {
+  emit("saveBtnClick", item)
 }
 const handleDeleteClick = (item: any) => {
   emit("deleteBtnClick", item)
@@ -70,7 +80,7 @@ defineExpose({
 
 <template>
   <div class="page-content">
-    <au-table
+    <AuTable
       :listData="dataList"
       v-bind="props.contentTableConfig"
       v-model:page="pageInfo"
@@ -83,35 +93,35 @@ defineExpose({
         <slot name="handlerHeader" />
       </template>
       <!-- body中的插槽 -->
-      <template #status="scope">
-        <el-button size="small" :type="scope.row.status == 1 ? 'success' : 'danger'">
-          {{ scope.row.status == 1 ? "启用" : "禁用" }}
-        </el-button>
-      </template>
       <template #type="scope">
         <el-tag v-if="scope.row.type == 1" type="success" effect="dark"> 一级 </el-tag>
         <el-tag v-if="scope.row.type == 2" type="warning" effect="dark"> 二级 </el-tag>
         <el-tag v-if="scope.row.type == 3" type="danger" effect="dark"> 三级 </el-tag>
       </template>
+
       <!-- 格式化时间 -->
       <template #created="scope">
         <span>
-          {{ formatUtcTime(scope.row.created) }}
+          {{ formatDateTime(scope.row.createAt) }}
         </span>
       </template>
       <template #updated="scope">
         <span>
-          {{ formatUtcTime(scope.row.updated) }}
+          {{ formatDateTime(scope.row.updateAt) }}
         </span>
       </template>
       <!-- 操作按钮 -->
       <template #handler="scope">
         <div class="handler-btns">
-          <el-button style="font-size: 10px" size="small" type="primary" @click="handleEditClick(scope.row)">
+          <el-button v-if="scope.row.edit" size="default" type="success" @click="handleSaveClick(scope.row)"
+            ><el-icon><check /></el-icon>保存</el-button
+          >
+
+          <el-button v-else style="font-size: 10px" type="primary" size="default" @click="handleEditClick(scope.row)">
             <el-icon mr1><edit /></el-icon>
             编辑</el-button
           >
-          <el-button style="font-size: 10px" size="small" type="danger" @click="handleDeleteClick(scope.row)">
+          <el-button style="font-size: 10px" size="default" type="danger" @click="handleDeleteClick(scope.row)">
             <el-icon mr1><delete /></el-icon>
             删除</el-button
           >
@@ -120,12 +130,12 @@ defineExpose({
         </div>
       </template>
       <!-- 插入剩余的动态插槽 -->
-      <template v-for="item in otherPropSlots" #[item.slotName]="scope">
+      <template v-for="(item, index) in otherPropSlots" :key="index" #[item.slotName]="scope">
         <template v-if="item.slotName">
           <slot :name="item.slotName" :row="scope.row" />
         </template>
       </template>
-    </au-table>
+    </AuTable>
   </div>
 </template>
 <style lang="scss" scoped>

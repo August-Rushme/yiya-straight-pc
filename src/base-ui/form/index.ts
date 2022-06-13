@@ -1,4 +1,4 @@
-import AuForm from "./src/form.vue"
+import AuForm from "./src/au-form.vue"
 
 export * from "./types"
 

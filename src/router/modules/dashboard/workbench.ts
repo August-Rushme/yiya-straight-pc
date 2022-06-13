@@ -1,8 +1,8 @@
 const Layout = () => import("@/layout/index.vue")
+
 export default {
   path: "/",
   component: Layout,
-  redirect: "/dashboard/home",
   meta: {
     title: "Dashboard",
     icon: "dashboard",
@@ -10,13 +10,12 @@ export default {
   },
   children: [
     {
-      path: "/dashboard/home",
-      component: () => import("@/views/dashboard/home/index.vue"),
-      name: "Home",
+      path: "/dashboard/workbench",
+      component: () => import("@/views/dashboard/workbench/index.vue"),
+      name: "Workbench",
       meta: {
-        title: "首页",
-        roles: ["admin"],
-        affix: true
+        title: "工作台",
+        roles: ["admin"]
       }
     }
   ]

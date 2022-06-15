@@ -15,10 +15,8 @@ interface ILoginForm {
   /** 验证码 */
   code: string
 }
-
 const router = useRouter()
 const loginFormDom = ref<any>()
-
 const state = reactive({
   /** 登录按钮 loading */
   loading: false,
@@ -59,6 +57,7 @@ const state = reactive({
               console.warn(err)
             })
             message.success("登录成功")
+            useUserStore().getUserMenusAction()
           })
           .catch(() => {
             state.loading = false

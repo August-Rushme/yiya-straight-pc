@@ -1,9 +1,9 @@
 const Layout = () => import("@/layout/index.vue")
-
 export default {
   path: "/",
-  redirect: "/dashboard/home",
   component: Layout,
+  redirect: "/dashboard/home",
+  name: "Dashboard",
   meta: {
     title: "Dashboard",
     icon: "dashboard",

@@ -21,3 +21,12 @@ export function userInfoRequest(id: number) {
     method: "get"
   })
 }
+
+/**获取用户的菜单  */
+export function getUserMenus(data: { userId: number }) {
+  return request({
+    url: "menu/list",
+    method: "post",
+    data
+  })
+}

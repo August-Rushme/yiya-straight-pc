@@ -3,14 +3,16 @@ import { defineStore } from "pinia"
 import { usePermissionStore } from "./permission"
 import { getToken, removeToken, setToken } from "@/utils/cookies"
 import router, { resetRouter } from "@/router"
-import { accountLogin, userInfoRequest } from "@/api/login"
+import { accountLogin, getUserMenus, userInfoRequest } from "@/api/login"
 import { RouteRecordRaw } from "vue-router"
 import cache from "@/utils/cache"
+import { mapMenusToRoutes } from "@/utils/menus-map"
 
 interface IUserState {
   token: string
   roles: string[]
   userInfo: any
+  userMenus: RouteRecordRaw[]
 }
 
 export const useUserStore = defineStore({
@@ -19,7 +21,8 @@ export const useUserStore = defineStore({
     return {
       token: getToken() || "",
       roles: [],
-      userInfo: {}
+      userInfo: {},
+      userMenus: []
     }
   },
   actions: {
@@ -36,11 +39,12 @@ export const useUserStore = defineStore({
           userName: userInfo.username.trim(),
           password: userInfo.password
         })
-          .then((res: any) => {
+          .then(async (res: any) => {
             setToken(res.token)
             this.token = res.token
             this.userInfo = res.userInfo
             cache.setCache("userInfo", res.user)
+
             resolve(true)
           })
           .catch((error) => {
@@ -48,8 +52,17 @@ export const useUserStore = defineStore({
           })
       })
     },
-    /** 获取用户详情 */
-    getInfo() {
+    async getUserMenusAction() {
+      // 获取用户的菜单
+      const { data: resMenu } = await getUserMenus({ userId: cache.getCache("userInfo").id })
+
+      const { newUserMenus } = await mapMenusToRoutes(resMenu)
+      this.userMenus = newUserMenus
+      cache.setCache("userMenus", this.userMenus)
+
+      return this.userMenus
+    },
+    /** 获取用户详情 */ getInfo() {
       return new Promise((resolve, reject) => {
         const id = cache.getCache("userInfo").id
         userInfoRequest(id)

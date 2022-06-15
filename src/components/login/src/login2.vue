@@ -2,7 +2,7 @@
  * @Author: Kenny
  * @Date: 2022-06-13 14:52:53
  * @LastEditors: Kenny
- * @LastEditTime: 2022-06-14 09:04:33
+ * @LastEditTime: 2022-06-15 10:51:47
  * @FilePath: \yiya-straight-front-pc\src\components\login\src\login2.vue
 -->
 <script setup lang="ts">
@@ -23,10 +23,8 @@ interface ILoginForm {
   /** 验证码 */
   code: string
 }
-
 const router = useRouter()
 const loginFormDom = ref<any>()
-
 const state = reactive({
   /** 登录按钮 loading */
   loading: false,
@@ -67,6 +65,7 @@ const state = reactive({
               console.warn(err)
             })
             message.success("登录成功")
+            useUserStore().getUserMenusAction()
           })
           .catch(() => {
             state.loading = false
@@ -86,6 +85,7 @@ const state = reactive({
     // state.codeUrl = `/api/v1/login/code?${Math.random() * 1000}`
   }
 })
+
 onMounted(() => {
   // loadAnimation 渲染动画
   lottie.loadAnimation({

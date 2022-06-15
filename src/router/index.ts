@@ -1,13 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router"
-import { useUserStoreHook } from "@/store/modules/user"
 
 const Layout = () => import("@/layout/index.vue")
 
-const store = useUserStoreHook()
-
-const userMenus: RouteRecordRaw[] = await store.getUserMenusAction()
-
-// userMenus = cache.getCache("userMenus")
 /** 常驻路由 */
 export const constantRoutes: Array<RouteRecordRaw> = [
   {
@@ -57,16 +51,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         }
       }
     ]
-  }
-]
-
-/**
- * 动态路由
- * 用来放置有权限（roles 属性）的路由
- * 必须带有 name 属性
- */
-export const asyncRoutes: Array<RouteRecordRaw> = [
-  ...userMenus,
+  },
   {
     path: "/:pathMatch(.*)*", // 必须将 'ErrorPage' 路由放在最后, Must put the 'ErrorPage' route at the end
     component: Layout,
@@ -97,6 +82,13 @@ export const asyncRoutes: Array<RouteRecordRaw> = [
     ]
   }
 ]
+
+/**
+ * 动态路由
+ * 用来放置有权限（roles 属性）的路由
+ * 必须带有 name 属性
+ */
+export const asyncRoutes: Array<RouteRecordRaw> = []
 
 const router = createRouter({
   history: createWebHistory(),

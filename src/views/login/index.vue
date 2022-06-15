@@ -60,7 +60,6 @@ const state = reactive({
               console.warn(err)
             })
             message.success("登录成功")
-            useUserStore().getUserMenusAction()
           })
           .catch(() => {
             state.loading = false

@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router"
+
 const Layout = () => import("@/layout/index.vue")
 
 /** 常驻路由 */
@@ -26,55 +27,27 @@ export const constantRoutes: Array<RouteRecordRaw> = [
   {
     path: "/",
     component: Layout,
-    redirect: "/dashboard",
-    children: [
-      {
-        path: "dashboard",
-        component: () => import("@/views/dashboard/index.vue"),
-        name: "Dashboard",
-        meta: {
-          title: "首页",
-          icon: "dashboard"
-        }
-      }
-    ]
-  }
-]
-
-/**
- * 动态路由
- * 用来放置有权限（roles 属性）的路由
- * 必须带有 name 属性
- */
-export const asyncRoutes: Array<RouteRecordRaw> = [
-  {
-    path: "/system",
-    component: Layout,
-    redirect: "/system/user",
-    name: "System",
+    redirect: "/dashboard/home",
     meta: {
-      title: "人事管理",
-      icon: "personnel",
-      roles: ["admin"], // 可以在根路由中设置角色
-      alwaysShow: true
+      title: "Dashboard",
+      icon: "dashboard"
     },
     children: [
       {
-        path: "user",
-        component: () => import("@/views/system/user/index.vue"),
-        name: "User",
+        path: "/dashboard/home",
+        component: () => import("@/views/dashboard/home/index.vue"),
+        name: "Home",
         meta: {
-          title: "员工管理",
-          roles: ["admin"]
+          title: "首页",
+          affix: true
         }
       },
       {
-        path: "role",
-        component: () => import("@/views/system/role/index.vue"),
-        name: "Role",
+        path: "/dashboard/workbench",
+        component: () => import("@/views/dashboard/workbench/index.vue"),
+        name: "Workbench",
         meta: {
-          title: "角色管理",
-          roles: ["admin"]
+          title: "工作台"
         }
       }
     ]
@@ -110,6 +83,13 @@ export const asyncRoutes: Array<RouteRecordRaw> = [
   }
 ]
 
+/**
+ * 动态路由
+ * 用来放置有权限（roles 属性）的路由
+ * 必须带有 name 属性
+ */
+export const asyncRoutes: Array<RouteRecordRaw> = []
+
 const router = createRouter({
   history: createWebHistory(),
   routes: constantRoutes
@@ -126,7 +106,7 @@ export function resetRouter() {
       }
     })
   } catch (error) {
-    // 强制刷新浏览器，不过体验不是很好
+    // 强制刷新浏览器
     window.location.reload()
   }
 }

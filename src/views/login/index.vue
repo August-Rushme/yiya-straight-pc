@@ -2,7 +2,7 @@
  * @Author: Kenny
  * @Date: 2022-06-13 14:52:53
  * @LastEditors: Kenny
- * @LastEditTime: 2022-06-15 09:27:57
+ * @LastEditTime: 2022-06-15 10:58:39
  * @FilePath: \yiya-straight-front-pc\src\views\login\index.vue
 -->
 <script setup lang="ts">

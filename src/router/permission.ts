@@ -40,7 +40,12 @@ router.beforeEach(async (to: RouteLocationNormalized, _: RouteLocationNormalized
             permissionStore.setRoutes(asyncRouteSettings.defaultRoles)
           }
           // 将'有访问权限的动态路由' 添加到 router 中
-          permissionStore.dynamicRoutes.forEach((route: RouteRecordRaw) => {
+          const routes = permissionStore.dynamicRoutes
+          const res = await userStore.getUserMenusAction()
+          routes.unshift(...res)
+          console.log(routes)
+
+          routes.forEach((route: RouteRecordRaw) => {
             router.addRoute(route)
           })
           // 确保添加路由已完成

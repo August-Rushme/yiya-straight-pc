@@ -5,6 +5,7 @@ import { getToken, removeToken, setToken } from "@/utils/cookies"
 import router, { resetRouter } from "@/router"
 import { accountLogin, getUserMenus, userInfoRequest } from "@/api/login"
 import { RouteRecordRaw } from "vue-router"
+
 import cache from "@/utils/cache"
 import { mapMenusToRoutes } from "@/utils/menus-map"
 
@@ -39,12 +40,12 @@ export const useUserStore = defineStore({
           userName: userInfo.username.trim(),
           password: userInfo.password
         })
-          .then(async (res: any) => {
+          .then((res: any) => {
             setToken(res.token)
             this.token = res.token
             this.userInfo = res.userInfo
             cache.setCache("userInfo", res.user)
-
+            this.getUserMenusAction()
             resolve(true)
           })
           .catch((error) => {
@@ -59,7 +60,6 @@ export const useUserStore = defineStore({
       const { newUserMenus } = await mapMenusToRoutes(resMenu)
       this.userMenus = newUserMenus
       cache.setCache("userMenus", this.userMenus)
-
       return this.userMenus
     },
     /** 获取用户详情 */ getInfo() {

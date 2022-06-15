@@ -2,7 +2,12 @@ import store from "@/store"
 import { defineStore } from "pinia"
 import { RouteRecordRaw } from "vue-router"
 import { constantRoutes, asyncRoutes } from "@/router"
-
+import { getUserMenus } from "@/api/login"
+import { mapMenusToRoutes } from "@/utils/menus-map"
+import cache from "@/utils/cache"
+// import { getUserMenus } from "@/api/login"
+// import cache from "@/utils/cache"
+// import { mapMenusToRoutes } from "@/utils/menus-map"
 interface IPermissionState {
   routes: RouteRecordRaw[]
   dynamicRoutes: RouteRecordRaw[]
@@ -45,7 +50,14 @@ export const usePermissionStore = defineStore({
     }
   },
   actions: {
-    setRoutes(roles: string[]) {
+    async setRoutes(roles: string[]) {
+      // 清空asyncRoutes
+      asyncRoutes.splice(0, asyncRoutes.length)
+      const { data: resMenu } = await getUserMenus({ userId: cache.getCache("userInfo").id })
+
+      const { newUserMenus } = await mapMenusToRoutes(resMenu)
+      asyncRoutes.push(...newUserMenus)
+      // 获取用户的菜单
       let accessedRoutes
       if (roles.includes("admin")) {
         accessedRoutes = asyncRoutes
@@ -53,6 +65,8 @@ export const usePermissionStore = defineStore({
         accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
       }
       this.routes = constantRoutes.concat(accessedRoutes)
+      console.log(this.routes)
+
       this.dynamicRoutes = accessedRoutes
     }
   }

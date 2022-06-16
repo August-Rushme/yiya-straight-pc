@@ -64,3 +64,11 @@ export function addPageData(url: string, data: any) {
     data
   })
 }
+
+// 获取所有的菜单
+export function getMenuAll(url: string) {
+  return request({
+    url,
+    method: "get"
+  })
+}

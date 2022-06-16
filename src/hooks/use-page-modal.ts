@@ -20,15 +20,18 @@ export function usePageModal(newCb?: CallbackFn, editCb?: CallbackFn) {
     newCb && newCb()
   }
   // 编辑
-  const handleEditData = (item: any) => {
-    console.log("item", item)
-
+  const handleEditData = (item: any, pageName?: string) => {
     modalTitle.value = "编辑"
-    item.edit = true
+    // 根据菜单名选择编辑模式
+    if (pageName !== "menu") {
+      // 非弹窗式
+      item.edit = true
+    }
     defaultInfo.value = { ...item }
-    // if (pageModalRef.value) {
-    //   pageModalRef.value.modalVisible = true
-    // }
+    if (pageModalRef.value && pageName == "menu") {
+      // 弹窗式
+      pageModalRef.value.modalVisible = true
+    }
     editCb && editCb(item)
   }
   // 保存

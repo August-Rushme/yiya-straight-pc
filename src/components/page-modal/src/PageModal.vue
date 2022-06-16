@@ -1,6 +1,18 @@
 <template>
   <div class="pageModal" v-if="modalVisible">
-    <el-dialog :title="title" v-model="modalVisible" width="30%" center destroy-on-close>
+    <el-drawer v-model="modalVisible" :title="title" :direction="direction">
+      <AuForm v-bind="pageModalConfig" v-model="formData" ref="pageFormRef" />
+      <slot />
+      <template #footer>
+        <div style="flex: auto">
+          <span class="dialog-footer">
+            <el-button @click="modalVisible = false">取 消</el-button>
+            <el-button type="primary" @click="handleConfirmCick(pageFormRef?.formRef)"> 确 定 </el-button>
+          </span>
+        </div>
+      </template>
+    </el-drawer>
+    <!-- <el-dialog :title="title" v-model="modalVisible" width="30%" center destroy-on-close>
       <AuForm v-bind="pageModalConfig" v-model="formData" ref="pageFormRef" />
       <slot />
       <template #footer>
@@ -9,12 +21,11 @@
           <el-button type="primary" @click="handleConfirmCick(pageFormRef?.formRef)"> 确 定 </el-button>
         </span>
       </template>
-    </el-dialog>
-    <el-card />
+    </el-dialog> -->
   </div>
 </template>
 <script setup lang="ts">
-import { ref, watch } from "vue"
+import { PropType, ref, watch } from "vue"
 import AuForm from "@/base-ui/form"
 import type { FormInstance } from "element-plus"
 
@@ -41,6 +52,10 @@ const props = defineProps({
   title: {
     type: String,
     default: ""
+  },
+  direction: {
+    type: String as PropType<"ltr" | "rtl" | "ttb" | "btt">,
+    default: "rtl"
   }
 })
 
@@ -71,6 +86,9 @@ const handleConfirmCick = async (formEl: FormInstance | undefined) => {
   if (Object.keys(props.defaultInfo).length) {
     // 编辑
     console.log("编辑")
+
+    store.editPageDataAction({ editData: { ...formData.value, id: props.defaultInfo.id }, pageName: props.pageName })
+    modalVisible.value = false
   } else {
     // 新建
     console.log("新建")

@@ -78,8 +78,6 @@ const state = reactive({
   createCode: () => {
     // 先清空验证码的输入
     state.loginForm.verCode = ""
-    // 实际开发中，可替换成自己的地址，这里只是提供一个参考
-    // state.codeUrl = `/api/v1/login/code?${Math.random() * 1000}`
   }
 })
 

@@ -14,7 +14,6 @@ const permissionStore = usePermissionStoreHook()
 NProgress.configure({ showSpinner: false })
 
 router.beforeEach(async (to: RouteLocationNormalized, _: RouteLocationNormalized, next: any) => {
-  // console.log("to", to)
   console.log(to.path)
 
   NProgress.start()

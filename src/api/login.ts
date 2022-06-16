@@ -4,6 +4,8 @@ interface IUserRequestData {
   buk: string
   userName: string
   password: string
+  verCode: string
+  verKey: string
 }
 
 /** 登录，返回 token */
@@ -28,5 +30,13 @@ export function getUserMenus(data: { userId: number }) {
     url: "menu/list",
     method: "post",
     data
+  })
+}
+
+/** 获取验证码 */
+export function getCaptcha() {
+  return request({
+    url: "captcha/getCode",
+    method: "get"
   })
 }

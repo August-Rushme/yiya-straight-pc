@@ -13,6 +13,7 @@ import { useRouter } from "vue-router"
 import { useUserStore } from "@/store/modules/user"
 // import { User, Lock, Key } from "@element-plus/icons-vue"
 import message from "@/utils/message"
+import { getCaptcha } from "@/api/login"
 interface ILoginForm {
   /**公司代码 */
   buk: string
@@ -21,7 +22,9 @@ interface ILoginForm {
   /** 密码 */
   password: string
   /** 验证码 */
-  code: string
+  verCode: string
+  /**验证码key */
+  verKey: string
 }
 const router = useRouter()
 const loginFormDom = ref<any>()
@@ -35,8 +38,7 @@ const state = reactive({
   loginForm: {
     buk: "mlqh",
     username: "a12345678",
-    password: "a12345678",
-    code: "abcd"
+    verCode: ""
   } as ILoginForm,
   /** 登录表单校验规则 */
   loginRules: {
@@ -46,7 +48,7 @@ const state = reactive({
       { required: true, message: "请输入密码", trigger: "blur" },
       { min: 8, max: 16, message: "长度在 8 到 16 个字符", trigger: "blur" }
     ],
-    code: [{ required: true, message: "请输入验证码", trigger: "blur" }]
+    verCode: [{ required: true, message: "请输入验证码", trigger: "blur" }]
   },
   /** 登录逻辑 */
   handleLogin: () => {
@@ -57,7 +59,9 @@ const state = reactive({
           .login({
             buk: state.loginForm.buk,
             username: state.loginForm.username,
-            password: state.loginForm.password
+            password: state.loginForm.password,
+            verCode: state.loginForm.verCode,
+            verKey: state.loginForm.verKey
           })
           .then(() => {
             state.loading = false
@@ -78,15 +82,25 @@ const state = reactive({
     })
   },
   /** 创建验证码 */
-  createCode: () => {
-    // 先清空验证码的输入
-    state.loginForm.code = ""
+  createCode: async () => {
+    const res: any = await getCaptcha()
+
+    // base64转blob
+    // const blob = new Blob([res.image], { type: "image/png" })
+    // // blob转url
+    // const url = URL.createObjectURL(blob)
+
+    // // 先清空验证码的输入
+    // state.loginForm.code = ""
     // 实际开发中，可替换成自己的地址，这里只是提供一个参考
     // state.codeUrl = `/api/v1/login/code?${Math.random() * 1000}`
+    state.codeUrl = res.image
+    state.loginForm.verKey = res.key
   }
 })
 
 onMounted(() => {
+  state.createCode()
   // loadAnimation 渲染动画
   lottie.loadAnimation({
     // 选取一个容器，用于渲染动画
@@ -130,6 +144,23 @@ onMounted(() => {
                 show-password
               />
             </el-form-item>
+            <el-form-item label="验证码:" prop="verCode" class="password">
+              <div>
+                <el-input
+                  v-model="state.loginForm.verCode"
+                  placeholder="请输入验证码"
+                  type="text"
+                  tabindex="2"
+                  size="large"
+                  style="width: 90%"
+                />
+                <span class="show-code">
+                  <img :src="state.codeUrl" @click="state.createCode" />
+                </span>
+              </div>
+
+              <!-- <img src="" alt=""> -->
+            </el-form-item>
             <div class="bottomGroup">
               <div>
                 <el-checkbox v-model="state.isKeepPassword">记住密码</el-checkbox>
@@ -158,7 +189,7 @@ onMounted(() => {
     display: flex;
     padding: 20px;
     padding-right: 60px;
-    height: 400px;
+    height: 450px;
     border-radius: 20px;
     background: white;
     box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff;
@@ -186,6 +217,18 @@ onMounted(() => {
     text-align: center;
     color: gray;
     font-size: 12px;
+  }
+}
+.show-code {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  cursor: pointer;
+  user-select: none;
+  img {
+    width: 100px;
+    height: 42px;
+    border-radius: 4px;
   }
 }
 </style>

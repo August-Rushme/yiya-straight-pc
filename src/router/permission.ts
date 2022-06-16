@@ -43,8 +43,6 @@ router.beforeEach(async (to: RouteLocationNormalized, _: RouteLocationNormalized
           const routes = permissionStore.dynamicRoutes
           const res = await userStore.getUserMenusAction()
           routes.unshift(...res)
-          console.log(routes)
-
           routes.forEach((route: RouteRecordRaw) => {
             router.addRoute(route)
           })

@@ -51,7 +51,15 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         }
       }
     ]
-  },
+  }
+]
+
+/**
+ * 动态路由
+ * 用来放置有权限（roles 属性）的路由
+ * 必须带有 name 属性
+ */
+export const asyncRoutes: Array<RouteRecordRaw> = [
   {
     path: "/:pathMatch(.*)*", // 必须将 'ErrorPage' 路由放在最后, Must put the 'ErrorPage' route at the end
     component: Layout,
@@ -83,13 +91,6 @@ export const constantRoutes: Array<RouteRecordRaw> = [
   }
 ]
 
-/**
- * 动态路由
- * 用来放置有权限（roles 属性）的路由
- * 必须带有 name 属性
- */
-export const asyncRoutes: Array<RouteRecordRaw> = []
-
 const router = createRouter({
   history: createWebHistory(),
   routes: constantRoutes
@@ -98,7 +99,9 @@ const router = createRouter({
 /** 重置路由 */
 export function resetRouter() {
   // 注意：所有动态路由路由必须带有 name 属性，否则可能会不能完全重置干净
+
   try {
+    window.location.reload()
     router.getRoutes().forEach((route) => {
       const { name, meta } = route
       if (name && meta.roles?.length) {

@@ -13,7 +13,9 @@ interface ILoginForm {
   /** 密码 */
   password: string
   /** 验证码 */
-  code: string
+  verCode: string
+  /** key */
+  verKey: string
 }
 const router = useRouter()
 const loginFormDom = ref<any>()
@@ -28,7 +30,8 @@ const state = reactive({
     buk: "mlqh",
     username: "a12345678",
     password: "a12345678",
-    code: "abcd"
+    verCode: "abcd",
+    verKey: ""
   } as ILoginForm,
   /** 登录表单校验规则 */
   loginRules: {
@@ -49,7 +52,9 @@ const state = reactive({
           .login({
             buk: state.loginForm.buk,
             username: state.loginForm.username,
-            password: state.loginForm.password
+            password: state.loginForm.password,
+            verKey: state.loginForm.verKey,
+            verCode: state.loginForm.verCode
           })
           .then(() => {
             state.loading = false
@@ -72,7 +77,7 @@ const state = reactive({
   /** 创建验证码 */
   createCode: () => {
     // 先清空验证码的输入
-    state.loginForm.code = ""
+    state.loginForm.verCode = ""
     // 实际开发中，可替换成自己的地址，这里只是提供一个参考
     // state.codeUrl = `/api/v1/login/code?${Math.random() * 1000}`
   }

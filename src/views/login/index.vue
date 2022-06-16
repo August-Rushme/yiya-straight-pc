@@ -2,9 +2,10 @@
  * @Author: Kenny
  * @Date: 2022-06-13 14:52:53
  * @LastEditors: Kenny
- * @LastEditTime: 2022-06-15 10:58:39
+ * @LastEditTime: 2022-06-15 11:43:51
  * @FilePath: \yiya-straight-front-pc\src\views\login\index.vue
 -->
+<!-- 手机 -->
 <script setup lang="ts">
 import { mobieLogin, pcLogin } from "@/components/login/index"
 import { onMounted, ref } from "vue"

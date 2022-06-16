@@ -2,9 +2,11 @@
  * @Author: Kenny
  * @Date: 2022-06-13 14:52:53
  * @LastEditors: Kenny
- * @LastEditTime: 2022-06-15 10:51:47
+ * @LastEditTime: 2022-06-15 11:43:45
  * @FilePath: \yiya-straight-front-pc\src\components\login\src\login2.vue
 -->
+
+<!-- PC -->
 <script setup lang="ts">
 import { onMounted } from "vue"
 import lottie from "lottie-web"

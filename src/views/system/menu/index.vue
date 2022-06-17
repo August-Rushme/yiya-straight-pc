@@ -1,47 +1,73 @@
 <script lang="ts" setup>
 import PageContent from "@/components/page-content"
-import PageSearch from "@/components/page-search"
+
 import PageModal from "@/components/page-modal"
 
-import { searchFormConfig } from "./config/search.config"
 import { contentTableConfig } from "./config/content.config"
 import { modalConfig } from "./config/modal.config"
 
-import { usePageSearch } from "@/hooks/use-page-search"
 import { usePageModal } from "@/hooks/use-page-modal"
+import { useSystemStoreHook } from "@/store/modules/system"
+import { computed } from "vue"
 
 const pageName = "menu"
-// pageModal相关的hook逻辑
-const { pageContentRef, handleResetClick, handleQueryClick } = usePageSearch()
+const store = useSystemStoreHook()
+
 // 调用hook获取公共变量和函数
 const { pageModalRef, defaultInfo, handleNewData, handleEditData, handleDeleteData, handleSaveData, modalTitle } =
   usePageModal()
 
+// 动态添加菜单列表
+const modalConfigRef = computed(() => {
+  const parentId = modalConfig.formItems.find((item) => item.field === "parentId")
+  parentId!.options = store.menuList.map((item) => {
+    // 如果有children则递归添加
+    const newMenuList = {
+      value: item.id,
+      label: item.name,
+      children: item.children
+        ? item.children.map((child: any) => {
+            return {
+              value: child.id,
+              label: child.name
+            }
+          })
+        : []
+    }
+    return newMenuList
+  })
+  return {
+    ...modalConfig,
+    title: modalTitle.value
+  }
+})
 defineExpose({
   handleEditData,
-  handleNewData
+  handleNewData,
+  modalConfigRef
 })
 </script>
 <template>
   <div class="app-container">
-    <el-card>
-      <page-search
-        :searchFormConfig="searchFormConfig"
-        @resetBtnClick="handleResetClick(pageName)"
-        @queryBtnClick="handleQueryClick"
-      />
-    </el-card>
     <el-card class="mt-5">
       <page-content
         :contentTableConfig="contentTableConfig"
         :pageName="pageName"
-        @editBtnClick="handleEditData"
+        @editBtnClick="handleEditData($event, pageName)"
         @saveBtnClick="handleSaveData($event, pageName)"
         @deleteBtnClick="handleDeleteData($event, pageName)"
         ref="pageContentRef"
       >
         <template #handlerHeader>
-          <el-button type="primary" size="small" @click="handleNewData('添加角色')"> 添加角色 </el-button>
+          <el-button type="primary" size="small" @click="handleNewData('添加菜单')">添加菜单</el-button>
+        </template>
+        <template #menuType="scope">
+          <el-tag v-if="scope.row.menuType == 0">一级菜单</el-tag>
+          <el-tag v-else-if="scope.row.menuType == 1" type="success">二级菜单</el-tag>
+          <el-tag v-else-if="scope.row.menuType == 2" type="warning">三级菜单</el-tag>
+        </template>
+        <template #icon="scope">
+          <i :class="scope.row.icon" style="font-size: 18px" />
         </template>
       </page-content>
     </el-card>
@@ -49,7 +75,7 @@ defineExpose({
       :defaultInfo="defaultInfo"
       ref="pageModalRef"
       :pageName="pageName"
-      :pageModalConfig="modalConfig"
+      :pageModalConfig="modalConfigRef"
       :title="modalTitle"
     />
   </div>

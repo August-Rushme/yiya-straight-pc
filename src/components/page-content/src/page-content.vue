@@ -4,6 +4,7 @@ import { useSystemStore } from "@/store/modules/system"
 import { AuTable } from "@/base-ui/table"
 import { formatDateTime } from "@/utils/index"
 import { PageInfo } from "../types/type"
+
 const props = defineProps({
   contentTableConfig: {
     type: Object,
@@ -49,6 +50,7 @@ const totalCount = computed(() => store.pageListDataCount(props.pageName))
 
 // 3.从vuex中获取数据
 const dataList = computed(() => store.pageListData(props.pageName))
+
 // 获取其它动态插槽名
 const otherPropSlots: any = props.contentTableConfig?.propList.filter((item: any) => {
   if (item.slotName === "handler") return false
@@ -56,6 +58,7 @@ const otherPropSlots: any = props.contentTableConfig?.propList.filter((item: any
   if (item.slotName === "updated") return false
   return true
 })
+
 // 删除/新建/编辑/保存等操作
 const handleEditClick = (item: any) => {
   emit("editBtnClick", item)

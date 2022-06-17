@@ -30,12 +30,37 @@
                   v-model="formData[`${item.field}`]"
                 >
                   <el-option v-for="option in item.options" :key="option.value" :value="option.value">{{
-                    option.title
+                    option.label
                   }}</el-option>
                 </el-select>
               </template>
+              <template v-else-if="item.type === 'treeSelect'">
+                <el-tree-select
+                  v-model="formData[`${item.field}`]"
+                  :data="item.options"
+                  check-strictly
+                  style="width: 100%"
+                />
+              </template>
               <template v-else-if="item.type === 'datepicker'">
                 <el-date-picker style="width: 100%" v-bind="item.otherOptions" v-model="formData[`${item.field}`]" />
+              </template>
+              <template v-else-if="item.type === 'menuIcon'">
+                <el-input
+                  :placeholder="item.placeholder"
+                  v-bind="item.otherOptions"
+                  style="width: 50%; margin-right: 6px"
+                  v-model="formData[`${item.field}`]"
+                /><el-button v-if="formData[`${item.field}`]" :disabled="true">
+                  <!-- <svg-icon :name="formData[`${item.field}`]" /> -->
+                  <i :class="formData[`${item.field}`]"
+                /></el-button>
+                <el-popover :visible="modal" placement="top" width="60vw" title="请选择图标">
+                  <icons @success="onSuccess($event, item.field)" />
+                  <template #reference>
+                    <el-button icon="el-icon-search" @click="handleClickChoose">选择图标</el-button>
+                  </template>
+                </el-popover>
               </template>
             </el-form-item>
           </el-col>
@@ -51,6 +76,7 @@
 <script lang="ts" setup>
 import { PropType, ref, watch } from "vue"
 import type { FormInstance } from "element-plus"
+import icons from "@/icons/icon.vue"
 import { IFormItem } from "../types"
 
 const props = defineProps({
@@ -89,7 +115,7 @@ const props = defineProps({
     default: false
   },
   labelPosition: {
-    type: String,
+    type: String as PropType<"left" | "right" | "top">,
     default: "top"
   }
 })
@@ -97,7 +123,6 @@ const emit = defineEmits(["update:modelValue"])
 
 const formRef = ref<FormInstance>()
 const formData = ref({ ...props.modelValue })
-const aaa = 111
 watch(
   formData,
   (newValue) => {
@@ -116,10 +141,19 @@ watch(
 // const handleValueChange = (value: any, field: string) => {
 //   emit("update:modelValue", { ...props.modelValue, [field]: value })
 // }
+
+// 图标选择相关
+const modal = ref(false)
+const handleClickChoose = () => {
+  modal.value = !modal.value
+}
+const onSuccess = (val: string, field: string) => {
+  formData.value[`${field}`] = val
+  modal.value = false
+}
 defineExpose({
   formData,
-  formRef,
-  aaa
+  formRef
 })
 </script>
 

@@ -29,8 +29,8 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     component: Layout,
     redirect: "/dashboard/home",
     meta: {
-      title: "Dashboard",
-      icon: "dashboard"
+      title: "首页",
+      icon: "ic ic-qrcode-fill"
     },
     children: [
       {

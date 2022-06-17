@@ -40,6 +40,7 @@ const state = reactive({
   loginForm: {
     buk: "mlqh",
     username: "a12345678",
+    password: "a12345678",
     verCode: ""
   } as ILoginForm,
   /** 登录表单校验规则 */
@@ -94,8 +95,6 @@ const state = reactive({
 
     // // 先清空验证码的输入
     // state.loginForm.code = ""
-    // 实际开发中，可替换成自己的地址，这里只是提供一个参考
-    // state.codeUrl = `/api/v1/login/code?${Math.random() * 1000}`
     state.codeUrl = res.image
     state.loginForm.verKey = res.key
   }

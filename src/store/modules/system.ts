@@ -4,6 +4,7 @@ import {
   deletePageData,
   editPageData,
   getAllRole,
+  getMenuAll,
   getPageList,
   getUserRole,
   setUserRole
@@ -21,6 +22,8 @@ interface ISystemState {
   roles: number[]
   pageNum: number
   pageSize: number
+  menuList: any[]
+  menuAll: any[]
 }
 export const useSystemStore = defineStore({
   id: "system",
@@ -32,7 +35,9 @@ export const useSystemStore = defineStore({
       roleCount: 0,
       roles: [],
       pageNum: 1,
-      pageSize: 6
+      pageSize: 6,
+      menuList: [],
+      menuAll: []
     }
   },
   getters: {
@@ -51,14 +56,20 @@ export const useSystemStore = defineStore({
     // 获取表格数据
     async getPageListAction(payload: any) {
       const clinicId = cache.getCache("userInfo").clinicId
-      // 1.获取pageUrl
+      const userId = cache.getCache("userInfo").id
+      // 获取pageUrl
       const pageName: string = payload.pageName
-      payload.pageInfo = { ...payload.pageInfo, clinicId }
+      payload.pageInfo = { ...payload.pageInfo, clinicId, userId }
       const pageUrl = `/${pageName}/list`
-      // 2.对页面发送请求
+      // 对页面发送请求
       const { data: res }: any = await getPageList(pageUrl, payload.pageInfo)
-      // 3.将数据存储到state中
-      const { list, total }: { list: any[]; total: number } = res
+      // 将数据存储到state中
+      let list: any[] = res.list
+      const total: number = res.total
+      // 特殊处理
+      if (pageName === "menu") {
+        list = res
+      }
       this.$patch({
         [`${pageName}List`]: list,
         [`${pageName}Count`]: total
@@ -111,19 +122,17 @@ export const useSystemStore = defineStore({
     },
     // 删除操作
     async deletePageDataAction(payload: any) {
-      // 1.获取pageName和id
-      // pageName -> /user
-      // id -> /user/id
+      // 获取pageName和id
       const { pageName, id } = payload
       const pageUrl = `/${pageName}/${id}`
 
-      // 2.调用删除网络请求
+      // 调用删除网络请求
       const res: any = await deletePageData(pageUrl)
       if (res.code !== 200) {
         return message.error("删除失败")
       }
       message.success("删除成功")
-      // 3.重新请求最新的数据
+      // 重新请求最新的数据
       this.getPageListAction({ pageName, pageInfo: { pageNum: this.pageNum, pageSize: this.pageSize } })
     },
     // 新增操作
@@ -137,9 +146,17 @@ export const useSystemStore = defineStore({
 
       this.getPageListAction({ pageName, pageInfo: { pageNum: this.pageNum, pageSize: this.pageSize } })
       return res
+    },
+    // 获取所有的菜单非树
+    async getAllMenuAction() {
+      const { data: res }: any = await getMenuAll("/menu/all")
+      this.$patch({
+        menuAll: res
+      })
+      console.log(res)
     }
   }
 })
-export function useUserStoreHook() {
+export function useSystemStoreHook() {
   return useSystemStore(store)
 }

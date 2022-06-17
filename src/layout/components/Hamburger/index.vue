@@ -1,6 +1,13 @@
+<!--
+ * @Author: Kenny
+ * @Date: 2022-06-13 14:52:52
+ * @LastEditors: Kenny
+ * @LastEditTime: 2022-06-16 23:07:52
+ * @FilePath: \yiya-straight-front-pc\src\layout\components\Hamburger\index.vue
+-->
 <script lang="ts" setup>
 import { Expand, Fold } from "@element-plus/icons-vue"
-
+import { useEchartsStoreHook } from "@/store/modules/echats"
 defineProps({
   isActive: {
     type: Boolean,
@@ -11,6 +18,11 @@ defineProps({
 const emit = defineEmits(["toggle-click"])
 
 const toggleClick = () => {
+  useEchartsStoreHook().echartsArray.forEach((item) => {
+    setTimeout(() => {
+      item.echartinstance.resize()
+    }, 300)
+  })
   emit("toggle-click")
 }
 </script>

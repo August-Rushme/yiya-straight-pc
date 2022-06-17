@@ -1,9 +1,9 @@
 <!--
  * @Author: error: git config user.name && git config user.email & please set dead value or install git
  * @Date: 2022-06-10 16:34:35
- * @LastEditors: error: git config user.name && git config user.email & please set dead value or install git
- * @LastEditTime: 2022-06-12 15:56:18
- * @FilePath: \yiya-straight-pc\src\components\ThemeSwitch\index.vue
+ * @LastEditors: Kenny
+ * @LastEditTime: 2022-06-16 22:42:28
+ * @FilePath: \yiya-straight-front-pc\src\components\ThemeSwitch\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <script lang="ts" setup>

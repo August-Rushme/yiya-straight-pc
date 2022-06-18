@@ -1,3 +1,10 @@
+/*
+ * @Author: Kenny
+ * @Date: 2022-06-17 14:54:20
+ * @LastEditors: Kenny
+ * @LastEditTime: 2022-06-18 15:15:53
+ * @FilePath: \yiya-straight-pc\types\shims-vue.d.ts
+ */
 declare module "*.vue" {
   import { DefineComponent } from "vue"
   const component: DefineComponent<{}, {}, any>
@@ -17,3 +24,4 @@ declare module "*.scss" {
   const scss: Record<string, string>
   export default scss
 }
+ declare module "*.json"

@@ -2,9 +2,11 @@
  * @Author: Kenny
  * @Date: 2022-06-13 14:52:53
  * @LastEditors: Kenny
- * @LastEditTime: 2022-06-15 10:51:47
- * @FilePath: \yiya-straight-front-pc\src\components\login\src\login2.vue
+ * @LastEditTime: 2022-06-17 20:02:29
+ * @FilePath: \yiya-straight-pc\src\components\login\src\login2.vue
 -->
+
+<!-- PC -->
 <script setup lang="ts">
 import { onMounted } from "vue"
 import lottie from "lottie-web"
@@ -183,15 +185,15 @@ onMounted(() => {
   align-items: center;
   width: 100%;
   min-height: 100vh;
-  background-color: #f5f7fe;
+  background-color: var(--el-bg-color-page);
   .login-panel {
     display: flex;
     padding: 20px;
     padding-right: 60px;
     height: 450px;
     border-radius: 20px;
-    background: white;
-    box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff;
+    background: var(--el-fill-color-lighter);
+    box-shadow: 20px 20px 10px var(--el-box-shadow-lighter), -20px -20px 10px var(--el-box-shadow-lighter);
   }
   .login-form {
     width: 400px;

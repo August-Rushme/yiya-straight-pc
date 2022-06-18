@@ -8,7 +8,8 @@ import { modalConfig } from "./config/modal.config"
 
 import { usePageModal } from "@/hooks/use-page-modal"
 import { useSystemStoreHook } from "@/store/modules/system"
-import { computed } from "vue"
+import { computed, ref } from "vue"
+import message from "@/utils/message"
 
 const pageName = "menu"
 const store = useSystemStoreHook()
@@ -36,11 +37,30 @@ const modalConfigRef = computed(() => {
     }
     return newMenuList
   })
+
   return {
     ...modalConfig,
     title: modalTitle.value
   }
 })
+
+// 选项改变
+const menuIds = ref<number[]>([])
+const handleCheckChange = (row: any) => {
+  if (row.length > 0) {
+    menuIds.value = row.map((item: any) => item.id)
+  } else {
+    menuIds.value = []
+  }
+}
+// 删除多个菜单
+const handleDeleteMore = () => {
+  if (menuIds.value.length > 0) {
+    store.deletePageDataMoreAction({ pageName, menuIds: menuIds.value })
+  } else {
+    message.info("请选择要删除的菜单")
+  }
+}
 defineExpose({
   handleEditData,
   handleNewData,
@@ -56,10 +76,12 @@ defineExpose({
         @editBtnClick="handleEditData($event, pageName)"
         @saveBtnClick="handleSaveData($event, pageName)"
         @deleteBtnClick="handleDeleteData($event, pageName)"
+        @checkBtnClick="handleCheckChange($event)"
         ref="pageContentRef"
       >
         <template #handlerHeader>
           <el-button type="primary" size="small" @click="handleNewData('添加菜单')">添加菜单</el-button>
+          <el-button type="danger" size="small" @click="handleDeleteMore">删除选中</el-button>
         </template>
         <template #menuType="scope">
           <el-tag v-if="scope.row.menuType == 0">一级菜单</el-tag>

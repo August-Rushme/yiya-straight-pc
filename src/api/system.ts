@@ -72,3 +72,21 @@ export function getMenuAll(url: string) {
     method: "get"
   })
 }
+
+// 分配权限
+export function setRoleMenu(url: string, data: any) {
+  return request({
+    url,
+    method: "post",
+    data
+  })
+}
+
+// 删除多个
+export function deleteMany(url: string, data: any) {
+  return request({
+    url,
+    method: "post",
+    data
+  })
+}

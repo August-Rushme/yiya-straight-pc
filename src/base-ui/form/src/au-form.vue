@@ -39,6 +39,7 @@
                   v-model="formData[`${item.field}`]"
                   :data="item.options"
                   check-strictly
+                  clearable
                   style="width: 100%"
                 />
               </template>
@@ -55,12 +56,21 @@
                   <!-- <svg-icon :name="formData[`${item.field}`]" /> -->
                   <i :class="formData[`${item.field}`]"
                 /></el-button>
-                <el-popover :visible="modal" placement="top" width="60vw" title="请选择图标">
+                <el-popover :visible="modal" placement="top" width="50vw" title="请选择图标">
                   <icons @success="onSuccess($event, item.field)" />
                   <template #reference>
-                    <el-button icon="el-icon-search" @click="handleClickChoose">选择图标</el-button>
+                    <el-button @click="handleClickChoose">选择图标</el-button>
                   </template>
                 </el-popover>
+              </template>
+              <template v-else-if="item.type === 'switch'">
+                <el-switch
+                  v-model="formData[`${item.field}`]"
+                  inline-prompt
+                  active-text="是"
+                  inactive-text="否"
+                  v-bind="item.otherOptions"
+                />
               </template>
             </el-form-item>
           </el-col>
@@ -123,6 +133,7 @@ const emit = defineEmits(["update:modelValue"])
 
 const formRef = ref<FormInstance>()
 const formData = ref({ ...props.modelValue })
+
 watch(
   formData,
   (newValue) => {

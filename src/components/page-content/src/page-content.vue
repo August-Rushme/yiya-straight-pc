@@ -130,6 +130,7 @@ defineExpose({
           >
           <!-- 分配角色按钮 -->
           <slot name="role" :row="scope.row" />
+          <slot :row="scope.row" />
         </div>
       </template>
       <!-- 插入剩余的动态插槽 -->

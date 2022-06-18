@@ -1,4 +1,4 @@
-type IFormType = "input" | "password" | "select" | "datepicker" | "menuIcon" | "treeSelect"
+type IFormType = "input" | "password" | "select" | "datepicker" | "menuIcon" | "treeSelect" | "switch"
 
 export interface IFormItem {
   field: string
@@ -16,6 +16,7 @@ export interface IFormItem {
 export interface IForm {
   formItems: IFormItem[]
   labelWidth?: string
+  labelPosition?: string
   colLayout?: any
   itemStyle?: any
   title?: string

@@ -21,6 +21,8 @@ export function usePageModal(newCb?: CallbackFn, editCb?: CallbackFn) {
   }
   // 编辑
   const handleEditData = (item: any, pageName?: string) => {
+    console.log(item)
+
     modalTitle.value = "编辑"
     // 根据菜单名选择编辑模式
     if (pageName !== "menu") {

@@ -1,17 +1,20 @@
 // import { getPageList } from "@/api/user"
 import {
   addPageData,
+  deleteMany,
   deletePageData,
   editPageData,
   getAllRole,
   getMenuAll,
   getPageList,
   getUserRole,
+  setRoleMenu,
   setUserRole
 } from "@/api/system"
 import store from "@/store"
 import cache from "@/utils/cache"
 import message from "@/utils/message"
+import { getMenuByRole } from "@/views/system/role/api"
 import { defineStore } from "pinia"
 
 interface ISystemState {
@@ -24,6 +27,7 @@ interface ISystemState {
   pageSize: number
   menuList: any[]
   menuAll: any[]
+  roleMenus: any[]
 }
 export const useSystemStore = defineStore({
   id: "system",
@@ -37,7 +41,8 @@ export const useSystemStore = defineStore({
       pageNum: 1,
       pageSize: 6,
       menuList: [],
-      menuAll: []
+      menuAll: [],
+      roleMenus: []
     }
   },
   getters: {
@@ -60,7 +65,10 @@ export const useSystemStore = defineStore({
       // 获取pageUrl
       const pageName: string = payload.pageName
       payload.pageInfo = { ...payload.pageInfo, clinicId, userId }
-      const pageUrl = `/${pageName}/list`
+      let pageUrl = `/${pageName}/list`
+      if (pageName === "menu") {
+        pageUrl = `/${pageName}/all`
+      }
       // 对页面发送请求
       const { data: res }: any = await getPageList(pageUrl, payload.pageInfo)
       // 将数据存储到state中
@@ -129,7 +137,7 @@ export const useSystemStore = defineStore({
       // 调用删除网络请求
       const res: any = await deletePageData(pageUrl)
       if (res.code !== 200) {
-        return message.error("删除失败")
+        return message.error(res.msg ?? "删除失败")
       }
       message.success("删除成功")
       // 重新请求最新的数据
@@ -147,13 +155,50 @@ export const useSystemStore = defineStore({
       this.getPageListAction({ pageName, pageInfo: { pageNum: this.pageNum, pageSize: this.pageSize } })
       return res
     },
-    // 获取所有的菜单非树
+    // 获取所有的菜单
     async getAllMenuAction() {
       const { data: res }: any = await getMenuAll("/menu/all")
       this.$patch({
         menuAll: res
       })
       console.log(res)
+    },
+    // 根据角色id获取菜单
+    async getMenuByRoleIdAction(roleId: number) {
+      const { data: res }: any = await getMenuByRole(roleId)
+      this.$patch({
+        roleMenus: res
+      })
+    },
+    // 分配权限
+    async setRoleMenuAction(payload: any) {
+      const res: any = await setRoleMenu("/role/assignMenu", payload)
+      if (res.code !== 200) {
+        return message.error("分配权限失败")
+      }
+      message.success("分配权限成功")
+      // 更新用户的角色
+      this.getMenuByRoleIdAction(payload.roleId)
+    },
+    // 多选删除
+    async deletePageDataMoreAction(payload: any) {
+      console.log(payload.menuIds)
+
+      // 获取pageName和id
+      const { pageName } = payload
+      const pageUrl = `/${pageName}/deleteMore`
+
+      // 调用删除网络请求
+      const res: any = await deleteMany(pageUrl, payload)
+      if (res.code !== 200) {
+        return message.error("删除失败")
+      }
+      if (res.msg == "请先删除子菜单") {
+        return message.warning(res.msg)
+      }
+      message.success("删除成功")
+      // 重新请求最新的数据
+      this.getPageListAction({ pageName, pageInfo: { pageNum: this.pageNum, pageSize: this.pageSize } })
     }
   }
 })

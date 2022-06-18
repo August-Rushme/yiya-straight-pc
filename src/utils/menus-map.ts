@@ -67,3 +67,24 @@ export async function mapMenusToRoutes(userMenus: any[]) {
     newUserMenus
   }
 }
+
+// 映射叶子节点
+export function menuMapLeafKeys(menuList: any[]) {
+  const leafKeys: number[] = []
+  // 如果menuList为空，则直接返回
+  if (menuList?.length == 0 || menuList == null) {
+    return leafKeys
+  } else {
+    const _recurseMapLeafKeys = (menus: any[]) => {
+      for (const menu of menus) {
+        if (menu.children && menu.children.length > 0) {
+          _recurseMapLeafKeys(menu.children)
+        } else {
+          leafKeys.push(menu.id)
+        }
+      }
+    }
+    _recurseMapLeafKeys(menuList)
+    return leafKeys
+  }
+}

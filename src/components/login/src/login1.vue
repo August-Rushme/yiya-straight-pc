@@ -3,8 +3,8 @@ import { reactive, ref } from "vue"
 import { useRouter } from "vue-router"
 import { useUserStore } from "@/store/modules/user"
 // import { User, Lock, Key } from "@element-plus/icons-vue"
-import ThemeSwitch from "@/components/ThemeSwitch/index.vue"
 import message from "@/utils/message"
+
 interface ILoginForm {
   /**公司代码 */
   buk: string
@@ -88,8 +88,6 @@ const state = reactive({
 <template>
   <!-- 手机端登录 -->
   <div class="login-container">
-    <ThemeSwitch class="theme-switch" />
-
     <div class="login-card">
       <div class="title">
         <svg

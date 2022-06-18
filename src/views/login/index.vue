@@ -8,6 +8,7 @@
 <!-- 手机 -->
 <script setup lang="ts">
 import { mobieLogin, pcLogin } from "@/components/login/index"
+import ThemeSwitch from "@/components/ThemeSwitch/index.vue"
 import { onMounted, ref } from "vue"
 const isMobie = ref(false)
 onMounted(() => {
@@ -24,6 +25,7 @@ onMounted(() => {
 
 <template>
   <div class="login">
+    <ThemeSwitch class="theme-switch" />
     <template v-if="isMobie">
       <mobieLogin />
     </template>
@@ -35,7 +37,13 @@ onMounted(() => {
 <style lang="scss" scoped>
 .login {
   display: flex;
+  position: relative;
   min-height: 100vh;
   align-items: center;
+}
+.theme-switch {
+  position: absolute;
+  top: 20px;
+  right: 20px;
 }
 </style>

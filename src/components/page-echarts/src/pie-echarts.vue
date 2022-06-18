@@ -1,11 +1,7 @@
 <script lang="ts" setup>
 import baseEcharts from "@/base-ui/echart"
-import { computed, watch } from "vue"
-import { useAppStore } from "@/store/modules/app"
-import { useEchartsStoreHook } from "@/store/modules/echats"
-import { storeToRefs } from "pinia"
-const appStore = useAppStore()
-const { activeThemeName } = storeToRefs(appStore)
+import { computed } from "vue"
+import { activeThemeName } from "@/utils/getTheme"
 const pointerData = 92 // 仪表指针数据
 const option: any = computed(() => {
   const echartsOption = {
@@ -155,14 +151,7 @@ const option: any = computed(() => {
   }
   return echartsOption
 })
-watch(activeThemeName, () => {
-  const index = useEchartsStoreHook().echartsArray.findIndex((item) => item.mark === "businessPie")
-  console.log(useEchartsStoreHook().echartsArray[index].echartinstance)
-  console.log(option.value)
-  useEchartsStoreHook().echartsArray[index].echartinstance.setOption(option.value)
-})
 </script>
-
 <template>
   <div class="pie-echarts">
     <baseEcharts :options="option" mark="businessPie" />

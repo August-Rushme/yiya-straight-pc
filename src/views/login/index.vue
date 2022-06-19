@@ -2,8 +2,8 @@
  * @Author: Kenny
  * @Date: 2022-06-13 14:52:53
  * @LastEditors: Kenny
- * @LastEditTime: 2022-06-15 11:43:51
- * @FilePath: \yiya-straight-front-pc\src\views\login\index.vue
+ * @LastEditTime: 2022-06-18 17:33:11
+ * @FilePath: \yiya-straight-pc\src\views\login\index.vue
 -->
 <!-- 手机 -->
 <script setup lang="ts">
@@ -16,8 +16,11 @@ onMounted(() => {
   if (/ipad|iphone|midp|rv:1.2.3.4|ucweb|SymbianOS|iPod|android|windows ce|windows mobile/.test(sUserAgent)) {
     //跳转移动端页面
     isMobie.value = true
+    localStorage.setItem("isMobie", "true")
+
     //this.mobileStatus = mobile(页面通过data的mobileStatus 值做不同样式)
   } else {
+    localStorage.setItem("isMobie", "false")
     isMobie.value = false
   }
 })

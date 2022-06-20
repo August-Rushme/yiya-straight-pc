@@ -133,12 +133,18 @@ onMounted(() => {
               <el-input v-model="state.loginForm.buk" placeholder="公司代码" type="text" tabindex="1" size="large" />
             </el-form-item>
             <el-form-item prop="username" label="账号:" class="username">
-              <el-input v-model="state.loginForm.username" placeholder="用户名" type="text" tabindex="1" size="large" />
+              <el-input
+                v-model="state.loginForm.username"
+                placeholder="请输入用户名"
+                type="text"
+                tabindex="1"
+                size="large"
+              />
             </el-form-item>
             <el-form-item prop="password" label="密码:" class="password">
               <el-input
                 v-model="state.loginForm.password"
-                placeholder="密码"
+                placeholder="请输入密码"
                 type="password"
                 tabindex="2"
                 size="large"

@@ -28,6 +28,8 @@ interface ISystemState {
   menuList: any[]
   menuAll: any[]
   roleMenus: any[]
+  clinicList: any[]
+  clinicCount: number
 }
 export const useSystemStore = defineStore({
   id: "system",
@@ -42,7 +44,9 @@ export const useSystemStore = defineStore({
       pageSize: 6,
       menuList: [],
       menuAll: [],
-      roleMenus: []
+      roleMenus: [],
+      clinicList: [],
+      clinicCount: 0
     }
   },
   getters: {
@@ -71,6 +75,7 @@ export const useSystemStore = defineStore({
       }
       // 对页面发送请求
       const { data: res }: any = await getPageList(pageUrl, payload.pageInfo)
+
       // 将数据存储到state中
       let list: any[] = res.list
       const total: number = res.total

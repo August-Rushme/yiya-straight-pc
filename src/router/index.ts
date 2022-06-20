@@ -99,6 +99,7 @@ const router = createRouter({
 /** 重置路由 */
 export function resetRouter() {
   // 注意：所有动态路由路由必须带有 name 属性，否则可能会不能完全重置干净
+  // window.location.reload()
   try {
     router.getRoutes().forEach((route) => {
       const { name, meta } = route

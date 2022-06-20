@@ -1,8 +1,8 @@
 <!--
  * @Author: Kenny
  * @Date: 2022-06-13 14:52:53
- * @LastEditors: Kenny
- * @LastEditTime: 2022-06-15 10:51:47
+ * @LastEditors: error: git config user.name && git config user.email & please set dead value or install git
+ * @LastEditTime: 2022-06-15 16:25:20
  * @FilePath: \yiya-straight-front-pc\src\components\login\src\login2.vue
 -->
 <script setup lang="ts">

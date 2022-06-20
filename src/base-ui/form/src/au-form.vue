@@ -67,10 +67,25 @@
                 <el-switch
                   v-model="formData[`${item.field}`]"
                   inline-prompt
+                  :size="item.size"
                   active-text="是"
                   inactive-text="否"
                   v-bind="item.otherOptions"
                 />
+              </template>
+              <template v-else-if="item.type === 'upload'">
+                <el-upload
+                  class="avatar-uploader"
+                  action="http://127.0.0.1:8081/clinic/upload/"
+                  drag
+                  :show-file-list="false"
+                  :on-success="handleAvatarSuccess"
+                  :before-upload="beforeAvatarUpload"
+                >
+                  <img v-if="formData[`${item.field}`]" :src="formData[`${item.field}`]" class="avatar" />
+                  <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+                  <div class="el-upload__text mt-1">拖拽或者 <em>点击上传</em></div>
+                </el-upload>
               </template>
             </el-form-item>
           </el-col>
@@ -85,9 +100,10 @@
 
 <script lang="ts" setup>
 import { PropType, ref, watch } from "vue"
-import type { FormInstance } from "element-plus"
+import type { FormInstance, UploadProps } from "element-plus"
 import icons from "@/icons/icon.vue"
 import { IFormItem } from "../types"
+import message from "@/utils/message"
 
 const props = defineProps({
   modelValue: {
@@ -162,14 +178,57 @@ const onSuccess = (val: string, field: string) => {
   formData.value[`${field}`] = val
   modal.value = false
 }
+
+// 头像上传相关
+const beforeAvatarUpload = (file: File) => {
+  const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png"
+  if (!isJpgOrPng) {
+    message.error("只能上传 JPG/PNG 格式的图片!")
+  }
+  const isLt2M = file.size / 1024 / 1024 < 2
+  if (!isLt2M) {
+    message.error("图片大小不能超过 2MB!")
+  }
+  return isJpgOrPng && isLt2M
+}
+
+const handleAvatarSuccess: UploadProps["onSuccess"] = (response, uploadFile) => {
+  console.log(uploadFile)
+  formData.value["img"] = response.data
+}
+
 defineExpose({
   formData,
   formRef
 })
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .au-form {
   padding-top: 22px;
+}
+.avatar-uploader .avatar {
+  width: 200px;
+  height: 200px;
+  display: block;
+}
+.avatar-uploader .el-upload {
+  border: 1px dashed var(--el-border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: var(--el-transition-duration-fast);
+}
+
+.avatar-uploader .el-upload:hover {
+  border-color: var(--el-color-primary);
+}
+
+.el-icon.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
 }
 </style>

@@ -34,6 +34,16 @@ export const searchFormConfig: IForm = {
         { label: "启用", value: "启用" },
         { label: "禁用", value: "禁用" }
       ]
+    },
+    {
+      field: "createAt",
+      type: "datepicker",
+      label: "创建时间",
+      otherOptions: {
+        startPlaceholder: "开始时间",
+        endPlaceholder: "结束时间",
+        type: "datetimerange"
+      }
     }
   ]
 }

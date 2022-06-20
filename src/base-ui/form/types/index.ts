@@ -1,4 +1,4 @@
-type IFormType = "input" | "password" | "select" | "datepicker" | "menuIcon" | "treeSelect" | "switch"
+type IFormType = "input" | "password" | "select" | "datepicker" | "menuIcon" | "treeSelect" | "switch" | "upload"
 
 export interface IFormItem {
   field: string
@@ -11,6 +11,7 @@ export interface IFormItem {
   // 针对特殊的属性
   otherOptions?: any
   isHidden?: boolean
+  size?: number | string
 }
 
 export interface IForm {

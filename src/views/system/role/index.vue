@@ -78,7 +78,7 @@ defineExpose({
       <page-content
         :contentTableConfig="contentTableConfig"
         :pageName="pageName"
-        @editBtnClick="handleEditData($event, 'save')"
+        @editBtnClick="handleEditData($event, { mode: 'save' })"
         @saveBtnClick="handleSaveData($event, pageName)"
         @deleteBtnClick="handleDeleteData($event, pageName)"
         ref="pageContentRef"
@@ -87,7 +87,7 @@ defineExpose({
           <el-button type="primary" size="small" @click="handleNewData('添加角色')"> 添加角色 </el-button>
         </template>
         <template #default="scope">
-          <el-button type="warning" style="font-size: 10px" @click="handleAuthorize(scope.row)"
+          <el-button type="warning" style="font-size: 10px" size="default" @click="handleAuthorize(scope.row)"
             ><el-icon mr1><Setting /></el-icon>授权</el-button
           >
         </template>

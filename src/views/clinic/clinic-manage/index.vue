@@ -16,17 +16,17 @@ const { pageContentRef, handleResetClick, handleQueryClick } = usePageSearch()
 const { pageModalRef, defaultInfo, handleNewData, handleEditData, handleDeleteData, handleSaveData, modalTitle } =
   usePageModal()
 
-const handleStatusChange = (row: any) => {
-  const r = window.confirm(`确定${row.status === 1 ? "禁用" : "启用"}该用户吗？`)
-  if (r) {
-    row.status === 1 ? (row.status = 0) : (row.status = 1)
-  }
-}
+// const handleStatusChange = (row: any) => {
+//   const r = window.confirm(`确定${row.status === 1 ? "禁用" : "启用"}该用户吗？`)
+//   if (r) {
+//     row.status === 1 ? (row.status = 0) : (row.status = 1)
+//   }
+// }
 
 // 下架诊所
-const handleOff = () => {
-  console.log("下架诊所")
-}
+// const handleOff = () => {
+//   console.log("下架诊所")
+// }
 </script>
 <template>
   <div app-container>
@@ -41,9 +41,9 @@ const handleOff = () => {
       <page-content
         :contentTableConfig="contentTableConfig"
         :pageName="pageName"
-        @editBtnClick="handleEditData($event, 'dialog')"
+        @editBtnClick="handleEditData($event, { mode: 'dialog' })"
         @saveBtnClick="handleSaveData($event, pageName)"
-        @deleteBtnClick="handleDeleteData($event, pageName)"
+        @deleteBtnClick="handleDeleteData($event, pageName, { otherInfo: { tip: '诊所' } })"
         ref="pageContentRef"
       >
         <template #handlerHeader>
@@ -51,19 +51,15 @@ const handleOff = () => {
         </template>
         <!-- 状态 -->
         <template #status="scope">
-          <el-button
-            size="small"
-            :type="scope.row.status == 1 ? 'success' : 'danger'"
-            @click="handleStatusChange(scope.row)"
-          >
-            {{ scope.row.status == 1 ? "启用" : "禁用" }}
-          </el-button>
+          <el-tag size="small" :type="scope.row.status == 1 ? 'success' : 'danger'">
+            {{ scope.row.status == 1 ? "启用中" : "下架中" }}
+          </el-tag>
         </template>
-        <template #default>
-          <el-button type="warning" @click="handleOff">
+        <!-- <template #default>
+          <el-button type="warning" style="font-size: 10px" size="default" @click="handleOff">
             <el-icon mr1><Hide /></el-icon>下架
           </el-button>
-        </template>
+        </template> -->
       </page-content>
     </el-card>
     <page-modal

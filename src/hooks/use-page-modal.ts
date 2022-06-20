@@ -4,7 +4,12 @@ import { useSystemStore } from "@/store/modules/system"
 import { ElMessageBox } from "element-plus"
 import message from "@/utils/message"
 
+interface IOtherInfo {
+  mode?: "save" | "dialog" | "drawer"
+  otherInfo?: any
+}
 type CallbackFn = (item?: any) => void
+
 const store = useSystemStore()
 const modalTitle = ref("编辑")
 export function usePageModal(newCb?: CallbackFn, editCb?: CallbackFn) {
@@ -20,17 +25,17 @@ export function usePageModal(newCb?: CallbackFn, editCb?: CallbackFn) {
     newCb && newCb()
   }
   // 编辑
-  const handleEditData = (item: any, mode?: string) => {
+  const handleEditData = (item: any, otherInfo?: IOtherInfo) => {
     console.log(item)
 
     modalTitle.value = "编辑"
-    // 根据菜单名选择编辑模式
-    if (mode == "save") {
+    // 判断择编辑模式
+    if (otherInfo?.mode == "save") {
       // 非弹窗式
       item.edit = true
     }
     defaultInfo.value = { ...item }
-    if (pageModalRef.value && mode == "dialog") {
+    if (pageModalRef.value && otherInfo?.mode == "dialog") {
       // 弹窗式
       pageModalRef.value.modalVisible = true
     }
@@ -42,8 +47,8 @@ export function usePageModal(newCb?: CallbackFn, editCb?: CallbackFn) {
     item.edit = false
   }
   // 删除
-  const handleDeleteData = (item: any, pageName: string) => {
-    ElMessageBox.confirm("此操作将永久删除该员工, 是否继续?", "提示", {
+  const handleDeleteData = (item: any, pageName: string, otherInfo?: IOtherInfo) => {
+    ElMessageBox.confirm(`此操作将永久删除该${otherInfo?.otherInfo.tip ?? "数据项"}, 是否继续?`, "提示", {
       confirmButtonText: "确定",
       cancelButtonText: "取消",
       type: "warning"

@@ -105,7 +105,7 @@ defineExpose({
       <page-content
         :contentTableConfig="contentTableConfig"
         :pageName="pageName"
-        @editBtnClick="handleEditData($event, 'save')"
+        @editBtnClick="handleEditData($event, { mode: 'save' })"
         @saveBtnClick="handleSaveData($event, pageName)"
         @deleteBtnClick="handleDeleteData($event, pageName)"
         ref="pageContentRef"

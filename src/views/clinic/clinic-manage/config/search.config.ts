@@ -28,11 +28,11 @@ export const searchFormConfig: IForm = {
     {
       field: "enable",
       type: "select",
-      label: "用户状态",
+      label: "诊所状态",
       placeholder: "请选择用户状态",
       options: [
-        { label: "启用", value: "启用" },
-        { label: "禁用", value: "禁用" }
+        { label: "启用中", value: "启用中" },
+        { label: "下架中", value: "下架中" }
       ]
     }
   ]

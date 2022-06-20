@@ -22,6 +22,6 @@ export const contentTableConfig = {
   ],
   showFooter: true,
   showSelectColumn: true,
-  showIndexColumn: true,
+  showIndexColumn: false,
   isBorder: false
 }

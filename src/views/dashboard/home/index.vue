@@ -2,13 +2,14 @@
  * @Author: Kenny
  * @Date: 2022-06-13 14:52:53
  * @LastEditors: Kenny
- * @LastEditTime: 2022-06-18 17:10:55
+ * @LastEditTime: 2022-06-18 20:40:43
  * @FilePath: \yiya-straight-pc\src\views\dashboard\home\index.vue
 -->
 <script lang="ts" setup>
 import { barEcharts, pieEcharts, mapEcharts } from "@/components/page-echarts"
 import { CountUp } from "countup.js"
 import { onMounted, ref } from "vue"
+const isMobie = localStorage.getItem("isMobie") === "true"
 const options = {
   useEasing: true, // 过渡动画效果，默认ture
   useGrouping: true, // 千分位效果，例：1000->1,000。默认true
@@ -35,33 +36,33 @@ const titleCardArray = [
 ]
 const broadcast = ref([
   {
-    name: "august",
+    name: "coderKenny",
     province: "海南"
   },
   {
-    name: "august",
+    name: "coderKenny",
     province: "海南"
   },
   {
-    name: "august",
+    name: "coderKenny",
     province: "海南"
   },
   {
-    name: "august",
+    name: "coderKenny",
     province: "海南"
   },
   {
-    name: "august",
+    name: "coderKenny",
     province: "海南"
   },
   {
-    name: "august",
+    name: "coderKenny",
     province: "海南"
   }
 ])
 setInterval(() => {
   broadcast.value.push({
-    name: "august",
+    name: "coderKenny",
     province: "海南"
   })
   broadcast.value.shift()
@@ -107,25 +108,27 @@ onMounted(() => {
         <el-card mb5> <pieEcharts /></el-card>
       </el-col>
     </el-row>
-    <el-row>
-      <el-col :span="24">
-        <el-card>
-          <div class="mapEcharts">
-            <mapEcharts />
-            <div class="broadcast">
-              <template v-for="(item, index) in broadcast" :key="index">
-                <div class="broadcast-item">
-                  <el-icon><Bell /></el-icon>
-                  <div ml3>
-                    恭喜用户<span color="#fec834" px1>{{ item.name }}</span> ({{ item.province }}) 成功申请了店铺
+    <template v-if="!isMobie">
+      <el-row>
+        <el-col :span="24">
+          <el-card>
+            <div class="mapEcharts">
+              <mapEcharts />
+              <div class="broadcast">
+                <template v-for="(item, index) in broadcast" :key="index">
+                  <div class="broadcast-item">
+                    <el-icon><Bell /></el-icon>
+                    <div ml3>
+                      恭喜用户<span color="#fec834" px1>{{ item.name }}</span> ({{ item.province }}) 成功申请了店铺
+                    </div>
                   </div>
-                </div>
-              </template>
+                </template>
+              </div>
             </div>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
+          </el-card>
+        </el-col>
+      </el-row>
+    </template>
   </div>
 </template>
 
@@ -163,16 +166,23 @@ onMounted(() => {
     height: 220px;
     padding: 10px;
     border: 1px solid var(--el-card-border-color);
-    right: 2%;
-    top: 20px;
+    right: 10px;
+    top: 10px;
     overflow: hidden;
     .broadcast-item {
       display: flex;
       height: 40px;
+      width: 370px;
       line-height: 40px;
       padding: 0px 10px;
       align-items: center;
       animation: toTop 1s ease infinite;
+      div {
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
     }
     @keyframes toTop {
       to {

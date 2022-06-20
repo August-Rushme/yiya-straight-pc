@@ -5,7 +5,6 @@ import { activeThemeName } from "@/utils/getTheme"
 import { computed } from "vue"
 import * as echarts from "echarts"
 const uploadedDataURL = "/src/components/page-echarts/assets/mapBar.png"
-
 echarts.registerMap("china", chianJson as any)
 let mapName = "china"
 const data = [
@@ -71,7 +70,7 @@ const option: any = computed(() => {
         zlevel: -1,
         zoom: 1.0,
         silent: true,
-        layoutCenter: ["40%", "50%"],
+        layoutCenter: ["35%", "50%"],
         layoutSize: "100%",
         roam: false,
         itemStyle: {
@@ -105,7 +104,7 @@ const option: any = computed(() => {
         show: true,
         map: mapName,
         zoom: 1.0,
-        layoutCenter: ["40%", "50%"],
+        layoutCenter: ["35%", "50%"],
         layoutSize: "100%",
         label: {
           normal: {
@@ -194,7 +193,7 @@ const option: any = computed(() => {
         map: mapName,
         zlevel: -2,
         zoom: 1.0,
-        layoutCenter: ["40%", "51.4%"],
+        layoutCenter: ["35%", "51.4%"],
         layoutSize: "100%",
         roam: false,
         silent: true,
@@ -213,7 +212,7 @@ const option: any = computed(() => {
         map: mapName,
         zlevel: -3,
         zoom: 1.0,
-        layoutCenter: ["40%", "52.4%"],
+        layoutCenter: ["35%", "52.4%"],
         layoutSize: "100%",
         roam: false,
         silent: true,
@@ -231,7 +230,7 @@ const option: any = computed(() => {
     series: [
       {
         type: "map",
-        layoutCenter: ["40%", "50%"],
+        layoutCenter: ["35%", "50%"],
         layoutSize: "100%",
         label: {
           normal: {

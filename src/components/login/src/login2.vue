@@ -2,7 +2,7 @@
  * @Author: Kenny
  * @Date: 2022-06-13 14:52:53
  * @LastEditors: Kenny
- * @LastEditTime: 2022-06-17 20:02:29
+ * @LastEditTime: 2022-06-18 19:17:51
  * @FilePath: \yiya-straight-pc\src\components\login\src\login2.vue
 -->
 

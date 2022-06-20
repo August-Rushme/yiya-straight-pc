@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { reactive, ref } from "vue"
+import { reactive, ref, onMounted } from "vue"
 import { useRouter } from "vue-router"
 import { useUserStore } from "@/store/modules/user"
 // import { User, Lock, Key } from "@element-plus/icons-vue"
 import message from "@/utils/message"
-
+import { getCaptcha } from "@/api/login"
 interface ILoginForm {
   /**公司代码 */
   buk: string
@@ -30,7 +30,7 @@ const state = reactive({
     buk: "mlqh",
     username: "a12345678",
     password: "a12345678",
-    verCode: "abcd",
+    verCode: "",
     verKey: ""
   } as ILoginForm,
   /** 登录表单校验规则 */
@@ -75,10 +75,22 @@ const state = reactive({
     })
   },
   /** 创建验证码 */
-  createCode: () => {
-    // 先清空验证码的输入
-    state.loginForm.verCode = ""
+  createCode: async () => {
+    const res: any = await getCaptcha()
+
+    // base64转blob
+    // const blob = new Blob([res.image], { type: "image/png" })
+    // // blob转url
+    // const url = URL.createObjectURL(blob)
+
+    // // 先清空验证码的输入
+    // state.loginForm.code = ""
+    state.codeUrl = res.image
+    state.loginForm.verKey = res.key
   }
+})
+onMounted(() => {
+  state.createCode()
 })
 
 /** 初始化验证码 */
@@ -141,6 +153,23 @@ const state = reactive({
               size="large"
               show-password
             />
+          </el-form-item>
+          <el-form-item label="验证码:" prop="verCode" class="password">
+            <div>
+              <el-input
+                v-model="state.loginForm.verCode"
+                placeholder="请输入验证码"
+                type="text"
+                tabindex="2"
+                size="large"
+                style="width: 50%"
+              />
+              <span class="show-code">
+                <img :src="state.codeUrl" @click="state.createCode" />
+              </span>
+            </div>
+
+            <!-- <img src="" alt=""> -->
           </el-form-item>
           <div class="account-control">
             <el-checkbox v-model="state.isKeepPassword">记住密码</el-checkbox>

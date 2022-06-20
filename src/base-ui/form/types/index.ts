@@ -1,4 +1,11 @@
-type IFormType = "input" | "password" | "select" | "datepicker" | "menuIcon" | "treeSelect" | "switch"
+/*
+ * @Author: Kenny
+ * @Date: 2022-06-17 14:54:19
+ * @LastEditors: Kenny
+ * @LastEditTime: 2022-06-20 17:28:36
+ * @FilePath: \yiya-straight-pc\src\base-ui\form\types\index.ts
+ */
+type IFormType = "input" | "password" | "select" | "datepicker" | "menuIcon" | "treeSelect" | "switch" | "datetimerange"
 
 export interface IFormItem {
   field: string

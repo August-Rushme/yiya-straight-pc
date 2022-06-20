@@ -3,6 +3,11 @@ lockfileVersion: 5.4
 specifiers:
   '@commitlint/cli': ^17.0.0
   '@element-plus/icons-vue': ^1.1.4
+  '@fullcalendar/core': ^5.11.0
+  '@fullcalendar/daygrid': ^5.11.0
+  '@fullcalendar/interaction': ^5.11.0
+  '@fullcalendar/timegrid': ^5.11.0
+  '@fullcalendar/vue3': ^5.11.1
   '@types/js-cookie': ^3.0.2
   '@types/lodash-es': ^4.17.6
   '@types/node': ^17.0.36
@@ -49,6 +54,11 @@ specifiers:
 
 dependencies:
   '@element-plus/icons-vue': registry.npmmirror.com/@element-plus/icons-vue/1.1.4_vue@3.2.36
+  '@fullcalendar/core': registry.npmmirror.com/@fullcalendar/core/5.11.0
+  '@fullcalendar/daygrid': registry.npmmirror.com/@fullcalendar/daygrid/5.11.0
+  '@fullcalendar/interaction': registry.npmmirror.com/@fullcalendar/interaction/5.11.0
+  '@fullcalendar/timegrid': registry.npmmirror.com/@fullcalendar/timegrid/5.11.0
+  '@fullcalendar/vue3': registry.npmmirror.com/@fullcalendar/vue3/5.11.1_vue@3.2.36
   axios: registry.npmmirror.com/axios/0.27.2
   countup.js: registry.npmmirror.com/countup.js/2.2.0
   dayjs: registry.npmmirror.com/dayjs/1.11.2
@@ -400,6 +410,65 @@ packages:
     version: 0.5.2
     dependencies:
       '@floating-ui/core': registry.npmmirror.com/@floating-ui/core/0.7.2
+    dev: false
+
+  registry.npmmirror.com/@fullcalendar/common/5.11.0:
+    resolution: {integrity: sha512-gWjbMAnN1u73Oqlgjbyky7i+3bY0hvFSnGT0YBPx44n874AkQa9e9OU12PMLTMOPy0tXPb8DEwRelFQ7CJNbcw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@fullcalendar/common/-/common-5.11.0.tgz}
+    name: '@fullcalendar/common'
+    version: 5.11.0
+    dependencies:
+      tslib: registry.npmmirror.com/tslib/2.4.0
+    dev: false
+
+  registry.npmmirror.com/@fullcalendar/core/5.11.0:
+    resolution: {integrity: sha512-cF/d9LuJb/6xw14ms0urv1H4BiA70c4jrufe/EuVzLR6qTDpK92IZ3JK7GVtZtzptfTYZ/NQgDV9YCzIaO9Blw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@fullcalendar/core/-/core-5.11.0.tgz}
+    name: '@fullcalendar/core'
+    version: 5.11.0
+    dependencies:
+      '@fullcalendar/common': registry.npmmirror.com/@fullcalendar/common/5.11.0
+      preact: registry.npmmirror.com/preact/10.8.1
+      tslib: registry.npmmirror.com/tslib/2.4.0
+    dev: false
+
+  registry.npmmirror.com/@fullcalendar/daygrid/5.11.0:
+    resolution: {integrity: sha512-Ybh/dfHn/VL0qOVIRVyJc9I8oYiqqHl6xQONk8xXCe456QbPzAQLsAxpLLJLH+3smWNCfoQgvDKzR9e9XTzLMQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@fullcalendar/daygrid/-/daygrid-5.11.0.tgz}
+    name: '@fullcalendar/daygrid'
+    version: 5.11.0
+    dependencies:
+      '@fullcalendar/common': registry.npmmirror.com/@fullcalendar/common/5.11.0
+      tslib: registry.npmmirror.com/tslib/2.4.0
+    dev: false
+
+  registry.npmmirror.com/@fullcalendar/interaction/5.11.0:
+    resolution: {integrity: sha512-9XTI5+ydqrSX+IL3iWgKBURXfnPewn57Tmsv9mJZhiqrUEF7/+qtftLoKEAc8ZdWk/+01aBe67PFL16uPXj2Jg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@fullcalendar/interaction/-/interaction-5.11.0.tgz}
+    name: '@fullcalendar/interaction'
+    version: 5.11.0
+    dependencies:
+      '@fullcalendar/common': registry.npmmirror.com/@fullcalendar/common/5.11.0
+      tslib: registry.npmmirror.com/tslib/2.4.0
+    dev: false
+
+  registry.npmmirror.com/@fullcalendar/timegrid/5.11.0:
+    resolution: {integrity: sha512-GNy+/PwAj510PS4Fu18Mf/CytNBVftFU7M8XwsUXOCJ6ouyroHZje0a7k5cH/nE5IQ6NJZfH2eAPBlxGath1MQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@fullcalendar/timegrid/-/timegrid-5.11.0.tgz}
+    name: '@fullcalendar/timegrid'
+    version: 5.11.0
+    dependencies:
+      '@fullcalendar/common': registry.npmmirror.com/@fullcalendar/common/5.11.0
+      '@fullcalendar/daygrid': registry.npmmirror.com/@fullcalendar/daygrid/5.11.0
+      tslib: registry.npmmirror.com/tslib/2.4.0
+    dev: false
+
+  registry.npmmirror.com/@fullcalendar/vue3/5.11.1_vue@3.2.36:
+    resolution: {integrity: sha512-cTWQvPcrRGNWDc9INmh37v7Oyw6Y0TgpcRCrSkaaDNjVC9pROqiDZjNnCSJIcC6FhCaEWQTX8BCGXxLXA8/qLw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@fullcalendar/vue3/-/vue3-5.11.1.tgz}
+    id: registry.npmmirror.com/@fullcalendar/vue3/5.11.1
+    name: '@fullcalendar/vue3'
+    version: 5.11.1
+    peerDependencies:
+      vue: ^3.0.11
+    dependencies:
+      '@fullcalendar/core': registry.npmmirror.com/@fullcalendar/core/5.11.0
+      tslib: registry.npmmirror.com/tslib/2.4.0
+      vue: registry.npmmirror.com/vue/3.2.36
     dev: false
 
   registry.npmmirror.com/@humanwhocodes/config-array/0.9.5:
@@ -5375,6 +5444,12 @@ packages:
       posthtml-render: registry.npmmirror.com/posthtml-render/1.4.0
     dev: true
 
+  registry.npmmirror.com/preact/10.8.1:
+    resolution: {integrity: sha512-p5CKQ0MCEXTGKGOHiFaNE2V2nDq2hvDHykXvIlz+4lbfJ9umLZr8JS/fa1bXUwRcHXK+Ljk8zqmDhr25n0LtVg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/preact/-/preact-10.8.1.tgz}
+    name: preact
+    version: 10.8.1
+    dev: false
+
   registry.npmmirror.com/prelude-ls/1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/prelude-ls/-/prelude-ls-1.2.1.tgz}
     name: prelude-ls
@@ -6462,7 +6537,6 @@ packages:
     resolution: {integrity: sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/tslib/-/tslib-2.4.0.tgz}
     name: tslib
     version: 2.4.0
-    dev: true
 
   registry.npmmirror.com/tsutils/3.21.0_typescript@4.7.2:
     resolution: {integrity: sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/tsutils/-/tsutils-3.21.0.tgz}

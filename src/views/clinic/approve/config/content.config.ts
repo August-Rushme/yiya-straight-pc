@@ -1,9 +1,9 @@
 export const contentTableConfig = {
   title: "审批列表",
   propList: [
-    { prop: "clinic", label: "诊所名", minWidth: "100" },
-    { prop: "password", label: "密码", minWidth: "100", slotName: "password" },
-    { prop: "name", label: "真实姓名", minWidth: "100" },
+    { prop: "name", label: "诊所名称", minWidth: "100" },
+    { prop: "address", label: "诊所地址", minWidth: "100" },
+    { prop: "detailedAddress", label: "诊所详细地址", minWidth: "100" },
     { prop: "tel", label: "手机号码", minWidth: "100" },
     { prop: "status", label: "状态", minWidth: "100", slotName: "status" },
     {

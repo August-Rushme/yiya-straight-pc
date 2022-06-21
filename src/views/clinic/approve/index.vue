@@ -2,14 +2,12 @@
 import { reactive, ref } from "vue"
 
 import PageContent from "@/components/page-content"
-import PageSearch from "@/components/page-search"
+
 import PageModal from "@/components/page-modal"
 
-import { searchFormConfig } from "./config/search.config"
 import { contentTableConfig } from "./config/content.config"
 import { modalConfig } from "./config/modal.config"
 
-import { usePageSearch } from "@/hooks/use-page-search"
 import { usePageModal } from "@/hooks/use-page-modal"
 import { useSystemStore } from "@/store/modules/system"
 import cache from "@/utils/cache"
@@ -28,7 +26,6 @@ const editCallback = () => {
   passwordItem!.isHidden = true
 }
 
-const { pageContentRef, handleResetClick, handleQueryClick } = usePageSearch()
 // 调用hook获取公共变量和函数
 const { pageModalRef, defaultInfo, handleNewData, handleEditData, handleDeleteData, handleSaveData, modalTitle } =
   usePageModal(newCallback, editCallback)
@@ -94,13 +91,6 @@ defineExpose({
 </script>
 <template>
   <div class="app-container">
-    <el-card>
-      <page-search
-        :searchFormConfig="searchFormConfig"
-        @resetBtnClick="handleResetClick"
-        @queryBtnClick="handleQueryClick"
-      />
-    </el-card>
     <el-card class="mt-5">
       <page-content
         :contentTableConfig="contentTableConfig"
@@ -110,9 +100,6 @@ defineExpose({
         @deleteBtnClick="handleDeleteData($event, pageName)"
         ref="pageContentRef"
       >
-        <template #handlerHeader>
-          <el-button type="primary" size="small" @click="handleNewData('添加用户')"> 添加用户 </el-button>
-        </template>
         <!-- 状态 -->
         <template #status="scope">
           <el-button
@@ -121,17 +108,6 @@ defineExpose({
             @click="state.handleStatusChange(scope.row)"
           >
             {{ scope.row.status == 1 ? "启用" : "禁用" }}
-          </el-button>
-        </template>
-        <template #password="scope">
-          <span v-if="!scope.row.edit">******</span>
-          <el-input v-else size="small" v-model="scope.row.password" />
-        </template>
-        <!-- 分配角色 -->
-        <template #role="scope">
-          <el-button size="default" type="warning" style="font-size: 10px" @click="state.handleRoleClick(scope.row)">
-            <el-icon class="mr1"><setting /></el-icon>
-            分配角色
           </el-button>
         </template>
       </page-content>

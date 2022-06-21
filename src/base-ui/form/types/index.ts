@@ -1,4 +1,14 @@
-type IFormType = "input" | "password" | "select" | "datepicker" | "menuIcon" | "treeSelect" | "switch" | "upload"
+type IFormType =
+  | "input"
+  | "password"
+  | "select"
+  | "datepicker"
+  | "menuIcon"
+  | "treeSelect"
+  | "switch"
+  | "upload"
+  | "text"
+  | "image"
 
 export interface IFormItem {
   field: string

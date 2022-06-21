@@ -2,7 +2,7 @@
  * @Author: Kenny
  * @Date: 2022-06-19 19:48:36
  * @LastEditors: Kenny
- * @LastEditTime: 2022-06-20 17:47:47
+ * @LastEditTime: 2022-06-21 08:04:20
  * @FilePath: \yiya-straight-pc\src\views\dashboard\workbench\calendar\config\form.config.ts
  */
 import { IForm } from "@/base-ui/form"
@@ -24,7 +24,9 @@ export const modalConfig: IForm = {
       label: "预约时间:",
       otherOptions: {
         type: "datetimerange",
+        rangeSeparator: "到",
         startPlaceholder: "开始时间",
+        teleported: false,
         endPlaceholder: "结束时间"
       }
     },

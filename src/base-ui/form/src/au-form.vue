@@ -76,16 +76,34 @@
               <template v-else-if="item.type === 'upload'">
                 <el-upload
                   class="avatar-uploader"
-                  action="http://127.0.0.1:8081/clinic/upload/"
+                  action="http://127.0.0.1:8083/clinic/upload/"
                   drag
                   :show-file-list="false"
-                  :on-success="handleAvatarSuccess"
+                  :on-success="
+                    (response, uploadFile, uploadFiles) => {
+                      return handleAvatarSuccess(response, uploadFile, uploadFiles, item.field)
+                    }
+                  "
                   :before-upload="beforeAvatarUpload"
                 >
                   <img v-if="formData[`${item.field}`]" :src="formData[`${item.field}`]" class="avatar" />
                   <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
                   <div class="el-upload__text mt-1">拖拽或者 <em>点击上传</em></div>
                 </el-upload>
+              </template>
+              <template v-else-if="item.type === 'text'">
+                <span class="fontText">
+                  {{ formData[`${item.field}`] }}
+                </span>
+              </template>
+              <template v-else-if="item.type === 'image'">
+                <el-image
+                  :src="formData[`${item.field}`]"
+                  :preview-src-list="[formData[`${item.field}`]]"
+                  fit="cover"
+                  mt-2
+                  v-bind="item.otherOptions"
+                />
               </template>
             </el-form-item>
           </el-col>
@@ -100,7 +118,7 @@
 
 <script lang="ts" setup>
 import { PropType, ref, watch } from "vue"
-import type { FormInstance, UploadProps } from "element-plus"
+import type { FormInstance, UploadFile, UploadFiles } from "element-plus"
 import icons from "@/icons/icon.vue"
 import { IFormItem } from "../types"
 import message from "@/utils/message"
@@ -192,9 +210,10 @@ const beforeAvatarUpload = (file: File) => {
   return isJpgOrPng && isLt2M
 }
 
-const handleAvatarSuccess: UploadProps["onSuccess"] = (response, uploadFile) => {
-  console.log(uploadFile)
-  formData.value["img"] = response.data
+const handleAvatarSuccess = (response: any, uploadFile: UploadFile, uploadFiles: UploadFiles, field: string) => {
+  if (response) {
+    formData.value[`${field}`] = response.data
+  }
 }
 
 defineExpose({
@@ -230,5 +249,9 @@ defineExpose({
   color: #8c939d;
   width: 178px;
   height: 178px;
+}
+.fontText {
+  font-size: 14px;
+  color: #8c939d;
 }
 </style>

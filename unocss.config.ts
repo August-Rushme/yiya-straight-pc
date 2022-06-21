@@ -1,3 +1,10 @@
+/*
+ * @Author: Kenny
+ * @Date: 2022-06-17 14:54:20
+ * @LastEditors: Kenny
+ * @LastEditTime: 2022-06-21 21:05:55
+ * @FilePath: \yiya-straight-pc\unocss.config.ts
+ */
 import { defineConfig, presetAttributify, presetUno } from "unocss"
 
 export default defineConfig({
@@ -17,6 +24,7 @@ export default defineConfig({
     "wh-full": "w-full h-full",
     "flex-center": "flex justify-center items-center",
     "flex-x-center": "flex justify-center",
-    "flex-y-center": "flex items-center"
+    "flex-y-center": "flex items-center",
+    "flex-x-between": "flex justify-between items-center"
   }
 })

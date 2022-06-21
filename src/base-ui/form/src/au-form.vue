@@ -196,10 +196,14 @@ const handleAvatarSuccess: UploadProps["onSuccess"] = (response, uploadFile) => 
   console.log(uploadFile)
   formData.value["img"] = response.data
 }
-
+// 重置表单
+const rerestFormDate = () => {
+  formData.value = {}
+}
 defineExpose({
   formData,
-  formRef
+  formRef,
+  rerestFormDate
 })
 </script>
 

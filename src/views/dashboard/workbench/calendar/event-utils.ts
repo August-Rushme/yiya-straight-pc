@@ -2,7 +2,7 @@
  * @Author: Kenny
  * @Date: 2022-06-19 12:46:32
  * @LastEditors: Kenny
- * @LastEditTime: 2022-06-19 13:46:34
+ * @LastEditTime: 2022-06-21 17:49:38
  * @FilePath: \yiya-straight-pc\src\views\dashboard\workbench\calendar\event-utils.ts
  */
 import { EventInput } from "@fullcalendar/vue3"
@@ -13,13 +13,15 @@ const todayStr = new Date().toISOString().replace(/T.*$/, "") // YYYY-MM-DD of t
 export const INITIAL_EVENTS: EventInput[] = [
   {
     id: createEventId(),
-    title: "All-day event",
+    formData: {
+      patientName: "张三",
+      doctorName: "李四",
+      appiontmentTime: [todayStr, todayStr],
+      phone: "18888888888",
+      sex: "男",
+      remark: "无"
+    },
     start: todayStr
-  },
-  {
-    id: createEventId(),
-    title: "Timed event",
-    start: todayStr + "T12:00:00"
   }
 ]
 

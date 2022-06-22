@@ -2,7 +2,7 @@
  * @Author: Kenny
  * @Date: 2022-06-17 14:54:19
  * @LastEditors: Kenny
- * @LastEditTime: 2022-06-22 18:06:29
+ * @LastEditTime: 2022-06-22 18:45:59
  * @FilePath: \yiya-straight-pc\src\components\page-search\src\page-search.vue
 -->
 <template>
@@ -55,7 +55,6 @@ const formData = ref(formOriginData)
 
 // 2.优化二: 当用户点击重置
 const handleResetClick = () => {
-  console.log(formData.value)
   for (const key in formOriginData) {
     formData.value[`${key}`] = formOriginData[key]
   }

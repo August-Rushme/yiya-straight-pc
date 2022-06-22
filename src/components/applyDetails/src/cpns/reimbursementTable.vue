@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { modalConfig } from "./config/details.config"
+import { modalConfig } from "../config/details.config"
 import AuForm from "@/base-ui/form"
 import { reactive } from "vue"
 

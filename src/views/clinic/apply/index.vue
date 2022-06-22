@@ -55,7 +55,7 @@ import { FormInstance } from "element-plus"
 import { defineComponent, ref } from "vue"
 import { modalConfig, modalFileConfig } from "./config/form.config"
 
-import ApplyDetails from "./cpns/applyDetails.vue"
+import ApplyDetails from "@/components/applyDetails"
 export default defineComponent({
   components: {
     AuForm,

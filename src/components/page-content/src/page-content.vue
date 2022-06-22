@@ -21,7 +21,6 @@ const store = useSystemStore()
 const emit = defineEmits(["editBtnClick", "deleteBtnClick", "checkBtnClick", "newBtnClick", "saveBtnClick"])
 
 const pageInfo = ref<PageInfo>({
-  query: "",
   pageNum: 1,
   pageSize: 6
 })
@@ -41,8 +40,8 @@ watch(
   }
 )
 // 2.发送网络请求
-const getPageData = (pageInfo: any = { query: "", pageNum: 1, pageSize: 6 }, pageName?: any) => {
-  store.getPageListAction({ pageInfo, pageName })
+const getPageData = (queryInfo: any, pageName?: string) => {
+  store.getPageListAction({ queryInfo, pageName })
 }
 getPageData(pageInfo.value, pageName.value)
 // footer
@@ -115,7 +114,7 @@ defineExpose({
       </template>
       <!-- 操作按钮 -->
       <template #handler="scope">
-        <div class="handler-btns">
+        <slot name="btns" class="handler-btns">
           <el-button v-if="scope.row.edit" size="default" type="success" @click="handleSaveClick(scope.row)"
             ><el-icon><check /></el-icon>保存</el-button
           >
@@ -131,7 +130,7 @@ defineExpose({
           <!-- 分配角色按钮 -->
           <slot name="role" :row="scope.row" />
           <slot :row="scope.row" />
-        </div>
+        </slot>
       </template>
       <!-- 插入剩余的动态插槽 -->
       <template v-for="(item, index) in otherPropSlots" :key="index" #[item.slotName]="scope">

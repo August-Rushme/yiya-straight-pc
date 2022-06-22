@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import processState from "./processState.vue"
-import reimbursementTable from "./reimbursementTable.vue"
-
+import processState from "./cpns/processState.vue"
+import reimbursementTable from "./cpns/reimbursementTable.vue"
+import trailGroup from "./cpns/trailGroup.vue"
 const emit = defineEmits(["handleBack"])
 // 返回申请页面
 const handleGoBack = () => {
   emit("handleBack")
-  console.log("handleGoBack")
 }
 </script>
 <template>
@@ -23,6 +22,7 @@ const handleGoBack = () => {
         <processState />
         <div class="leaveTable">
           <reimbursementTable />
+          <trailGroup style="margin-left: 80px" />
         </div>
       </div>
     </el-card>
@@ -33,6 +33,7 @@ const handleGoBack = () => {
 .card-header {
   display: flex;
   justify-content: space-between;
+
   align-items: center;
 }
 

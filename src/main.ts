@@ -1,3 +1,10 @@
+/*
+ * @Author: Kenny
+ * @Date: 2022-06-17 14:54:20
+ * @LastEditors: Kenny
+ * @LastEditTime: 2022-06-21 20:02:45
+ * @FilePath: \yiya-straight-pc\src\main.ts
+ */
 import { createApp, Directive } from "vue"
 import router from "./router"
 import "@/router/permission"
@@ -12,7 +19,6 @@ import "normalize.css"
 import "element-plus/dist/index.css"
 import "element-plus/theme-chalk/dark/css-vars.css"
 import "@/styles/index.scss"
-
 const app = createApp(App)
 /** element-plus 组件完整引入 */
 app.use(ElementPlus)

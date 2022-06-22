@@ -1,17 +1,9 @@
 <script lang="ts" setup>
 import baseEcharts from "@/base-ui/echart"
 import { computed } from "vue"
-import { activeThemeName } from "@/utils/getTheme"
 const pointerData = 92 // 仪表指针数据
 const option: any = computed(() => {
   const echartsOption = {
-    title: {
-      text: "商品好评率",
-      x: "left",
-      textStyle: {
-        color: activeThemeName.value === "dark" ? "#fff" : "#333"
-      }
-    },
     series: [
       {
         type: "gauge",

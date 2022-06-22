@@ -2,21 +2,31 @@
  * @Author: Kenny
  * @Date: 2022-06-19 19:48:36
  * @LastEditors: Kenny
- * @LastEditTime: 2022-06-20 17:47:47
+ * @LastEditTime: 2022-06-21 17:41:41
  * @FilePath: \yiya-straight-pc\src\views\dashboard\workbench\calendar\config\form.config.ts
  */
 import { IForm } from "@/base-ui/form"
 export const modalConfig: IForm = {
   formItems: [
     {
-      field: "name",
+      field: "patientName",
       type: "input",
       label: "患者姓名:",
       placeholder: "请输入患者姓名",
       otherOptions: {
         clearable: true
       },
-      rules: [{ type: "string", required: true, message: "请输入菜单名称", trigger: "blur" }]
+      rules: [{ type: "string", required: true, message: "请输入患者姓名", trigger: "blur" }]
+    },
+    {
+      field: "doctorName",
+      type: "input",
+      label: "医生姓名:",
+      placeholder: "请输入医生姓名",
+      otherOptions: {
+        clearable: true
+      },
+      rules: [{ type: "string", required: true, message: "请输入医生姓名", trigger: "blur" }]
     },
     {
       field: "appiontmentTime",
@@ -24,7 +34,9 @@ export const modalConfig: IForm = {
       label: "预约时间:",
       otherOptions: {
         type: "datetimerange",
+        rangeSeparator: "到",
         startPlaceholder: "开始时间",
+        teleported: false,
         endPlaceholder: "结束时间"
       }
     },
@@ -35,11 +47,11 @@ export const modalConfig: IForm = {
       placeholder: "请选择患者性别",
       options: [
         {
-          value: "0",
+          value: "男",
           label: "男"
         },
         {
-          value: "1",
+          value: "女",
           label: "女"
         }
       ],
@@ -48,8 +60,8 @@ export const modalConfig: IForm = {
     {
       field: "phone",
       type: "input",
-      label: "手机号:",
-      placeholder: "请输入手机号",
+      label: "患者手机号:",
+      placeholder: "请输入患者手机号",
       otherOptions: {
         clearable: true
       },

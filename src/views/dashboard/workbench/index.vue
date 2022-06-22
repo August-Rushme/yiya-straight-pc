@@ -2,19 +2,106 @@
  * @Author: Kenny
  * @Date: 2022-06-17 14:54:20
  * @LastEditors: Kenny
- * @LastEditTime: 2022-06-19 13:06:11
+ * @LastEditTime: 2022-06-21 21:38:24
  * @FilePath: \yiya-straight-pc\src\views\dashboard\workbench\index.vue
 -->
 <script lang="ts" setup>
 import calendar from "./calendar/calendar.vue"
+import dayjs from "dayjs"
+const avatarSrc = JSON.parse(localStorage.getItem("userInfo") as string).photo
+const isMobile = localStorage.getItem("isMobie") === "true"
+const currentTime = dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss")
+const titleCardArray = [
+  {
+    title: "店铺总销量",
+    value: 14567
+  },
+  {
+    title: "店铺商品总库存",
+    value: 134567
+  },
+  {
+    title: "店铺昨日营收额",
+    value: 1234
+  },
+  {
+    title: "店铺总销售额",
+    value: 481234
+  }
+]
 </script>
 
 <template>
   <div app-container>
-    <el-row>
-      <el-col :span="24">
-        <el-card><calendar /> </el-card>
-      </el-col>
+    <el-row :span="24" mb3>
+      <el-card style="width: 100%">
+        <div :class="isMobile ? '' : 'flex-x-between'">
+          <div :class="isMobile ? 'text-center' : 'flex-y-center'">
+            <el-avatar shape="circle" :size="80" :src="avatarSrc" mr4 />
+            <div>
+              <div class="title" pt1>欢迎使用神州牙都会,祝您一天的工作顺利!</div>
+              <div class="subTitle">当前时间: {{ currentTime }}</div>
+            </div>
+          </div>
+          <div flex :class="[isMobile ? 'justify-center' : '']">
+            <div class="option">
+              <div class="subTitle">待审批</div>
+              <div class="title" pt1>8</div>
+            </div>
+            <div class="option">
+              <div class="subTitle">待审批</div>
+              <div class="title" pt1>2/10</div>
+            </div>
+            <div class="option">
+              <div class="subTitle">待审批</div>
+              <div class="title" pt1>8</div>
+            </div>
+          </div>
+        </div>
+      </el-card>
     </el-row>
+    <el-row :gutter="20">
+      <template v-for="item in titleCardArray" :key="item.title">
+        <el-col :sm="24" mb5 :lg="6">
+          <el-card>
+            <div class="card-title">
+              <span>{{ item.title }}</span>
+              <el-icon :size="20"><Warning /></el-icon>
+            </div>
+            <div class="card-value">
+              {{ item.value }}
+            </div>
+            <div mt3>
+              <span class="card-bottom">{{ item.title }}</span>
+              <span class="card-bottom card-bottom-value">{{ item.value.toLocaleString() }}</span>
+            </div>
+          </el-card>
+        </el-col>
+      </template>
+    </el-row>
+    <template v-if="!isMobile">
+      <el-row>
+        <el-col :span="24">
+          <el-card><calendar /> </el-card>
+        </el-col>
+      </el-row>
+    </template>
   </div>
 </template>
+<style lang="scss" scoped>
+.option {
+  width: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.title {
+  font-size: 24px;
+}
+.subTitle {
+  font-size: 14px;
+  padding-top: 15px;
+  color: #8c8c8c;
+}
+</style>

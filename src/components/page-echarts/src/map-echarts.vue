@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import chianJson from "../data/china.json"
 import baseEcharts from "@/base-ui/echart"
-import { activeThemeName } from "@/utils/getTheme"
 import { computed } from "vue"
 import * as echarts from "echarts"
 const uploadedDataURL = "/src/components/page-echarts/assets/mapBar.png"
@@ -42,15 +41,6 @@ for (var i = 0; i < data.length; i++) {
 }
 const option: any = computed(() => {
   const echartsOption = {
-    title: {
-      text: "商家店铺分布",
-      textStyle: {
-        color: activeThemeName.value === "dark" ? "#fff" : "#333",
-        fontSize: 28
-      },
-      left: 20,
-      top: 20
-    },
     tooltip: {
       trigger: "axis",
       axisPointer: {

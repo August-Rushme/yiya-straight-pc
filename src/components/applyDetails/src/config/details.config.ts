@@ -27,8 +27,8 @@ export const modalConfig: IForm = {
       label: "诊所执业许可证:",
       otherOptions: {
         style: {
-          width: "200px",
-          height: "180px"
+          width: "140px",
+          height: "100px"
         }
       }
     },
@@ -38,8 +38,8 @@ export const modalConfig: IForm = {
       label: "身份证正面:",
       otherOptions: {
         style: {
-          width: "200px",
-          height: "180px"
+          width: "140px",
+          height: "100px"
         }
       }
     },
@@ -49,8 +49,8 @@ export const modalConfig: IForm = {
       label: "身份证反面:",
       otherOptions: {
         style: {
-          width: "200px",
-          height: "180px"
+          width: "140px",
+          height: "100px"
         }
       }
     }

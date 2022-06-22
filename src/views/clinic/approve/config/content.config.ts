@@ -1,4 +1,6 @@
-export const contentTableConfig = {
+import { ITablePropsType } from "@/base-ui/table/types"
+
+export const contentTableConfig: ITablePropsType = {
   title: "审批列表",
   propList: [
     { prop: "name", label: "诊所名称", minWidth: "100" },
@@ -18,7 +20,7 @@ export const contentTableConfig = {
       minWidth: "120",
       slotName: "updated"
     },
-    { label: "操作", minWidth: "280", slotName: "handler" }
+    { label: "操作", minWidth: "120", slotName: "handler" }
   ],
   showFooter: true,
   showSelectColumn: true,

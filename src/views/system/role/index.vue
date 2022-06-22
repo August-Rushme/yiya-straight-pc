@@ -13,9 +13,11 @@ import { useSystemStoreHook } from "@/store/modules/system"
 import { computed, nextTick, ref } from "vue"
 import { ElTree } from "element-plus"
 import { menuMapLeafKeys } from "@/utils/menus-map"
+import cache from "@/utils/cache"
 
 const pageName = "role"
 const store = useSystemStoreHook()
+const userInfo = cache.getCache("userInfo")
 // pageModal相关的hook逻辑
 const { pageContentRef, handleResetClick, handleQueryClick } = usePageSearch()
 // 调用hook获取公共变量和函数
@@ -60,6 +62,14 @@ const handleMenuConfirm = () => {
 const handleClose = () => {
   // 清空选中的节点
 }
+// 其它搜索条件
+const searchOtherInfo = {
+  buk: userInfo.buk,
+  clinicId: userInfo.clinicId,
+  type: "search",
+  pageNum: 1,
+  pageSize: 6
+}
 defineExpose({
   handleEditData,
   handleNewData
@@ -71,7 +81,7 @@ defineExpose({
       <page-search
         :searchFormConfig="searchFormConfig"
         @resetBtnClick="handleResetClick(pageName)"
-        @queryBtnClick="handleQueryClick"
+        @queryBtnClick="handleQueryClick($event, pageName, searchOtherInfo)"
       />
     </el-card>
     <el-card class="mt-5">

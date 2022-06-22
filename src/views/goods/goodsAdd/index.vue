@@ -1,9 +1,9 @@
 <!--
  * @Author: Kenny
- * @Date: 2022-06-19 11:51:28
+ * @Date: 2022-06-22 17:09:04
  * @LastEditors: Kenny
- * @LastEditTime: 2022-06-22 10:16:41
- * @FilePath: \yiya-straight-pc\src\views\test\test2.vue
+ * @LastEditTime: 2022-06-22 17:09:17
+ * @FilePath: \yiya-straight-pc\src\views\goods\goodsAdd\index.vue
 -->
 <template>
   <div app-container>

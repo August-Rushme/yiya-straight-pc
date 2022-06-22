@@ -105,6 +105,13 @@
                   v-bind="item.otherOptions"
                 />
               </template>
+              <template v-else-if="item.type === 'numberRange'">
+                <div flex>
+                  <el-input v-model="formData[`${item.field[0]}`]" />
+                  <span mx1>-</span>
+                  <el-input v-model="formData[`${item.field[1]}`]" />
+                </div>
+              </template>
             </el-form-item>
           </el-col>
         </template>

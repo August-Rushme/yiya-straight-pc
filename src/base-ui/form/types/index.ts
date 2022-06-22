@@ -1,3 +1,10 @@
+/*
+ * @Author: Kenny
+ * @Date: 2022-06-17 14:54:19
+ * @LastEditors: Kenny
+ * @LastEditTime: 2022-06-22 17:25:44
+ * @FilePath: \yiya-straight-pc\src\base-ui\form\types\index.ts
+ */
 type IFormType =
   | "input"
   | "password"
@@ -9,9 +16,10 @@ type IFormType =
   | "upload"
   | "text"
   | "image"
+  | "numberRange"
 
 export interface IFormItem {
-  field: string
+  field: string | string[]
   type: IFormType
   label: string
   rules?: any[]

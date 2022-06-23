@@ -30,6 +30,8 @@ interface ISystemState {
   roleMenus: any[]
   clinicList: any[]
   clinicCount: number
+  clinicApplyList: any[]
+  clinicApplyCount: number
 }
 export const useSystemStore = defineStore({
   id: "system",
@@ -46,7 +48,9 @@ export const useSystemStore = defineStore({
       menuAll: [],
       roleMenus: [],
       clinicList: [],
-      clinicCount: 0
+      clinicCount: 0,
+      clinicApplyList: [],
+      clinicApplyCount: 0
     }
   },
   getters: {

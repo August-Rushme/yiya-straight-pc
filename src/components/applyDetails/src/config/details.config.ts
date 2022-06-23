@@ -2,7 +2,7 @@ import { IForm } from "@/base-ui/form"
 export const modalConfig: IForm = {
   formItems: [
     {
-      field: "name",
+      field: "clinicName",
       type: "text",
       label: "诊所名称:"
     },
@@ -12,12 +12,12 @@ export const modalConfig: IForm = {
       label: "诊所地址:"
     },
     {
-      field: "detailedAddress",
+      field: "detailAddress",
       type: "text",
       label: "诊所详细地址:"
     },
     {
-      field: "tel",
+      field: "phone",
       type: "text",
       label: "联系电话:"
     },

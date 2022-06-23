@@ -163,7 +163,7 @@ const calendarOptions = ref<CalendarOptions>({
         </template>
       </FullCalendar>
     </div>
-    <el-dialog v-model="dialogVisible" :title="title" center>
+    <el-dialog v-model="dialogVisible" :title="title" center @close="handleDialogCancel">
       <auForm v-bind="modalConfig" v-model="formData" ref="pageFormRef" />
       <template #footer>
         <span class="dialog-footer">

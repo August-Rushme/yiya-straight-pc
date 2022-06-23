@@ -1,9 +1,14 @@
+<!--
+ * @Author: Kenny
+ * @Date: 2022-06-19 11:51:28
+ * @LastEditors: Kenny
+ * @LastEditTime: 2022-06-22 10:16:41
+ * @FilePath: \yiya-straight-pc\src\views\test\test2.vue
+-->
 <template>
   <div app-container>
-    <el-card> test1 </el-card>
+    <el-card>模板</el-card>
   </div>
 </template>
-<script>
-export default {}
-</script>
-<style lang=""></style>
+<script setup lang="ts"></script>
+<style lang="scss" scoped></style>

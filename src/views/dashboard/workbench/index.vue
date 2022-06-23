@@ -2,7 +2,7 @@
  * @Author: Kenny
  * @Date: 2022-06-17 14:54:20
  * @LastEditors: Kenny
- * @LastEditTime: 2022-06-21 21:38:24
+ * @LastEditTime: 2022-06-22 15:16:09
  * @FilePath: \yiya-straight-pc\src\views\dashboard\workbench\index.vue
 -->
 <script lang="ts" setup>
@@ -13,19 +13,19 @@ const isMobile = localStorage.getItem("isMobie") === "true"
 const currentTime = dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss")
 const titleCardArray = [
   {
-    title: "店铺总销量",
+    title: "新增患者",
     value: 14567
   },
   {
-    title: "店铺商品总库存",
+    title: "新增预约",
     value: 134567
   },
   {
-    title: "店铺昨日营收额",
+    title: "预约已到店",
     value: 1234
   },
   {
-    title: "店铺总销售额",
+    title: "新增回访",
     value: 481234
   }
 ]
@@ -73,7 +73,7 @@ const titleCardArray = [
             </div>
             <div mt3>
               <span class="card-bottom">{{ item.title }}</span>
-              <span class="card-bottom card-bottom-value">{{ item.value.toLocaleString() }}</span>
+              <span class="card-bottom card-bottom-value">{{ item.value }}</span>
             </div>
           </el-card>
         </el-col>
@@ -89,6 +89,22 @@ const titleCardArray = [
   </div>
 </template>
 <style lang="scss" scoped>
+.card-title {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--el-text-color-secondary);
+}
+.card-value {
+  font-weight: bold;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--el-border-color);
+  font-size: 38px;
+}
+.card-bottom {
+  font-size: 13px;
+  padding-right: 8px;
+}
 .option {
   width: 80px;
   display: flex;

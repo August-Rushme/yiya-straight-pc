@@ -27,7 +27,7 @@
               <template v-else-if="active == 1">
                 <au-form v-bind="modalFileConfig" ref="pageFormRef" v-model="formData" />
                 <div>
-                  <div mb5>商品就诊流程 <span text-gray>(必须添写,不填写则商品主页无流程)</span></div>
+                  <div mb5>商品就诊流程 <span text-gray>(不填写则商品主页无流程)</span></div>
                   <div p3 class="processBox">
                     <el-form v-model="processData" label-width="0">
                       <template v-for="(item, index) in processData.processArray" :key="index">
@@ -44,7 +44,7 @@
                           </el-col>
                           <el-col :xs="24" :lg="10">
                             <el-form-item>
-                              <el-input v-model="item.price" placeholder="请输入价格" clearable />
+                              <el-input v-model="item.name" placeholder="请输入价格" clearable />
                             </el-form-item>
                           </el-col>
                         </el-row>
@@ -56,10 +56,8 @@
                     </div>
                   </div>
                 </div>
-
                 <el-button type="warning" @click="submitForm(pageFormRef?.formRef)">提交</el-button>
                 <el-button @click="handleLastStep()">上一步</el-button>
-
                 <el-divider />
               </template>
               <template v-else-if="active == 3">
@@ -84,7 +82,6 @@ import AuForm from "@/base-ui/form"
 import { FormInstance } from "element-plus"
 import { defineComponent, ref } from "vue"
 import { modalConfig, modalFileConfig } from "./config/form.config"
-
 import ApplyDetails from "@/components/applyDetails"
 export default defineComponent({
   components: {
@@ -101,14 +98,12 @@ export default defineComponent({
         }
       ]
     })
-
     const flag = ref(false)
     const pageFormRef = ref<InstanceType<typeof AuForm>>()
     const active = ref(1)
     const formData = ref<any>({})
     // 下一步标记
     const selectedAccType = ref("1")
-
     // 添加步骤
     const addProcess = () => {
       processData.value.processArray.push({
@@ -116,7 +111,6 @@ export default defineComponent({
         amount: 1,
         price: ""
       })
-      console.log(processData.value)
     }
     const deleteProcess = () => {
       processData.value.processArray.pop()
@@ -151,7 +145,6 @@ export default defineComponent({
           console.log("error submit!", fields)
         }
       })
-
       return true
     }
     const resetForm = (formEl: FormInstance | undefined) => {
@@ -192,7 +185,6 @@ export default defineComponent({
   }
 })
 </script>
-
 <style lang="scss" scoped>
 .processBox {
   border: 1px dashed var(--el-border-color);
@@ -201,7 +193,6 @@ export default defineComponent({
 .stepForm {
   .demo-ruleForm {
     text-align: left;
-
     margin: 15px;
   }
   .confirmInfo {
@@ -215,7 +206,6 @@ export default defineComponent({
       justify-content: flex-start;
       align-items: center;
       width: 300px;
-
       .label {
         font-weight: 400;
         color: rgba(0, 0, 0, 0.85);
@@ -227,7 +217,6 @@ export default defineComponent({
       font-size: 14px;
     }
   }
-
   .info {
     text-align: left;
     padding-left: 20px;
@@ -239,15 +228,12 @@ export default defineComponent({
     justify-content: space-between;
     align-items: center;
   }
-
   .text {
     font-size: 14px;
   }
-
   .item {
     margin-bottom: 18px;
   }
-
   .box-card {
     width: 100%;
   }

@@ -27,10 +27,10 @@
               <template v-else-if="active == 1">
                 <au-form v-bind="modalFileConfig" ref="pageFormRef" v-model="formData" />
                 <div>
-                  <div mb5>商品就诊流程 <span text-gray>(不填写则商品主页无流程)</span></div>
+                  <div mb5>商品就诊流程 <span text-gray>(必须添写,不填写则商品主页无流程)</span></div>
                   <div p3 class="processBox">
                     <el-form v-model="processData" label-width="0">
-                      <template v-for="(item, index) in processArray" :key="index">
+                      <template v-for="(item, index) in processData.processArray" :key="index">
                         <el-row :gutter="20">
                           <el-col :xs="24" :lg="10">
                             <el-form-item>
@@ -44,7 +44,7 @@
                           </el-col>
                           <el-col :xs="24" :lg="10">
                             <el-form-item>
-                              <el-input v-model="item.name" placeholder="请输入价格" clearable />
+                              <el-input v-model="item.price" placeholder="请输入价格" clearable />
                             </el-form-item>
                           </el-col>
                         </el-row>
@@ -92,7 +92,16 @@ export default defineComponent({
     ApplyDetails
   },
   setup() {
-    const processData = ref()
+    const processData = ref({
+      processArray: [
+        {
+          name: "",
+          amount: 1,
+          price: ""
+        }
+      ]
+    })
+
     const flag = ref(false)
     const pageFormRef = ref<InstanceType<typeof AuForm>>()
     const active = ref(1)
@@ -100,24 +109,17 @@ export default defineComponent({
     // 下一步标记
     const selectedAccType = ref("1")
 
-    // 商品步骤流程
-    const processArray = ref([
-      {
-        name: "",
-        amount: 1,
-        price: ""
-      }
-    ])
     // 添加步骤
     const addProcess = () => {
-      processArray.value.push({
+      processData.value.processArray.push({
         name: "",
         amount: 1,
         price: ""
       })
+      console.log(processData.value)
     }
     const deleteProcess = () => {
-      processArray.value.pop()
+      processData.value.processArray.pop()
     }
     // method
     const handleNextStep = async (formEl: FormInstance | undefined) => {
@@ -175,7 +177,6 @@ export default defineComponent({
       deleteProcess,
       active,
       handleViewDetails,
-      processArray,
       selectedAccType,
       modalConfig,
       modalFileConfig,
@@ -194,7 +195,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .processBox {
-  border: 1px dashed #e8e8e8;
+  border: 1px dashed var(--el-border-color);
   margin-bottom: 20px;
 }
 .stepForm {

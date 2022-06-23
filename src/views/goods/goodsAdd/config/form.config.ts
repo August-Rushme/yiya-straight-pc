@@ -2,7 +2,7 @@
  * @Author: Kenny
  * @Date: 2022-06-22 18:47:51
  * @LastEditors: Kenny
- * @LastEditTime: 2022-06-22 20:25:09
+ * @LastEditTime: 2022-06-23 09:55:36
  * @FilePath: \yiya-straight-pc\src\views\goods\goodsAdd\config\form.config.ts
  */
 import { IForm } from "@/base-ui/form"
@@ -64,6 +64,19 @@ export const modalConfig: IForm = {
         }
       ],
       rules: [{ required: true, message: "请选择商品类型", trigger: "change" }]
+    },
+    {
+      field: "clinicId",
+      type: "select",
+      label: "所属诊所",
+      placeholder: "请选择所属诊所",
+      options: [
+        {
+          label: "测试",
+          value: "1"
+        }
+      ],
+      rules: [{ required: true, message: "请选择所属诊所", trigger: "change" }]
     },
     {
       field: "count",
@@ -132,12 +145,6 @@ export const modalFileConfig: IForm = {
       type: "upload",
       label: "商品详细长图",
       rules: [{ required: true, message: "请上传商品详细长图", trigger: "blur" }]
-    },
-    {
-      field: "idCardBack",
-      type: "upload",
-      label: "个人身份证(反面)",
-      rules: [{ required: true, message: "请上传个人身份证", trigger: "blur" }]
     }
   ],
   colLayout: { span: 24 },

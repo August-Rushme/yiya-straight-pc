@@ -1,64 +1,62 @@
 <script setup lang="ts">
-import { watch, onMounted, reactive } from "vue"
+import { onMounted, ref } from "vue"
 import AuForm from "@/base-ui/form"
 import { modalConfig } from "./config/details.config"
-import { useClinicStoreHook } from "@/store/modules/clinic"
 
 const props = defineProps({
-  approveId: {
-    type: String
+  form: {
+    type: Object
   }
 })
 const emit = defineEmits(["handleBack"])
-const store = useClinicStoreHook()
-let formData = reactive({ clinicName: "12312" })
-// 监听props.approveId变化
-watch(
-  () => props.approveId,
-  async (newVal) => {
-    // 更新表格数据
-    // 更新进度条数据
-    // 更新审批记录数据
-    const res = await store.getApplyDetailsAction({ id: newVal })
-    console.log(res)
-    formData.clinicName = "2356"
-    console.log(formData.clinicName)
-    console.log(formData)
 
-    console.log("approveId变化")
-    // formData.value = res
-  }
-)
-
-// formData.value = store.applyDetails
+const formData = ref({ ...props.form })
 
 // 侧边流程相关
 const activities = [
   {
+    status: 0,
     content: "申请发起",
     timestamp: "2022-06-21 20:46",
     state: "成功",
     color: "#10ba9c"
   },
+  { status: 2, content: "平台审批", timestamp: "2022-06-21 20:46", state: "同意", color: "#4285f4" },
   {
-    content: "平台审批",
-    timestamp: "2022-06-21 20:46",
-    state: "同意",
-    color: "#4285f4"
-  },
-  {
+    status: 3,
     content: "平台审批",
     timestamp: "2022-06-21 20:46",
     state: "驳回",
     color: "#ff8282"
   },
   {
+    status: 1,
     content: "平台审批",
     timestamp: "2022-06-21 20:46",
     state: "处理中",
     color: "#f8ac7f"
   }
 ]
+let newActivities = [
+  {
+    status: 0,
+    content: "申请发起",
+    timestamp: "2022-06-21 20:46",
+    state: "成功",
+    color: "#10ba9c"
+  }
+]
+activities.forEach((item: any) => {
+  if (item.status == 1 && formData.value.status == 1) {
+    newActivities.push(item)
+  }
+  if (item.status == 2 && formData.value.status == 2) {
+    newActivities.push(item)
+  }
+  if (item.status == 3 && formData.value.status == 3) {
+    newActivities.push(item)
+  }
+})
 onMounted(() => {
   const stateEle = document.querySelectorAll(".state")
   for (let i = 0; i < stateEle.length; i++) {
@@ -98,7 +96,7 @@ const handleGoBack = () => {
           <div class="processBlock">
             <el-timeline>
               <el-timeline-item
-                v-for="(activity, index) in activities"
+                v-for="(activity, index) in newActivities"
                 :key="index"
                 :color="activity.color"
                 :timestamp="activity.timestamp"
@@ -112,7 +110,7 @@ const handleGoBack = () => {
         <div class="leaveTable">
           <div class="table">
             <au-form v-bind="modalConfig" v-model="formData" />
-            <div flex justify-end>
+            <div flex justify-end mr35 mt10>
               <el-button type="primary" @click="support" size="large" v-permission="['admin']">同意</el-button>
               <el-button type="danger" @click="reject" size="large" v-permission="['admin']">拒绝</el-button>
             </div>

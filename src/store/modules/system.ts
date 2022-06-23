@@ -23,6 +23,8 @@ interface ISystemState {
   roleList: any[]
   roleCount: number
   roles: number[]
+  productList: any[]
+  productCount: number
   pageNum: number
   pageSize: number
   menuList: any[]
@@ -30,6 +32,8 @@ interface ISystemState {
   roleMenus: any[]
   clinicList: any[]
   clinicCount: number
+  clinicApplyList: any[]
+  clinicApplyCount: number
 }
 export const useSystemStore = defineStore({
   id: "system",
@@ -39,6 +43,8 @@ export const useSystemStore = defineStore({
       userCount: 0,
       roleList: [],
       roleCount: 0,
+      productList: [],
+      productCount: 0,
       roles: [],
       pageNum: 1,
       pageSize: 6,
@@ -46,7 +52,9 @@ export const useSystemStore = defineStore({
       menuAll: [],
       roleMenus: [],
       clinicList: [],
-      clinicCount: 0
+      clinicCount: 0,
+      clinicApplyList: [],
+      clinicApplyCount: 0
     }
   },
   getters: {
@@ -68,10 +76,17 @@ export const useSystemStore = defineStore({
       const userId = cache.getCache("userInfo").id
       // 获取pageUrl
       const pageName: string = payload.pageName
-      payload.pageInfo = { ...payload.pageInfo, clinicId, userId }
+      // 合并参数
+      payload.pageInfo = { ...payload.pageInfo, ...payload.queryInfo, clinicId, userId }
       let pageUrl = `/${pageName}/list`
+      // 判断是请求链接
       if (pageName === "menu") {
         pageUrl = `/${pageName}/all`
+      } else if (payload.queryInfo?.type === "search" || false) {
+        pageUrl = `/${pageName}/advanceSelect`
+      }
+      if (pageName === "product") {
+        pageUrl = `/${pageName}/getByClinic`
       }
       // 对页面发送请求
       const { data: res }: any = await getPageList(pageUrl, payload.pageInfo)
@@ -83,6 +98,18 @@ export const useSystemStore = defineStore({
       if (pageName === "menu") {
         list = res
       }
+      this.$patch({
+        [`${pageName}List`]: list,
+        [`${pageName}Count`]: total
+      })
+    },
+    // 高级搜索
+    async getPageListAdvancedSearchAction(payload: any) {
+      const pageName: string = payload.pageName
+      const pageUrl = `/${pageName}/advanceSelect`
+      const { data: res }: any = await getPageList(pageUrl, payload.pageInfo)
+      const list: any[] = res.list
+      const total: number = res.total
       this.$patch({
         [`${pageName}List`]: list,
         [`${pageName}Count`]: total

@@ -2,8 +2,7 @@
  * @Author: Kenny
  * @Date: 2022-06-13 14:52:53
  * @LastEditors: error: git config user.name && git config user.email & please set dead value or install git
- * @LastEditTime: 2022-06-20 18:37:02
- * @FilePath: \yiya-straight-pc\src\views\dashboard\home\index.vue
+ * @LastEditTime: 2022-06-23 18:56:16
 -->
 <script lang="ts" setup>
 import { barEcharts, pieEcharts, mapEcharts } from "@/components/page-echarts"
@@ -105,7 +104,12 @@ onMounted(() => {
         </el-card>
       </el-col>
       <el-col :sm="24" :md="10" :lg="8">
-        <el-card mb5> <pieEcharts /></el-card>
+        <el-card mb5>
+          <div class="pieEcharts">
+            <div class="title">店铺好评率</div>
+            <pieEcharts />
+          </div>
+        </el-card>
       </el-col>
     </el-row>
     <template v-if="!isMobie">
@@ -113,6 +117,7 @@ onMounted(() => {
         <el-col :span="24">
           <el-card>
             <div class="mapEcharts">
+              <div class="title">商家店铺分布</div>
               <mapEcharts />
               <div class="broadcast">
                 <template v-for="(item, index) in broadcast" :key="index">
@@ -158,9 +163,22 @@ onMounted(() => {
   font-family: electronicFont;
   font-size: 16px;
 }
-
+.pieEcharts {
+  position: relative;
+  .title {
+    position: absolute;
+    font-weight: bold;
+    font-size: 28px;
+  }
+}
 .mapEcharts {
   position: relative;
+  .title {
+    position: absolute;
+    left: 20px;
+    font-weight: bold;
+    font-size: 36px;
+  }
   .broadcast {
     position: absolute;
     height: 220px;

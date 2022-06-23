@@ -87,6 +87,15 @@ const state = reactive({
     state.dialogVisible = false
   }
 })
+
+// 搜索需要的其它参数
+const searchOtherInfo = {
+  buk: userInfo.buk,
+  clinicId: userInfo.clinicId,
+  type: "search",
+  pageNum: 1,
+  pageSize: 6
+}
 defineExpose({
   handleEditData,
   handleNewData
@@ -97,8 +106,8 @@ defineExpose({
     <el-card>
       <page-search
         :searchFormConfig="searchFormConfig"
-        @resetBtnClick="handleResetClick"
-        @queryBtnClick="handleQueryClick"
+        @resetBtnClick="handleResetClick(pageName)"
+        @queryBtnClick="handleQueryClick($event, pageName, searchOtherInfo)"
       />
     </el-card>
     <el-card class="mt-5">

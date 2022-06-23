@@ -1,4 +1,6 @@
-export const contentTableConfig = {
+import { ITablePropsType } from "@/base-ui/table/types"
+
+export const contentTableConfig: ITablePropsType = {
   title: "员工列表",
   propList: [
     { prop: "userName", label: "用户名", minWidth: "100" },

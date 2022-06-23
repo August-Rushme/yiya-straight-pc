@@ -1,148 +1,171 @@
-<script lang="ts">
-import { defineComponent } from "vue"
+<script lang="ts" setup>
+import { ref } from "vue"
 import auForm from "@/base-ui/form"
 import "@fullcalendar/core/vdom" // solve problem with Vite
+import message from "@/utils/message"
 import FullCalendar, { CalendarOptions, EventApi, DateSelectArg, EventClickArg } from "@fullcalendar/vue3"
 import dayGridPlugin from "@fullcalendar/daygrid"
 import timeGridPlugin from "@fullcalendar/timegrid"
 import interactionPlugin from "@fullcalendar/interaction"
+import { formatUtcTime } from "@/utils"
 import { INITIAL_EVENTS, createEventId } from "./event-utils"
 import { modalConfig } from "./config/form.config"
-const Demo = defineComponent({
-  components: {
-    FullCalendar,
-    auForm
-  },
-  data() {
-    return {
-      selectInfo: null as any,
-      dialogVisible: false,
-      modalConfig: modalConfig,
-      formData: {} as any,
-      pageFormRef: null as any,
-      calendarOptions: {
-        plugins: [
-          dayGridPlugin,
-          timeGridPlugin,
-          interactionPlugin // needed for dateClick
-        ],
-        headerToolbar: {
-          left: "prev,next today",
-          center: "title",
-          right: "dayGridMonth,timeGridWeek,timeGridDay"
-        },
-        buttonText: {
-          today: "今天",
-          month: "月视图",
-          week: "周视图",
-          day: "日视图"
-        },
-        initialView: "dayGridMonth",
-        initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
-        editable: true,
-        selectable: true,
-        selectMirror: true,
-        locale: "zh-cn",
-        dayMaxEvents: true,
-        weekends: true,
-        select: this.handleDateSelect,
-        eventClick: this.handleEventClick,
-        eventsSet: this.handleEvents
-        /* you can update a remote database when these fire:
-        eventAdd:
-        eventChange:
-        eventRemove:
-        */
-      } as CalendarOptions,
-      currentEvents: [] as EventApi[]
-    }
-  },
-  methods: {
-    handleWeekendsToggle() {
-      this.calendarOptions.weekends = !this.calendarOptions.weekends // update a property
-    },
-    handleDateSelect(selectInfo: DateSelectArg) {
-      this.selectInfo = selectInfo
-      this.dialogVisible = true
-      console.log(selectInfo, createEventId())
-      // let title = prompt("Please enter a new title for your event")
-      // let calendarApi = selectInfo.view.calendar
-      // calendarApi.unselect() // clear date selection
-      // if (title) {
-      // calendarApi.addEvent({
-      //   id: createEventId(),
-      //   title,
-      //   start: selectInfo.startStr,
-      //   end: selectInfo.endStr,
-      //   allDay: selectInfo.allDay
-      // })
-      // }
-    },
-    handleEventClick(clickInfo: EventClickArg) {
-      if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-        clickInfo.event.remove()
-      }
-    },
-    handleEvents(events: EventApi[]) {
-      this.currentEvents = events
-    },
-    handleDialogConfirm() {
-      let calendarApi = this.selectInfo.view.calendar
-      calendarApi.unselect()
-      calendarApi.addEvent({
-        id: createEventId(),
-        title: this.formData.name,
-        start: this.selectInfo.startStr,
-        end: this.selectInfo.endStr,
-        allDay: this.selectInfo.allDay
-      })
-      this.dialogVisible = false
-    },
-    handleDialogCancel() {
-      this.dialogVisible = false
-    }
+
+import { Action, ElMessageBox } from "element-plus"
+const dialogVisible = ref(false)
+const selectInfoRef = ref<DateSelectArg>()
+const formData = ref<any>({})
+const currentEvents = ref<EventApi[]>([])
+const pageFormRef = ref<InstanceType<typeof auForm>>()
+let calendarEventApi: any
+const title = ref("新建事件")
+// 编辑事件ID
+const editId = ref()
+// 新建事件
+const handleDateSelect = (selectInfo: DateSelectArg) => {
+  title.value = "新建事件"
+  selectInfoRef.value = selectInfo
+  dialogVisible.value = true
+}
+// 编辑事件
+const handleEventClick = (clickInfo: EventClickArg) => {
+  title.value = "编辑事件"
+  editId.value = parseInt(clickInfo.event.id)
+  for (let key in clickInfo.event.extendedProps.formData) {
+    formData.value[key] = clickInfo.event.extendedProps.formData[key]
   }
+  dialogVisible.value = true
+}
+// 删除事件
+const removeEvents = (e: any, id: string) => {
+  e.stopPropagation()
+  const index = parseInt(id)
+  ElMessageBox.alert("是否删除该日历事件", "提示", {
+    confirmButtonText: "是",
+    showCancelButton: true,
+    callback: (action: Action) => {
+      if (action === "confirm") {
+        calendarEventApi.getEventById(index).remove()
+        message.success("删除成功")
+      } else {
+        message.info("删除被取消")
+      }
+    }
+  })
+}
+// 事件更新
+const handleEvents = (events: EventApi[]) => {
+  currentEvents.value = events
+}
+// 提交事件
+const handleDialogConfirm = () => {
+  if (pageFormRef.value) {
+    pageFormRef.value.formRef?.validate((validate) => {
+      if (!validate) {
+        return message.error("请正确填写表单")
+      } else {
+        const calendarApi = selectInfoRef.value?.view.calendar
+        calendarApi?.unselect()
+
+        if (!calendarEventApi) {
+          calendarEventApi = calendarApi
+        }
+        if (title.value === "新建事件") {
+          calendarApi?.addEvent({
+            id: createEventId(),
+            start: selectInfoRef.value?.startStr,
+            end: selectInfoRef.value?.endStr,
+            allDay: selectInfoRef.value?.allDay,
+            formData: formData.value
+          })
+          formData.value = ref()
+          pageFormRef.value?.rerestFormDate()
+          dialogVisible.value = false
+          message.success("添加事件成功")
+        } else {
+          calendarApi?.getEventById(editId.value)?.setExtendedProp("formData", formData.value)
+          formData.value = ref()
+          pageFormRef.value?.rerestFormDate()
+          dialogVisible.value = false
+          message.success("编辑事件成功")
+        }
+      }
+    })
+  }
+}
+
+// 弹窗取消
+const handleDialogCancel = () => {
+  formData.value = ref()
+  pageFormRef.value?.rerestFormDate()
+  dialogVisible.value = false
+}
+// 日历配置
+const calendarOptions = ref<CalendarOptions>({
+  plugins: [
+    dayGridPlugin,
+    timeGridPlugin,
+    interactionPlugin // needed for dateClick
+  ],
+  headerToolbar: {
+    left: "prev,next today",
+    center: "title",
+    right: "dayGridMonth,timeGridWeek,timeGridDay"
+  },
+  buttonText: {
+    today: "今天",
+    month: "月视图",
+    week: "周视图",
+    day: "日视图"
+  },
+  initialView: "dayGridMonth",
+  initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
+  editable: true,
+  selectable: true,
+  selectMirror: true,
+  locale: "zh-cn",
+  dayMaxEvents: true,
+  weekends: true,
+  select: handleDateSelect,
+  eventClick: handleEventClick,
+  eventsSet: handleEvents
 })
-export default Demo
 </script>
 
 <template>
   <div class="demo-app">
-    <!-- <div class="demo-app-sidebar">
-      <div class="demo-app-sidebar-section">
-        <h2>Instructions</h2>
-        <ul>
-          <li>Select dates and you will be prompted to create a new event</li>
-          <li>Drag, drop, and resize events</li>
-          <li>Click an event to delete it</li>
-        </ul>
-      </div>
-      <div class="demo-app-sidebar-section">
-        <label>
-          <input type="checkbox" :checked="calendarOptions.weekends" @change="handleWeekendsToggle" />
-          toggle weekends
-        </label>
-      </div>
-      <div class="demo-app-sidebar-section">
-        <h2>All Events ({{ currentEvents.length }})</h2>
-        <ul>
-          <li v-for="event in currentEvents" :key="event.id">
-            <b>{{ event.startStr }}</b>
-            <i>{{ event.title }}</i>
-          </li>
-        </ul>
-      </div>
-    </div> -->
     <div class="demo-app-main">
       <FullCalendar class="demo-app-calendar" :options="calendarOptions">
         <template v-slot:eventContent="arg">
-          <b>{{ arg.timeText }}</b>
-          <i>{{ arg.event.title }}</i>
+          <el-popover ref="popover" placement="right" title="详细信息" :width="200" trigger="hover">
+            <template #reference>
+              <div flex-y-center relative style="min-height: 4em; background-color: #3788d8; height: 100%">
+                <span class="circle" :style="{ 'background-color': !!arg.timeText ? '#21b3a9' : '#ffd55f' }" />
+                <b>{{ arg.timeText }}</b> <i>{{ arg.event.extendedProps.formData?.patientName }}</i>
+                <span pl-3>
+                  {{ arg.event.extendedProps.formData?.sex }}
+                </span>
+                <span class="eventClose" @click="removeEvents($event, arg.event.id)">
+                  <el-icon :size="15"><CircleClose /></el-icon
+                ></span>
+              </div>
+            </template>
+            <div>患者姓名: {{ arg.event.extendedProps.formData?.patientName }}</div>
+            <div>医生姓名: {{ arg.event.extendedProps.formData?.doctorName }}</div>
+            <div>
+              预约时间:
+              {{ formatUtcTime(arg.event.extendedProps.formData?.appiontmentTime[0]) }} 到
+              {{ formatUtcTime(arg.event.extendedProps.formData?.appiontmentTime[1]) }}
+            </div>
+            <div>患者性别: {{ arg.event.extendedProps.formData?.sex }}</div>
+            <div>患者手机号: {{ arg.event.extendedProps.formData?.phone }}</div>
+            <div>备注: {{ arg.event.extendedProps.formData?.remark }}</div>
+          </el-popover>
         </template>
       </FullCalendar>
     </div>
 
-    <el-dialog v-model="dialogVisible" center>
+    <el-dialog v-model="dialogVisible" :title="title" center @close="handleDialogCancel">
       <auForm v-bind="modalConfig" v-model="formData" ref="pageFormRef" />
       <template #footer>
         <span class="dialog-footer">
@@ -155,9 +178,34 @@ export default Demo
 </template>
 
 <style lang="css">
+.fc .fc-popover {
+  z-index: 999;
+}
+.fc .fc-timegrid-slot {
+  height: 4em;
+}
 /* :root {
   --fc-today-bg-color: var(--el-color-info-light-3);
 } */
+.fc .fc-daygrid-event > span {
+  display: block !important;
+  width: 100%;
+}
+.circle {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin: 0 3px;
+}
+.eventClose {
+  display: flex;
+  align-items: center;
+  background-color: #3788d8;
+  position: absolute;
+  top: 0;
+  right: 0px;
+}
 h2 {
   margin: 0;
   font-size: 16px;
@@ -175,8 +223,7 @@ b {
   margin-right: 3px;
 }
 .demo-app {
-  display: flex;
-  min-height: 100%;
+  min-height: 100vh;
   font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
   font-size: 14px;
 }

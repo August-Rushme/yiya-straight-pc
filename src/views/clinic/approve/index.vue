@@ -1,92 +1,81 @@
 <script lang="ts" setup>
-import { reactive, ref } from "vue"
-
 import PageContent from "@/components/page-content"
 import PageSearch from "@/components/page-search"
 import PageModal from "@/components/page-modal"
+import AuForm from "@/base-ui/form"
 
-import { searchFormConfig } from "./config/search.config"
 import { contentTableConfig } from "./config/content.config"
-import { modalConfig } from "./config/modal.config"
+import { searchFormConfig } from "./config/search.config"
+import { modalConfig, modalDetailsConfig } from "./config/modal.config"
 
 import { usePageSearch } from "@/hooks/use-page-search"
 import { usePageModal } from "@/hooks/use-page-modal"
-import { useSystemStore } from "@/store/modules/system"
-import cache from "@/utils/cache"
+import { onMounted, ref } from "vue"
 
-const store = useSystemStore()
-const userInfo = cache.getCache("userInfo")
-const pageName = "user"
-// pageModal相关的hook逻辑
-// 1.处理密码的逻辑
-const newCallback = () => {
-  const passwordItem = modalConfig.formItems.find((item) => item.field === "password")
-  passwordItem!.isHidden = false
-}
-const editCallback = () => {
-  const passwordItem = modalConfig.formItems.find((item) => item.field === "password")
-  passwordItem!.isHidden = true
-}
+// import { useSystemStore } from "@/store/modules/system"
+// import { ref } from "vue"
 
+// const store = useSystemStore()
+
+const pageName = "clinicApply"
+const flag = ref(false)
 const { pageContentRef, handleResetClick, handleQueryClick } = usePageSearch()
 // 调用hook获取公共变量和函数
 const { pageModalRef, defaultInfo, handleNewData, handleEditData, handleDeleteData, handleSaveData, modalTitle } =
-  usePageModal(newCallback, editCallback)
+  usePageModal()
+const approveId = ref<string>("0")
+// 处理查看审批
+const handleView = async (row: any) => {
+  flag.value = true
+  approveId.value = row.userId
 
-// 获取全部角色
-const pageInfo = ref({
-  pageNum: 1,
-  pageSize: 6
-})
-const selectValue = ref<number[]>([]) // 已选中的角色
-const options = ref<any>([]) // 所有的角色
-const getRoleList = async () => {
-  const res = await store.getAllRoleAction(pageInfo.value)
-  res.list.map((role: any) => {
-    options.value.push({
-      value: role.id,
-      label: role.name
-    })
-  })
-}
-getRoleList()
-// 处理用户角色改变
-const handleRoleChange = (value: any) => {
-  console.log(value)
-}
-// 添加用户的其他逻辑
-const addOtherInfo = {
-  buk: userInfo.buk,
-  clinicId: userInfo.clinicId
+  formData.value = row
+
+  console.log(formData.value)
+
+  console.log("查看审批")
 }
 
-const state = reactive({
-  userId: "",
-  dialogVisible: false,
-  // 删除
-
-  handleStatusChange: (row: any) => {
-    const r = window.confirm(`确定${row.status === 1 ? "禁用" : "启用"}该用户吗？`)
-    if (r) {
-      row.status === 1 ? (row.status = 0) : (row.status = 1)
-    }
+// 返回
+const handleBack = () => {
+  flag.value = false
+}
+// 侧边流程相关
+const activities = [
+  {
+    content: "申请发起",
+    timestamp: "2022-06-21 20:46",
+    state: "成功",
+    color: "#10ba9c"
   },
-  // 处理角色分配
-  handleRoleClick: async (row: any) => {
-    state.userId = row.id
-    // 先清空已选中的角色
-    selectValue.value = []
-    // 获取已分配的角色
-    await store.getUserRoleAction(row.id)
-    selectValue.value = store.roles
-    state.dialogVisible = true
+  {
+    content: "平台审批",
+    timestamp: "2022-06-21 20:46",
+    state: "同意",
+    color: "#4285f4"
   },
-  // 确认分配角色
-  handleRoleConfirm: () => {
-    store.setUserRoleAction({ roleIds: selectValue.value, userId: state.userId })
-    state.dialogVisible = false
+  {
+    content: "平台审批",
+    timestamp: "2022-06-21 20:46",
+    state: "驳回",
+    color: "#ff8282"
+  },
+  {
+    content: "平台审批",
+    timestamp: "2022-06-21 20:46",
+    state: "处理中",
+    color: "#f8ac7f"
+  }
+]
+onMounted(() => {
+  const stateEle = document.querySelectorAll(".state")
+  for (let i = 0; i < stateEle.length; i++) {
+    const e = stateEle[i] as HTMLElement
+    e.style.backgroundColor = activities[i].color
   }
 })
+// 表格详细
+const formData = ref<any>({})
 defineExpose({
   handleEditData,
   handleNewData
@@ -94,72 +83,137 @@ defineExpose({
 </script>
 <template>
   <div class="app-container">
-    <el-card>
-      <page-search
-        :searchFormConfig="searchFormConfig"
-        @resetBtnClick="handleResetClick"
-        @queryBtnClick="handleQueryClick"
-      />
-    </el-card>
-    <el-card class="mt-5">
-      <page-content
-        :contentTableConfig="contentTableConfig"
+    <div v-if="!flag">
+      <el-card>
+        <page-search
+          :searchFormConfig="searchFormConfig"
+          @resetBtnClick="handleResetClick(pageName)"
+          @queryBtnClick="handleQueryClick"
+        />
+      </el-card>
+      <el-card class="mt-5">
+        <page-content
+          :contentTableConfig="contentTableConfig"
+          :pageName="pageName"
+          @editBtnClick="handleEditData"
+          @saveBtnClick="handleSaveData($event, pageName)"
+          @deleteBtnClick="handleDeleteData($event, pageName)"
+          ref="pageContentRef"
+        >
+          <template #btns="scope">
+            <el-button type="primary" @click="handleView(scope.row)">查看</el-button>
+          </template>
+        </page-content>
+      </el-card>
+      <page-modal
+        :defaultInfo="defaultInfo"
+        ref="pageModalRef"
         :pageName="pageName"
-        @editBtnClick="handleEditData"
-        @saveBtnClick="handleSaveData($event, pageName)"
-        @deleteBtnClick="handleDeleteData($event, pageName)"
-        ref="pageContentRef"
-      >
-        <template #handlerHeader>
-          <el-button type="primary" size="small" @click="handleNewData('添加用户')"> 添加用户 </el-button>
+        :pageModalConfig="modalConfig"
+        :title="modalTitle"
+      />
+    </div>
+    <div v-if="flag">
+      <el-card>
+        <template #header>
+          <div class="card-header">
+            <el-link class="button" type="primary" :underline="false" @click="handleBack"
+              ><el-icon><ArrowLeftBold /></el-icon>返回</el-link
+            >
+            <span>申请信息</span>
+            <div />
+          </div>
         </template>
-        <!-- 状态 -->
-        <template #status="scope">
-          <el-button
-            size="small"
-            :type="scope.row.status == 1 ? 'success' : 'danger'"
-            @click="state.handleStatusChange(scope.row)"
-          >
-            {{ scope.row.status == 1 ? "启用" : "禁用" }}
-          </el-button>
-        </template>
-        <template #password="scope">
-          <span v-if="!scope.row.edit">******</span>
-          <el-input v-else size="small" v-model="scope.row.password" />
-        </template>
-        <!-- 分配角色 -->
-        <template #role="scope">
-          <el-button size="default" type="warning" style="font-size: 10px" @click="state.handleRoleClick(scope.row)">
-            <el-icon class="mr1"><setting /></el-icon>
-            分配角色
-          </el-button>
-        </template>
-      </page-content>
-    </el-card>
-    <page-modal
-      :defaultInfo="defaultInfo"
-      :otherInfo="addOtherInfo"
-      ref="pageModalRef"
-      :pageName="pageName"
-      :pageModalConfig="modalConfig"
-      :title="modalTitle"
-    />
-
-    <!-- 角色分配对话框 -->
-    <el-dialog v-model="state.dialogVisible" title="角色分配" width="25%">
-      <el-select v-model="selectValue" multiple placeholder="Select" style="width: 100%" @change="handleRoleChange">
-        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-          {{ item.label }}
-        </el-option>
-      </el-select>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="state.dialogVisible = false">取消</el-button>
-          <el-button type="primary" @click="state.handleRoleConfirm">确认</el-button>
-        </span>
-      </template>
-    </el-dialog>
+        <div class="reTodoContent">
+          <div class="processState">
+            <div class="processTitle">流程状态</div>
+            <div class="processBlock">
+              <el-timeline>
+                <el-timeline-item
+                  v-for="(activity, index) in activities"
+                  :key="index"
+                  :color="activity.color"
+                  :timestamp="activity.timestamp"
+                >
+                  {{ activity.content }}
+                  <span class="state">{{ activity.state }}</span>
+                </el-timeline-item>
+              </el-timeline>
+            </div>
+          </div>
+          <div class="leaveTable">
+            <div class="table">
+              <au-form v-bind="modalDetailsConfig" v-model="formData" />
+              <div flex justify-end>
+                <el-button type="primary" size="large" v-permission="['admin']">同意</el-button>
+                <el-button type="danger" size="large" v-permission="['admin']">拒绝</el-button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </el-card>
+    </div>
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.searhGroup {
+  text-align: left;
+  font-size: 16px;
+  color: var(--elTableTextColor);
+  transition: color 1s ease;
+  margin-bottom: 10px;
+  margin-left: 20px;
+  .title {
+    margin-right: 10px;
+  }
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+
+  align-items: center;
+}
+.processState {
+  min-width: 16vw;
+  position: relative;
+  margin: 80px 20px;
+  padding: 20px 50px;
+  border-radius: 5%;
+  text-align: left;
+  background-color: var(--processStateBgColor);
+  transition: all 1s ease;
+  .processTitle {
+    color: var(--textColor);
+    margin-top: 10px;
+    font-size: 18px;
+  }
+  .processBlock {
+    --el-text-color-primary: var(--textColor);
+    --el-text-color-secondary: var(--submenuTitleTextColor);
+    margin-top: 30px;
+    margin-left: -40px;
+    span {
+      margin-left: 5px;
+      font-size: 12px;
+      padding: 2px 5px;
+    }
+    p {
+      color: var(--submenuTitleTextColor);
+    }
+  }
+}
+.reTodoContent {
+  display: flex;
+}
+.table {
+  margin: 0 60px;
+  .tableTitle {
+    width: 722px;
+    text-align: center;
+    color: var(--textColor);
+    margin-bottom: 20px;
+    transition: all 1s ease;
+  }
+}
+</style>

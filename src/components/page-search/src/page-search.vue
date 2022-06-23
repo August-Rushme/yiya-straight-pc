@@ -1,3 +1,10 @@
+<!--
+ * @Author: Kenny
+ * @Date: 2022-06-17 14:54:19
+ * @LastEditors: Kenny
+ * @LastEditTime: 2022-06-22 18:45:59
+ * @FilePath: \yiya-straight-pc\src\components\page-search\src\page-search.vue
+-->
 <template>
   <div class="page-search">
     <au-form v-bind="searchFormConfig" v-model:modelValue="formData">
@@ -36,7 +43,13 @@ const emit = defineEmits(["resetBtnClick", "queryBtnClick"])
 const formItems = props.searchFormConfig?.formItems ?? []
 const formOriginData: any = {}
 for (const item of formItems) {
-  formOriginData[item.field] = ""
+  if (typeof item.field === "object") {
+    item.field.forEach((e: string) => {
+      formOriginData[e] = ""
+    })
+  } else {
+    formOriginData[item.field] = ""
+  }
 }
 const formData = ref(formOriginData)
 

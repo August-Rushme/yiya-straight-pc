@@ -7,7 +7,7 @@
             <el-card>
               <template #header>
                 <div class="card-header">
-                  <el-button class="button" type="text" @click="handleViewDetails"
+                  <el-button class="button" link @click="handleViewDetails"
                     ><i class="el-icon-arrow-left" />查看申请详情</el-button
                   >
                   <span>表单信息</span>
@@ -26,6 +26,36 @@
               </template>
               <template v-else-if="active == 1">
                 <au-form v-bind="modalFileConfig" ref="pageFormRef" v-model="formData" />
+                <div>
+                  <div mb5>商品就诊流程 <span text-gray>(不填写则商品主页无流程)</span></div>
+                  <div p3 class="processBox">
+                    <el-form v-model="processData" label-width="0">
+                      <template v-for="(item, index) in processArray" :key="index">
+                        <el-row :gutter="20">
+                          <el-col :xs="24" :lg="10">
+                            <el-form-item>
+                              <el-input v-model="item.name" placeholder="请输入步骤名称" clearable />
+                            </el-form-item>
+                          </el-col>
+                          <el-col :xs="24" :lg="4">
+                            <el-form-item>
+                              <el-input-number v-model="item.amount" :min="1" style="width: 100%" />
+                            </el-form-item>
+                          </el-col>
+                          <el-col :xs="24" :lg="10">
+                            <el-form-item>
+                              <el-input v-model="item.name" placeholder="请输入价格" clearable />
+                            </el-form-item>
+                          </el-col>
+                        </el-row>
+                      </template>
+                    </el-form>
+                    <div flex-x-center>
+                      <el-icon :size="50" color="#c0c4cc" cursor-pointer mr5 @click="addProcess"><Plus /></el-icon>
+                      <el-icon :size="50" color="#c0c4cc" cursor-pointer @click="deleteProcess"><SemiSelect /></el-icon>
+                    </div>
+                  </div>
+                </div>
 
                 <el-button type="warning" @click="submitForm(pageFormRef?.formRef)">提交</el-button>
                 <el-button @click="handleLastStep()">上一步</el-button>
@@ -62,13 +92,33 @@ export default defineComponent({
     ApplyDetails
   },
   setup() {
+    const processData = ref()
     const flag = ref(false)
     const pageFormRef = ref<InstanceType<typeof AuForm>>()
-    const active = ref(0)
+    const active = ref(1)
     const formData = ref<any>({})
     // 下一步标记
     const selectedAccType = ref("1")
 
+    // 商品步骤流程
+    const processArray = ref([
+      {
+        name: "",
+        amount: 1,
+        price: ""
+      }
+    ])
+    // 添加步骤
+    const addProcess = () => {
+      processArray.value.push({
+        name: "",
+        amount: 1,
+        price: ""
+      })
+    }
+    const deleteProcess = () => {
+      processArray.value.pop()
+    }
     // method
     const handleNextStep = async (formEl: FormInstance | undefined) => {
       if (!formEl) return
@@ -93,7 +143,7 @@ export default defineComponent({
       await formEl.validate(async (valid, fields) => {
         if (valid) {
           active.value = 3
-
+          console.log(formData.value)
           return true
         } else {
           console.log("error submit!", fields)
@@ -119,9 +169,13 @@ export default defineComponent({
       flag.value = false
     }
     return {
+      processData,
       handleRedo,
+      addProcess,
+      deleteProcess,
       active,
       handleViewDetails,
+      processArray,
       selectedAccType,
       modalConfig,
       modalFileConfig,
@@ -139,6 +193,10 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.processBox {
+  border: 1px dashed #e8e8e8;
+  margin-bottom: 20px;
+}
 .stepForm {
   .demo-ruleForm {
     text-align: left;

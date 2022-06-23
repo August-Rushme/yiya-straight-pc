@@ -2,7 +2,7 @@
  * @Author: Kenny
  * @Date: 2022-06-22 10:45:58
  * @LastEditors: Kenny
- * @LastEditTime: 2022-06-22 17:16:27
+ * @LastEditTime: 2022-06-22 20:44:46
  * @FilePath: \yiya-straight-pc\src\views\goods\goodsManage\index.vue
 -->
 <script setup lang="ts">
@@ -51,6 +51,7 @@ const { pageModalRef, defaultInfo, handleEditData, handleDeleteData, handleSaveD
           <template #image>
             <el-image
               style="width: 100px; height: 100px"
+              preview-teleported="true"
               src="https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"
               :preview-src-list="['https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg']"
               fit="cover"

@@ -3,6 +3,9 @@ import { modalConfig } from "../config/details.config"
 import AuForm from "@/base-ui/form"
 import { reactive } from "vue"
 
+// let approveId = inject("userId")
+// console.log(approveId)
+
 const formData = reactive({
   name: "海南清合口腔",
   address: "南宝路24号双南小区",

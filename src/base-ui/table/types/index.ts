@@ -14,4 +14,5 @@ export interface IPropItem {
   label: string
   minWidth?: string
   slotName?: string
+  isHidden?: boolean
 }

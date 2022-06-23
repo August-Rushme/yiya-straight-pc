@@ -114,7 +114,7 @@ defineExpose({
       </template>
       <!-- 操作按钮 -->
       <template #handler="scope">
-        <slot name="btns" class="handler-btns">
+        <slot name="btns" class="handler-btns" :row="scope.row">
           <el-button v-if="scope.row.edit" size="default" type="success" @click="handleSaveClick(scope.row)"
             ><el-icon><check /></el-icon>保存</el-button
           >

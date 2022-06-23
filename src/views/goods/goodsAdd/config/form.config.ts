@@ -2,7 +2,7 @@
  * @Author: Kenny
  * @Date: 2022-06-22 18:47:51
  * @LastEditors: Kenny
- * @LastEditTime: 2022-06-23 09:55:36
+ * @LastEditTime: 2022-06-23 15:53:56
  * @FilePath: \yiya-straight-pc\src\views\goods\goodsAdd\config\form.config.ts
  */
 import { IForm } from "@/base-ui/form"

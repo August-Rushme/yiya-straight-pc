@@ -2,7 +2,7 @@
  * @Author: Kenny
  * @Date: 2022-06-22 11:02:51
  * @LastEditors: Kenny
- * @LastEditTime: 2022-06-22 11:03:09
+ * @LastEditTime: 2022-06-23 15:54:12
  * @FilePath: \yiya-straight-pc\src\views\goods\goodsManage\config\modal.config.ts
  */
 import { IForm } from "@/base-ui/form"
@@ -11,99 +11,133 @@ export const modalConfig: IForm = {
     {
       field: "name",
       type: "input",
-      label: "菜单名称:",
-      placeholder: "请输入菜单名称",
-      otherOptions: {
-        clearable: true
-      },
-      rules: [{ type: "string", required: true, message: "请输入菜单名称", trigger: "blur" }]
-    },
-    {
-      field: "menuType",
-      type: "select",
-      label: "菜单类型:",
-      placeholder: "请输选择菜单类型",
-      isHidden: false,
-      rules: [{ required: true, message: "请选择菜单类型", trigger: "blur" }],
-      options: [
+      label: "商品名称",
+      placeholder: "请输入商品名称",
+      rules: [
+        { required: true, message: "请输入诊所名称", trigger: "blur" },
         {
-          label: "一级菜单",
-          value: "0"
-        },
-        {
-          label: "二级菜单",
-          value: "1"
-        },
-        {
-          label: "三级菜单",
-          value: "2"
+          min: 1,
+          max: 15,
+          pattern: /[\u4e00-\u9fa5]/,
+          message: "只能是中文名称",
+          trigger: "blur"
         }
       ]
     },
     {
-      field: "parentId",
-      type: "treeSelect",
-      label: "父级菜单:",
-      placeholder: "请选择父级菜单",
-      options: []
-    },
-    {
-      field: "url",
+      field: "price",
       type: "input",
-      label: "访问路径:",
-      placeholder: "请输入访问路径",
-      otherOptions: {
-        clearable: true
-      },
-      rules: [{ required: true, message: "请输入访问路径", trigger: "blur" }]
+      label: "商品价格",
+      placeholder: "请输入商品价格",
+      rules: [
+        { required: true, message: "请输入诊商品价格", trigger: "blur" },
+        {
+          pattern: /(^[1-9][0-9]{0,7}$)|(^((0\.0[1-9]$)|(^0\.[1-9]\d?)$)|(^[1-9][0-9]{0,7}\.\d{1,2})$)/,
+          message: "商品价格应该大于0小于1亿且最多保留2位小数",
+          trigger: "blur"
+        }
+      ]
     },
     {
-      field: "component",
+      field: "oldPrice",
       type: "input",
-      label: "前端组件:",
-      placeholder: "请输入前端组件",
-      otherOptions: {
-        clearable: true
-      },
-      rules: [{ required: true, message: "请输入前端组件", trigger: "blur" }]
+      label: "商品虚拟价格",
+      placeholder: "请输入商品虚拟价格(即打折前的价格)",
+      rules: [
+        { required: true, message: "请输入诊商品价格", trigger: "blur" },
+        {
+          pattern: /(^[1-9][0-9]{0,7}$)|(^((0\.0[1-9]$)|(^0\.[1-9]\d?)$)|(^[1-9][0-9]{0,7}\.\d{1,2})$)/,
+          message: "商品价格应该大于0小于1亿且最多保留2位小数",
+          trigger: "blur"
+        }
+      ]
     },
     {
-      field: "redirect",
+      field: "type",
+      type: "select",
+      label: "商品类型",
+      placeholder: "请选择商品类型",
+      options: [
+        {
+          label: "测试",
+          value: "测试"
+        }
+      ],
+      rules: [{ required: true, message: "请选择商品类型", trigger: "change" }]
+    },
+    {
+      field: "clinicId",
+      type: "select",
+      label: "所属诊所",
+      placeholder: "请选择所属诊所",
+      options: [
+        {
+          label: "测试",
+          value: "1"
+        }
+      ],
+      rules: [{ required: true, message: "请选择所属诊所", trigger: "change" }]
+    },
+    {
+      field: "count",
       type: "input",
-      label: "默认跳转地址:",
-      placeholder: "请输入默认跳转地址",
-      otherOptions: {
-        clearable: true
-      }
+      label: "商品库存",
+      placeholder: "请输入商品库存",
+      rules: [
+        { required: true, message: "请输入诊商品价格", trigger: "blur" },
+        {
+          pattern: /^[1-9]\d*$/,
+          message: "库存应该大于0",
+          trigger: "blur"
+        }
+      ]
     },
     {
-      field: "icon",
-      type: "menuIcon",
-      label: "菜单图标:",
-      placeholder: "请选菜单图标",
-      otherOptions: {
-        clearable: true
-      }
+      field: "label",
+      type: "input",
+      label: "商品标签",
+      placeholder: "请输入商品标签(例如：工作日|限成人)",
+      rules: [{ required: true, message: "请输入商品标签", trigger: "blur" }]
     },
     {
-      field: "isRoute",
-      type: "switch",
-      label: "是否是路由:"
+      field: "avaPerson",
+      type: "select",
+      label: "适用人群",
+      placeholder: "请选择适用人群",
+      options: [
+        {
+          label: "限儿童",
+          value: "限儿童"
+        },
+        {
+          label: "限成人",
+          value: "限成人"
+        },
+        {
+          label: "成人儿童通用",
+          value: "成人儿童通用"
+        }
+      ],
+      rules: [{ required: true, message: "请选择适用人群", trigger: "change" }]
     },
     {
-      field: "hindden",
-      type: "switch",
-      label: "隐藏路由:"
+      field: "avaTime",
+      type: "input",
+      label: "适用时间",
+      placeholder: "请输入适用时间(例如: 周一到周五)",
+      rules: [{ required: true, message: "请输入适用时间", trigger: "blur" }]
     },
     {
-      field: "hiddenTab",
-      type: "switch",
-      label: "隐藏Tab:"
+      field: "img",
+      type: "upload",
+      label: "商品封面",
+      rules: [{ required: true, message: "请上传诊商品封面", trigger: "blur" }]
     },
     {
-      field: "breadcrumb",
-      type: "switch",
-      label: "显示面包屑:"
+      field: "imgDetail",
+      type: "upload",
+      label: "商品详细长图",
+      rules: [{ required: true, message: "请上传商品详细长图", trigger: "blur" }]
     }
   ],
   colLayout: { span: 24 },

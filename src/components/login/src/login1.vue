@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { reactive, ref } from "vue"
+import { reactive, ref, onMounted } from "vue"
 import { useRouter } from "vue-router"
 import { useUserStore } from "@/store/modules/user"
 // import { User, Lock, Key } from "@element-plus/icons-vue"
-import ThemeSwitch from "@/components/ThemeSwitch/index.vue"
 import message from "@/utils/message"
+import { getCaptcha } from "@/api/login"
 interface ILoginForm {
   /**公司代码 */
   buk: string
@@ -13,7 +13,9 @@ interface ILoginForm {
   /** 密码 */
   password: string
   /** 验证码 */
-  code: string
+  verCode: string
+  /** key */
+  verKey: string
 }
 const router = useRouter()
 const loginFormDom = ref<any>()
@@ -28,7 +30,8 @@ const state = reactive({
     buk: "mlqh",
     username: "a12345678",
     password: "a12345678",
-    code: "abcd"
+    verCode: "",
+    verKey: ""
   } as ILoginForm,
   /** 登录表单校验规则 */
   loginRules: {
@@ -49,7 +52,9 @@ const state = reactive({
           .login({
             buk: state.loginForm.buk,
             username: state.loginForm.username,
-            password: state.loginForm.password
+            password: state.loginForm.password,
+            verKey: state.loginForm.verKey,
+            verCode: state.loginForm.verCode
           })
           .then(() => {
             state.loading = false
@@ -70,12 +75,22 @@ const state = reactive({
     })
   },
   /** 创建验证码 */
-  createCode: () => {
-    // 先清空验证码的输入
-    state.loginForm.code = ""
-    // 实际开发中，可替换成自己的地址，这里只是提供一个参考
-    // state.codeUrl = `/api/v1/login/code?${Math.random() * 1000}`
+  createCode: async () => {
+    const res: any = await getCaptcha()
+
+    // base64转blob
+    // const blob = new Blob([res.image], { type: "image/png" })
+    // // blob转url
+    // const url = URL.createObjectURL(blob)
+
+    // // 先清空验证码的输入
+    // state.loginForm.code = ""
+    state.codeUrl = res.image
+    state.loginForm.verKey = res.key
   }
+})
+onMounted(() => {
+  state.createCode()
 })
 
 /** 初始化验证码 */
@@ -85,8 +100,6 @@ const state = reactive({
 <template>
   <!-- 手机端登录 -->
   <div class="login-container">
-    <ThemeSwitch class="theme-switch" />
-
     <div class="login-card">
       <div class="title">
         <svg
@@ -140,6 +153,23 @@ const state = reactive({
               size="large"
               show-password
             />
+          </el-form-item>
+          <el-form-item label="验证码:" prop="verCode" class="password">
+            <div>
+              <el-input
+                v-model="state.loginForm.verCode"
+                placeholder="请输入验证码"
+                type="text"
+                tabindex="2"
+                size="large"
+                style="width: 50%"
+              />
+              <span class="show-code">
+                <img :src="state.codeUrl" @click="state.createCode" />
+              </span>
+            </div>
+
+            <!-- <img src="" alt=""> -->
           </el-form-item>
           <div class="account-control">
             <el-checkbox v-model="state.isKeepPassword">记住密码</el-checkbox>

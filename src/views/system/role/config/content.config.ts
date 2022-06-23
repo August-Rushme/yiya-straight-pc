@@ -1,9 +1,9 @@
 export const contentTableConfig = {
   title: "角色列表",
   propList: [
-    { prop: "name", label: "角色名", minWidth: "120" },
-    { prop: "code", label: "角色编码", minWidth: "120" },
-    { prop: "description", label: "权限", minWidth: "160" },
+    { prop: "name", label: "角色名", minWidth: "100" },
+    { prop: "code", label: "角色编码", minWidth: "100" },
+    { prop: "description", label: "权限", minWidth: "120" },
     {
       prop: "createAt",
       label: "创建时间",
@@ -20,6 +20,6 @@ export const contentTableConfig = {
   ],
   showFooter: true,
   showSelectColumn: true,
-  showIndexColumn: true,
+  showIndexColumn: false,
   isBorder: false
 }

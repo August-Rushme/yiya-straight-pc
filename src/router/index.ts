@@ -29,8 +29,8 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     component: Layout,
     redirect: "/dashboard/home",
     meta: {
-      title: "Dashboard",
-      icon: "dashboard"
+      title: "首页",
+      icon: "ic ic-qrcode-fill"
     },
     children: [
       {
@@ -99,8 +99,8 @@ const router = createRouter({
 /** 重置路由 */
 export function resetRouter() {
   // 注意：所有动态路由路由必须带有 name 属性，否则可能会不能完全重置干净
-  // window.location.reload()
   try {
+    window.location.reload()
     router.getRoutes().forEach((route) => {
       const { name, meta } = route
       if (name && meta.roles?.length) {

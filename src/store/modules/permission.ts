@@ -12,9 +12,6 @@ import { RouteRecordRaw } from "vue-router"
 import { constantRoutes, asyncRoutes } from "@/router"
 import { mapMenusToRoutes } from "@/utils/menus-map"
 import cache from "@/utils/cache"
-// import { getUserMenus } from "@/api/login"
-// import cache from "@/utils/cache"
-// import { mapMenusToRoutes } from "@/utils/menus-map"
 interface IPermissionState {
   routes: RouteRecordRaw[]
   dynamicRoutes: RouteRecordRaw[]
@@ -58,7 +55,6 @@ export const usePermissionStore = defineStore({
   },
   actions: {
     async setRoutes(roles: string[]) {
-      // 清空asyncRoutes
       let newAsyncRoutes: RouteRecordRaw[] = []
       newAsyncRoutes = asyncRoutes
       const resMenu = cache.getCache("userMenus")
@@ -67,13 +63,11 @@ export const usePermissionStore = defineStore({
       // 获取用户的菜单
       let accessedRoutes
       if (roles.includes("admin")) {
-        accessedRoutes = asyncRoutes
+        accessedRoutes = newAsyncRoutes
       } else {
         accessedRoutes = filterAsyncRoutes(newAsyncRoutes, roles)
       }
       this.routes = constantRoutes.concat(accessedRoutes)
-      console.log(this.routes)
-
       this.dynamicRoutes = accessedRoutes
     }
   }

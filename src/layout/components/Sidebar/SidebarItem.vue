@@ -68,7 +68,7 @@ const resolvePath = (routePath: string) => {
     <template v-if="!alwaysShowRootMenu && theOnlyOneChild && !theOnlyOneChild.children">
       <SidebarItemLink v-if="theOnlyOneChild.meta" :to="resolvePath(theOnlyOneChild.path)">
         <el-menu-item :index="resolvePath(theOnlyOneChild.path)">
-          <svg-icon v-if="theOnlyOneChild.meta.icon" :name="theOnlyOneChild.meta.icon" />
+          <i v-if="theOnlyOneChild.meta.icon" :class="theOnlyOneChild.meta.icon" style="margin-right: 4px" />
           <template v-if="theOnlyOneChild.meta.title" #title>
             {{ theOnlyOneChild.meta.title }}
           </template>
@@ -77,7 +77,7 @@ const resolvePath = (routePath: string) => {
     </template>
     <el-sub-menu v-else :index="resolvePath(item.path)" popper-append-to-body>
       <template #title>
-        <svg-icon v-if="item.meta && item.meta.icon" :name="item.meta.icon" />
+        <i v-if="item.meta && item.meta.icon" :class="item.meta.icon" style="margin-right: 4px" />
         <span v-if="item.meta && item.meta.title">{{ item.meta.title }}</span>
       </template>
       <template v-if="item.children">

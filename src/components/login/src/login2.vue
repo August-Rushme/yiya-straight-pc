@@ -2,9 +2,12 @@
  * @Author: Kenny
  * @Date: 2022-06-13 14:52:53
  * @LastEditors: error: git config user.name && git config user.email & please set dead value or install git
- * @LastEditTime: 2022-06-15 16:25:20
+ * @LastEditTime: 2022-06-20 18:25:23
  * @FilePath: \yiya-straight-front-pc\src\components\login\src\login2.vue
+
 -->
+
+<!-- PC -->
 <script setup lang="ts">
 import { onMounted } from "vue"
 import lottie from "lottie-web"
@@ -13,6 +16,7 @@ import { useRouter } from "vue-router"
 import { useUserStore } from "@/store/modules/user"
 // import { User, Lock, Key } from "@element-plus/icons-vue"
 import message from "@/utils/message"
+import { getCaptcha } from "@/api/login"
 interface ILoginForm {
   /**公司代码 */
   buk: string
@@ -21,7 +25,9 @@ interface ILoginForm {
   /** 密码 */
   password: string
   /** 验证码 */
-  code: string
+  verCode: string
+  /**验证码key */
+  verKey: string
 }
 const router = useRouter()
 const loginFormDom = ref<any>()
@@ -36,7 +42,7 @@ const state = reactive({
     buk: "mlqh",
     username: "a12345678",
     password: "a12345678",
-    code: "abcd"
+    verCode: ""
   } as ILoginForm,
   /** 登录表单校验规则 */
   loginRules: {
@@ -46,7 +52,7 @@ const state = reactive({
       { required: true, message: "请输入密码", trigger: "blur" },
       { min: 8, max: 16, message: "长度在 8 到 16 个字符", trigger: "blur" }
     ],
-    code: [{ required: true, message: "请输入验证码", trigger: "blur" }]
+    verCode: [{ required: true, message: "请输入验证码", trigger: "blur" }]
   },
   /** 登录逻辑 */
   handleLogin: () => {
@@ -57,7 +63,9 @@ const state = reactive({
           .login({
             buk: state.loginForm.buk,
             username: state.loginForm.username,
-            password: state.loginForm.password
+            password: state.loginForm.password,
+            verCode: state.loginForm.verCode,
+            verKey: state.loginForm.verKey
           })
           .then(() => {
             state.loading = false
@@ -78,15 +86,23 @@ const state = reactive({
     })
   },
   /** 创建验证码 */
-  createCode: () => {
-    // 先清空验证码的输入
-    state.loginForm.code = ""
-    // 实际开发中，可替换成自己的地址，这里只是提供一个参考
-    // state.codeUrl = `/api/v1/login/code?${Math.random() * 1000}`
+  createCode: async () => {
+    const res: any = await getCaptcha()
+
+    // base64转blob
+    // const blob = new Blob([res.image], { type: "image/png" })
+    // // blob转url
+    // const url = URL.createObjectURL(blob)
+
+    // // 先清空验证码的输入
+    // state.loginForm.code = ""
+    state.codeUrl = res.image
+    state.loginForm.verKey = res.key
   }
 })
 
 onMounted(() => {
+  state.createCode()
   // loadAnimation 渲染动画
   lottie.loadAnimation({
     // 选取一个容器，用于渲染动画
@@ -118,17 +134,40 @@ onMounted(() => {
               <el-input v-model="state.loginForm.buk" placeholder="公司代码" type="text" tabindex="1" size="large" />
             </el-form-item>
             <el-form-item prop="username" label="账号:" class="username">
-              <el-input v-model="state.loginForm.username" placeholder="用户名" type="text" tabindex="1" size="large" />
+              <el-input
+                v-model="state.loginForm.username"
+                placeholder="请输入用户名"
+                type="text"
+                tabindex="1"
+                size="large"
+              />
             </el-form-item>
             <el-form-item prop="password" label="密码:" class="password">
               <el-input
                 v-model="state.loginForm.password"
-                placeholder="密码"
+                placeholder="请输入密码"
                 type="password"
                 tabindex="2"
                 size="large"
                 show-password
               />
+            </el-form-item>
+            <el-form-item label="验证码:" prop="verCode" class="password">
+              <div>
+                <el-input
+                  v-model="state.loginForm.verCode"
+                  placeholder="请输入验证码"
+                  type="text"
+                  tabindex="2"
+                  size="large"
+                  style="width: 90%"
+                />
+                <span class="show-code">
+                  <img :src="state.codeUrl" @click="state.createCode" />
+                </span>
+              </div>
+
+              <!-- <img src="" alt=""> -->
             </el-form-item>
             <div class="bottomGroup">
               <div>
@@ -153,15 +192,15 @@ onMounted(() => {
   align-items: center;
   width: 100%;
   min-height: 100vh;
-  background-color: #f5f7fe;
+  background-color: var(--el-bg-color-page);
   .login-panel {
     display: flex;
     padding: 20px;
     padding-right: 60px;
-    height: 400px;
+    height: 450px;
     border-radius: 20px;
-    background: white;
-    box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff;
+    background: var(--el-fill-color-lighter);
+    box-shadow: 20px 20px 10px var(--el-box-shadow-lighter), -20px -20px 10px var(--el-box-shadow-lighter);
   }
   .login-form {
     width: 400px;
@@ -186,6 +225,18 @@ onMounted(() => {
     text-align: center;
     color: gray;
     font-size: 12px;
+  }
+}
+.show-code {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  cursor: pointer;
+  user-select: none;
+  img {
+    width: 100px;
+    height: 42px;
+    border-radius: 4px;
   }
 }
 </style>

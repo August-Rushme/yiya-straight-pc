@@ -33,12 +33,14 @@ export const useUserStore = defineStore({
     },
     /** 登录 */
 
-    login(userInfo: { username: string; password: string; buk: string }) {
+    login(userInfo: { username: string; password: string; buk: string; verCode: string; verKey: string }) {
       return new Promise((resolve, reject) => {
         accountLogin({
           buk: userInfo.buk,
           userName: userInfo.username.trim(),
-          password: userInfo.password
+          password: userInfo.password,
+          verCode: userInfo.verCode.trim(),
+          verKey: userInfo.verKey
         })
           .then((res: any) => {
             setToken(res.token)

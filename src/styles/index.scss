@@ -1,6 +1,8 @@
 @import "./mixins.scss"; // mixins
 @import "./transition.scss"; // transition
+@import "./element-ui.scss";
 @import "./theme/register.scss"; // 注册主题
+@import "./icons.scss"; // 注册图标
 
 .app-container {
   padding: 20px;

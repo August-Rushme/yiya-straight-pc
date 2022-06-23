@@ -102,7 +102,7 @@ const handleDbClick = (row: any) => {
       :border="isBorder"
       style="width: 100%"
       v-bind="childrenProps"
-      @select="handleSelectionChange"
+      @selection-change="handleSelectionChange"
       @cell-click="handleCellClick"
       @cell-dblclick="handleDbClick"
       max-height="510"

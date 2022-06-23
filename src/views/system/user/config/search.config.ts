@@ -31,8 +31,8 @@ export const searchFormConfig: IForm = {
       label: "用户状态",
       placeholder: "请选择用户状态",
       options: [
-        { title: "启用", value: "启用" },
-        { title: "禁用", value: "禁用" }
+        { label: "启用", value: "启用" },
+        { label: "禁用", value: "禁用" }
       ]
     }
   ]

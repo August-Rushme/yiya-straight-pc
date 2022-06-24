@@ -16,3 +16,12 @@ export function approveClinic(url: string, data: any) {
     data
   })
 }
+
+// 诊所入驻申请
+export function clinicApply(url: string, data: any) {
+  return request({
+    url,
+    method: "post",
+    data
+  })
+}

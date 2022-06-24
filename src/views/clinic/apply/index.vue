@@ -7,8 +7,8 @@
             <el-card>
               <template #header>
                 <div class="card-header">
-                  <el-button class="button" type="text" @click="handleViewDetails"
-                    ><i class="el-icon-arrow-left" />查看申请详情</el-button
+                  <el-link class="button" type="primary" @click="handleViewDetails" :underline="false"
+                    >查看详情</el-link
                   >
                   <span>表单信息</span>
                   <div />
@@ -35,7 +35,7 @@
               <template v-else-if="active == 3">
                 <el-result icon="success" title="操作成功" sub-title="请等待平台审核">
                   <template #extra>
-                    <el-button type="primary" size="medium" @click="handleRedo">查看申请</el-button>
+                    <el-button type="primary" size="default" @click="handleRedo">查看申请</el-button>
                   </template>
                 </el-result>
               </template>
@@ -45,7 +45,7 @@
       </el-row>
     </div>
     <div v-if="flag">
-      <apply-details @handleBack="handleBack" />
+      <apply-details @handleBack="handleBack" :form="applyData" />
     </div>
   </div>
 </template>
@@ -56,6 +56,8 @@ import { defineComponent, ref } from "vue"
 import { modalConfig, modalFileConfig } from "./config/form.config"
 
 import ApplyDetails from "@/components/applyDetails"
+import { useClinicStoreHook } from "@/store/modules/clinic"
+import cache from "@/utils/cache"
 export default defineComponent({
   components: {
     AuForm,
@@ -64,8 +66,24 @@ export default defineComponent({
   setup() {
     const flag = ref(false)
     const pageFormRef = ref<InstanceType<typeof AuForm>>()
-    const active = ref(0)
+
     const formData = ref<any>({})
+    const store = useClinicStoreHook()
+    const userInfo = cache.getCache("userInfo")
+    // 获取申请详情
+    const applyData = ref({})
+    const getApplyDetails = async () => {
+      await store.getApplyDetailsAction({
+        id: userInfo.id,
+        buk: userInfo.buk
+      })
+      if (store.applyDetails !== null) {
+        active.value = 3
+      }
+    }
+
+    getApplyDetails()
+    const active = ref(0)
     // 下一步标记
     const selectedAccType = ref("1")
 
@@ -93,7 +111,7 @@ export default defineComponent({
       await formEl.validate(async (valid, fields) => {
         if (valid) {
           active.value = 3
-
+          store.clinicApplyAction({ ...formData.value, userId: userInfo.id, buk: userInfo.buk })
           return true
         } else {
           console.log("error submit!", fields)
@@ -111,13 +129,21 @@ export default defineComponent({
       flag.value = true
     }
     // 查看申请
-    const handleRedo = () => {
+    const handleRedo = async () => {
+      await store.getApplyDetailsAction({
+        id: userInfo.id,
+        buk: userInfo.buk
+      })
+      if (store.applyDetails !== null) {
+        applyData.value = store.applyDetails
+      }
       flag.value = true
     }
     // 处理返回
     const handleBack = () => {
       flag.value = false
     }
+
     return {
       handleRedo,
       active,
@@ -132,7 +158,8 @@ export default defineComponent({
       resetForm,
       formData,
       flag,
-      handleBack
+      handleBack,
+      applyData
     }
   }
 })

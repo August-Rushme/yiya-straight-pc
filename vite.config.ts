@@ -27,17 +27,17 @@ export default (): UserConfigExport => {
       /** 跨域设置允许 */
       cors: true,
       /** 端口被占用时，是否直接退出 */
-      strictPort: false
+      strictPort: false,
       /** 接口代理 */
-      // proxy: {
-      //   "/mock-api": {
-      //     target: "https://vue-typescript-admin-mock-server-armour.vercel.app/mock-api",
-      //     ws: true,
-      //     /** 是否允许跨域 */
-      //     changeOrigin: true,
-      //     rewrite: (path) => path.replace("/mock-api", "")
-      //   }
-      // }
+      proxy: {
+        "/api": {
+          target: "http://127.0.0.1:8083",
+          ws: true,
+          /** 是否允许跨域 */
+          changeOrigin: true,
+          rewrite: (path) => path.replace("/api", "")
+        }
+      }
     },
     build: {
       brotliSize: false,

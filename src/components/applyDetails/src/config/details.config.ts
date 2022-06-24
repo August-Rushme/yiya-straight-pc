@@ -58,5 +58,5 @@ export const modalConfig: IForm = {
   colLayout: { span: 12 },
   itemStyle: {},
   labelPosition: "right",
-  labelWidth: "120px"
+  labelWidth: "auto"
 }

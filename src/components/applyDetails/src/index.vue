@@ -2,12 +2,16 @@
 import { onMounted, ref } from "vue"
 import AuForm from "@/base-ui/form"
 import { modalConfig } from "./config/details.config"
+import message from "@/utils/message"
+import { ElMessageBox } from "element-plus"
+import { useClinicStoreHook } from "@/store/modules/clinic"
 
 const props = defineProps({
   form: {
     type: Object
   }
 })
+const store = useClinicStoreHook()
 const emit = defineEmits(["handleBack"])
 
 const formData = ref({ ...props.form })
@@ -48,13 +52,19 @@ let newActivities = [
 ]
 activities.forEach((item: any) => {
   if (item.status == 1 && formData.value.status == 1) {
+    //  处理中
+    item.timestamp = formData.value.processDate
     newActivities.push(item)
-  }
-  if (item.status == 2 && formData.value.status == 2) {
+  } else if (item.status == 2 && formData.value.status == 2) {
+    // 同意申请
+    item.timestamp = formData.value.approveDate
     newActivities.push(item)
-  }
-  if (item.status == 3 && formData.value.status == 3) {
+  } else if (item.status == 3 && formData.value.status == 3) {
+    // 驳回申请
     newActivities.push(item)
+  } else if (item.status == 0) {
+    // 发起申请
+    newActivities[0].timestamp = formData.value.applyDate
   }
 })
 onMounted(() => {
@@ -65,13 +75,41 @@ onMounted(() => {
   }
 })
 
+// 判断是否已经审批过
+const isApproved = ref(false)
+if (formData.value.status == 2) {
+  isApproved.value = true
+} else {
+  isApproved.value = false
+}
 // 处理确认
 const support = () => {
-  console.log("确认")
+  // 提示是否确认同意申请
+  ElMessageBox.confirm("确认同意该诊所的入驻申请吗", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning"
+  })
+    .then(() => {
+      store.setApplyDetailsAction({
+        id: formData.value.id,
+        status: 2
+      })
+      isApproved.value = true
+      handleGoBack()
+    })
+    .catch(() => {
+      message.info("已取消删除")
+    })
 }
 // 处理拒绝
 const reject = () => {
-  console.log("拒绝")
+  store.setApplyDetailsAction({
+    id: formData.value.id,
+    status: 3
+  })
+  isApproved.value = false
+  handleGoBack()
 }
 // 返回申请页面
 const handleGoBack = () => {
@@ -110,9 +148,13 @@ const handleGoBack = () => {
         <div class="leaveTable">
           <div class="table">
             <au-form v-bind="modalConfig" v-model="formData" />
-            <div flex justify-end mr35 mt10>
-              <el-button type="primary" @click="support" size="large" v-permission="['admin']">同意</el-button>
-              <el-button type="danger" @click="reject" size="large" v-permission="['admin']">拒绝</el-button>
+            <div flex justify-end mt10 style="margin-right: 20%">
+              <el-button type="primary" @click="support" size="large" v-permission="['admin']" :disabled="isApproved"
+                >同意</el-button
+              >
+              <el-button type="danger" @click="reject" size="large" v-permission="['admin']" :disabled="isApproved"
+                >拒绝</el-button
+              >
             </div>
           </div>
         </div>

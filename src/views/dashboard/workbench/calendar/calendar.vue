@@ -10,6 +10,7 @@ import interactionPlugin from "@fullcalendar/interaction"
 import { formatUtcTime } from "@/utils"
 import { INITIAL_EVENTS, createEventId } from "./event-utils"
 import { modalConfig } from "./config/form.config"
+
 import { Action, ElMessageBox } from "element-plus"
 const dialogVisible = ref(false)
 const selectInfoRef = ref<DateSelectArg>()
@@ -163,6 +164,7 @@ const calendarOptions = ref<CalendarOptions>({
         </template>
       </FullCalendar>
     </div>
+
     <el-dialog v-model="dialogVisible" :title="title" center @close="handleDialogCancel">
       <auForm v-bind="modalConfig" v-model="formData" ref="pageFormRef" />
       <template #footer>

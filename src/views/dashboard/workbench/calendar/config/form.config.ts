@@ -1,8 +1,8 @@
 /*
  * @Author: Kenny
  * @Date: 2022-06-19 19:48:36
- * @LastEditors: Kenny
- * @LastEditTime: 2022-06-21 17:41:41
+ * @LastEditors: error: git config user.name && git config user.email & please set dead value or install git
+ * @LastEditTime: 2022-06-23 19:42:38
  * @FilePath: \yiya-straight-pc\src\views\dashboard\workbench\calendar\config\form.config.ts
  */
 import { IForm } from "@/base-ui/form"
@@ -33,10 +33,10 @@ export const modalConfig: IForm = {
       type: "datepicker",
       label: "预约时间:",
       otherOptions: {
+        teleported: false,
         type: "datetimerange",
         rangeSeparator: "到",
         startPlaceholder: "开始时间",
-        teleported: false,
         endPlaceholder: "结束时间"
       }
     },

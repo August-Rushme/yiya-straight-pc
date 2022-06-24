@@ -2,10 +2,10 @@ export const contentTableConfig = {
   title: "商品列表",
   propList: [
     { prop: "name", label: "商品名称", minWidth: "120" },
-    { prop: "image", label: "商品图片", minWidth: "140", slotName: "image" },
+    { prop: "img", label: "商品图片", minWidth: "140", slotName: "image" },
     { prop: "status", label: "商品状态", minWidth: "80", slotName: "status" },
     { prop: "price", label: "商品价格", minWidth: "80" },
-    { prop: "sales", label: "销量", minWidth: "80" },
+    { prop: "count", label: "库存", minWidth: "80" },
     { prop: "type", label: "商品类型", minWidth: "100" },
     {
       prop: "createAt",

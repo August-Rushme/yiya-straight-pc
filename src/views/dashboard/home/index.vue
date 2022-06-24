@@ -1,9 +1,8 @@
 <!--
  * @Author: Kenny
  * @Date: 2022-06-13 14:52:53
- * @LastEditors: Kenny
- * @LastEditTime: 2022-06-21 20:21:01
- * @FilePath: \yiya-straight-pc\src\views\dashboard\home\index.vue
+ * @LastEditors: error: git config user.name && git config user.email & please set dead value or install git
+ * @LastEditTime: 2022-06-23 18:56:16
 -->
 <script lang="ts" setup>
 import { barEcharts, pieEcharts, mapEcharts } from "@/components/page-echarts"

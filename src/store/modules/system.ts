@@ -23,6 +23,8 @@ interface ISystemState {
   roleList: any[]
   roleCount: number
   roles: number[]
+  productList: any[]
+  productCount: number
   pageNum: number
   pageSize: number
   menuList: any[]
@@ -41,6 +43,8 @@ export const useSystemStore = defineStore({
       userCount: 0,
       roleList: [],
       roleCount: 0,
+      productList: [],
+      productCount: 0,
       roles: [],
       pageNum: 1,
       pageSize: 6,
@@ -80,6 +84,9 @@ export const useSystemStore = defineStore({
         pageUrl = `/${pageName}/all`
       } else if (payload.queryInfo?.type === "search" || false) {
         pageUrl = `/${pageName}/advanceSelect`
+      }
+      if (pageName === "product") {
+        pageUrl = `/${pageName}/getByClinic`
       }
       // 对页面发送请求
       const { data: res }: any = await getPageList(pageUrl, payload.pageInfo)

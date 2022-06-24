@@ -1,8 +1,8 @@
 <!--
  * @Author: Kenny
  * @Date: 2022-06-22 10:45:58
- * @LastEditors: Kenny
- * @LastEditTime: 2022-06-23 15:59:39
+ * @LastEditors: error: git config user.name && git config user.email & please set dead value or install git
+ * @LastEditTime: 2022-06-23 20:23:33
  * @FilePath: \yiya-straight-pc\src\views\goods\goodsManage\index.vue
 -->
 <script setup lang="ts">
@@ -17,7 +17,7 @@ import { modalConfig } from "./config/modal.config"
 
 import { usePageSearch } from "@/hooks/use-page-search"
 import { usePageModal } from "@/hooks/use-page-modal"
-const pageName = "user"
+const pageName = "product"
 const router = useRouter()
 const { pageContentRef, handleResetClick, handleQueryClick } = usePageSearch()
 const goAddGoodPage = () => {
@@ -48,12 +48,12 @@ const { pageModalRef, defaultInfo, handleEditData, handleDeleteData, handleSaveD
           <template #handlerHeader>
             <el-button type="primary" size="small" @click="goAddGoodPage"> 添加商品 </el-button>
           </template>
-          <template #image>
+          <template #image="scope">
             <el-image
               style="width: 100px; height: 100px"
               :preview-teleported="true"
-              src="https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"
-              :preview-src-list="['https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg']"
+              :src="scope.row.img"
+              :preview-src-list="[scope.row.img]"
               fit="cover"
             />
           </template>

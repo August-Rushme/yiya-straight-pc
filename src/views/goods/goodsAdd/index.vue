@@ -81,6 +81,7 @@
 import AuForm from "@/base-ui/form"
 import { FormInstance } from "element-plus"
 import { defineComponent, ref } from "vue"
+import { useGooodsStoreHook } from "@/store/modules/goods"
 import { modalConfig, modalFileConfig } from "./config/form.config"
 import ApplyDetails from "@/components/applyDetails"
 import { useSystemStore } from "@/store/modules/system"
@@ -96,7 +97,7 @@ export default defineComponent({
       processArray: [
         {
           name: "",
-          amount: 1,
+          count: 1,
           price: ""
         }
       ]
@@ -121,7 +122,7 @@ export default defineComponent({
       return modalConfig
     })
     const pageFormRef = ref<InstanceType<typeof AuForm>>()
-    const active = ref(1)
+    const active = ref(0)
     const formData = ref<any>({})
     // 下一步标记
     const selectedAccType = ref("1")
@@ -129,7 +130,7 @@ export default defineComponent({
     const addProcess = () => {
       processData.value.processArray.push({
         name: "",
-        amount: 1,
+        count: 1,
         price: ""
       })
     }
@@ -160,10 +161,11 @@ export default defineComponent({
       await formEl.validate(async (valid, fields) => {
         if (valid) {
           active.value = 3
-          console.log({
+          const goodsInfo = {
             product: formData.value,
             process: processData.value.processArray
-          })
+          }
+          await useGooodsStoreHook().addProductAction(goodsInfo)
           return true
         } else {
           console.log("error submit!", fields)

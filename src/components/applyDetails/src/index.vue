@@ -110,7 +110,7 @@ const handleGoBack = () => {
         <div class="leaveTable">
           <div class="table">
             <au-form v-bind="modalConfig" v-model="formData" />
-            <div flex justify-end mr35 mt10>
+            <div flex justify-end mt10 style="margin-right: 20%">
               <el-button type="primary" @click="support" size="large" v-permission="['admin']">同意</el-button>
               <el-button type="danger" @click="reject" size="large" v-permission="['admin']">拒绝</el-button>
             </div>

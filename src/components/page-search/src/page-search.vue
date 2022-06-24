@@ -2,7 +2,7 @@
  * @Author: Kenny
  * @Date: 2022-06-17 14:54:19
  * @LastEditors: Kenny
- * @LastEditTime: 2022-06-22 18:45:59
+ * @LastEditTime: 2022-06-24 10:01:28
  * @FilePath: \yiya-straight-pc\src\components\page-search\src\page-search.vue
 -->
 <template>
@@ -66,6 +66,10 @@ const handleResetClick = () => {
 const handleQueryClick = () => {
   emit("queryBtnClick", formData.value)
 }
+
+defineExpose({
+  formData
+})
 </script>
 
 <style lang="scss" scoped>

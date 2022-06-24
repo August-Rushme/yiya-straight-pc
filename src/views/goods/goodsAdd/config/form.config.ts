@@ -2,7 +2,7 @@
  * @Author: Kenny
  * @Date: 2022-06-22 18:47:51
  * @LastEditors: Kenny
- * @LastEditTime: 2022-06-23 15:53:56
+ * @LastEditTime: 2022-06-24 16:59:37
  * @FilePath: \yiya-straight-pc\src\views\goods\goodsAdd\config\form.config.ts
  */
 import { IForm } from "@/base-ui/form"
@@ -59,8 +59,36 @@ export const modalConfig: IForm = {
       placeholder: "请选择商品类型",
       options: [
         {
-          label: "测试",
-          value: "测试"
+          label: "洗牙",
+          value: "洗牙"
+        },
+        {
+          label: "补牙",
+          value: "补牙"
+        },
+        {
+          label: "美白",
+          value: "美白"
+        },
+        {
+          label: "洗牙",
+          value: "洗牙"
+        },
+        {
+          label: "拔牙",
+          value: "拔牙"
+        },
+        {
+          label: "儿童齿科",
+          value: "儿童齿科"
+        },
+        {
+          label: "检查",
+          value: "检查"
+        },
+        {
+          label: "矫正",
+          value: "矫正"
         }
       ],
       rules: [{ required: true, message: "请选择商品类型", trigger: "change" }]

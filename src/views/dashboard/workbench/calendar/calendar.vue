@@ -78,6 +78,7 @@ const handleDialogConfirm = () => {
             allDay: selectInfoRef.value?.allDay,
             formData: formData.value
           })
+          console.log(calendarApi?.getEvents())
           formData.value = ref()
           pageFormRef.value?.rerestFormDate()
           dialogVisible.value = false
@@ -139,7 +140,7 @@ const calendarOptions = ref<CalendarOptions>({
         <template v-slot:eventContent="arg">
           <el-popover ref="popover" placement="right" title="详细信息" :width="200" trigger="hover">
             <template #reference>
-              <div flex-y-center relative style="min-height: 4em; background-color: #3788d8; height: 100%">
+              <div flex-y-center relative style="min-height: 4em; height: 100%">
                 <span class="circle" :style="{ 'background-color': !!arg.timeText ? '#21b3a9' : '#ffd55f' }" />
                 <b>{{ arg.timeText }}</b> <i>{{ arg.event.extendedProps.formData?.patientName }}</i>
                 <span pl-3>
@@ -201,7 +202,6 @@ const calendarOptions = ref<CalendarOptions>({
 .eventClose {
   display: flex;
   align-items: center;
-  background-color: #3788d8;
   position: absolute;
   top: 0;
   right: 0px;

@@ -1,8 +1,8 @@
 <!--
  * @Author: Kenny
  * @Date: 2022-06-22 10:45:58
- * @LastEditors: error: git config user.name && git config user.email & please set dead value or install git
- * @LastEditTime: 2022-06-23 20:23:33
+ * @LastEditors: Kenny
+ * @LastEditTime: 2022-06-24 17:11:31
  * @FilePath: \yiya-straight-pc\src\views\goods\goodsManage\index.vue
 -->
 <script setup lang="ts">
@@ -17,8 +17,34 @@ import { modalConfig } from "./config/modal.config"
 
 import { usePageSearch } from "@/hooks/use-page-search"
 import { usePageModal } from "@/hooks/use-page-modal"
+import { useSystemStore } from "@/store/modules/system"
+import { computed } from "vue"
+const clinicPageInfo = {
+  pageName: "clinic",
+  pageNum: 1,
+  pageSize: 9999
+}
+const store = useSystemStore()
+store.getPageListAction(clinicPageInfo)
+
+const modalConfigRef = computed(() => {
+  const clinicList = store.clinicList.map((clinic: any) => {
+    return {
+      value: clinic.id,
+      label: clinic.name
+    }
+  })
+  modalConfig.formItems.find((item: any) => item.field === "clinicId")!.options = clinicList
+  return modalConfig
+})
+
 const pageName = "product"
 const router = useRouter()
+const searchOtherInfo = {
+  useAdvanceSelect: true,
+  pageNum: 1,
+  pageSize: 6
+}
 const { pageContentRef, handleResetClick, handleQueryClick } = usePageSearch()
 const goAddGoodPage = () => {
   router.push({ path: "/goods/goodsAdd" })
@@ -33,7 +59,7 @@ const { pageModalRef, defaultInfo, handleEditData, handleDeleteData, handleSaveD
         <page-search
           :searchFormConfig="searchFormConfig"
           @resetBtnClick="handleResetClick(pageName)"
-          @queryBtnClick="handleQueryClick"
+          @queryBtnClick="handleQueryClick($event, pageName, searchOtherInfo)"
         />
       </el-card>
       <el-card class="mt-5">
@@ -58,7 +84,22 @@ const { pageModalRef, defaultInfo, handleEditData, handleDeleteData, handleSaveD
             />
           </template>
           <template #status="scope">
-            <el-switch v-model="scope.row.status" active-color="#13ce66" inactive-color="#ff4949" />
+            <el-switch
+              v-model="scope.row.status"
+              @click="
+                handleSaveData(
+                  {
+                    product: {
+                      id: scope.row.id,
+                      status: scope.row.status
+                    }
+                  },
+                  pageName
+                )
+              "
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+            />
           </template>
         </page-content>
       </el-card>
@@ -66,7 +107,7 @@ const { pageModalRef, defaultInfo, handleEditData, handleDeleteData, handleSaveD
         :defaultInfo="defaultInfo"
         ref="pageModalRef"
         :pageName="pageName"
-        :pageModalConfig="modalConfig"
+        :pageModalConfig="modalConfigRef"
         :title="modalTitle"
       />
     </div>

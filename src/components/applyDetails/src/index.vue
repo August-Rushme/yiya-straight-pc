@@ -2,12 +2,16 @@
 import { onMounted, ref } from "vue"
 import AuForm from "@/base-ui/form"
 import { modalConfig } from "./config/details.config"
+import message from "@/utils/message"
+import { ElMessageBox } from "element-plus"
+import { useClinicStoreHook } from "@/store/modules/clinic"
 
 const props = defineProps({
   form: {
     type: Object
   }
 })
+const store = useClinicStoreHook()
 const emit = defineEmits(["handleBack"])
 
 const formData = ref({ ...props.form })
@@ -21,16 +25,16 @@ const activities = [
     state: "成功",
     color: "#10ba9c"
   },
-  { status: 2, content: "平台审批", timestamp: "2022-06-21 20:46", state: "同意", color: "#4285f4" },
+  { status: 1, content: "平台审批", timestamp: "2022-06-21 20:46", state: "同意", color: "#4285f4" },
   {
-    status: 3,
+    status: 2,
     content: "平台审批",
     timestamp: "2022-06-21 20:46",
     state: "驳回",
     color: "#ff8282"
   },
   {
-    status: 1,
+    status: 3,
     content: "平台审批",
     timestamp: "2022-06-21 20:46",
     state: "处理中",
@@ -47,31 +51,80 @@ let newActivities = [
   }
 ]
 activities.forEach((item: any) => {
-  if (item.status == 1 && formData.value.status == 1) {
-    newActivities.push(item)
-  }
-  if (item.status == 2 && formData.value.status == 2) {
-    newActivities.push(item)
-  }
   if (item.status == 3 && formData.value.status == 3) {
+    //  处理中
+    item.timestamp = formData.value.processDate
     newActivities.push(item)
+  } else if (item.status == 1 && formData.value.status == 1) {
+    // 同意申请
+    item.timestamp = formData.value.approveDate
+    newActivities.push(item)
+  } else if (item.status == 2 && formData.value.status == 2) {
+    // 驳回申请
+    newActivities.push(item)
+  } else if (item.status == 0) {
+    // 发起申请
+    newActivities[0].timestamp = formData.value.applyDate
   }
 })
 onMounted(() => {
   const stateEle = document.querySelectorAll(".state")
   for (let i = 0; i < stateEle.length; i++) {
     const e = stateEle[i] as HTMLElement
-    e.style.backgroundColor = activities[i].color
+    e.style.backgroundColor = newActivities[i].color
   }
 })
-
+// 判断是否挂起
+const isWatting = ref(false)
+// 判断是否已经审批过
+const isApproved = ref(false)
+if (formData.value.status != 0 && formData.value.status != 3) {
+  isApproved.value = true
+  isWatting.value = true
+} else {
+  // 可以继续审批
+  isApproved.value = false
+}
 // 处理确认
 const support = () => {
-  console.log("确认")
+  // 提示是否确认同意申请
+  ElMessageBox.confirm("确认同意该诊所的入驻申请吗", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning"
+  })
+    .then(() => {
+      store.setApplyDetailsAction({
+        id: formData.value.id,
+        status: 1
+      })
+      isApproved.value = true
+      isWatting.value = true
+      handleGoBack()
+    })
+    .catch(() => {
+      message.info("已取消删除")
+    })
 }
 // 处理拒绝
 const reject = () => {
-  console.log("拒绝")
+  store.setApplyDetailsAction({
+    id: formData.value.id,
+    status: 2
+  })
+  isApproved.value = false
+  isWatting.value = true
+  handleGoBack()
+}
+// 挂起
+const waitProcess = () => {
+  store.setApplyDetailsAction({
+    id: formData.value.id,
+    status: 3
+  })
+  isWatting.value = true
+  isApproved.value = false
+  handleGoBack()
 }
 // 返回申请页面
 const handleGoBack = () => {
@@ -111,8 +164,15 @@ const handleGoBack = () => {
           <div class="table">
             <au-form v-bind="modalConfig" v-model="formData" />
             <div flex justify-end mt10 style="margin-right: 20%">
-              <el-button type="primary" @click="support" size="large" v-permission="['admin']">同意</el-button>
-              <el-button type="danger" @click="reject" size="large" v-permission="['admin']">拒绝</el-button>
+              <el-button type="primary" @click="support" size="large" v-permission="['admin']" :disabled="isApproved"
+                >同意</el-button
+              >
+              <el-button type="danger" @click="reject" size="large" v-permission="['admin']" :disabled="isApproved"
+                >拒绝</el-button
+              >
+              <el-button type="warning" @click="waitProcess" size="large" v-permission="['admin']" :disabled="isWatting"
+                >挂起</el-button
+              >
             </div>
           </div>
         </div>
@@ -129,7 +189,7 @@ const handleGoBack = () => {
   align-items: center;
 }
 .processState {
-  min-width: 16vw;
+  min-width: 17vw;
   position: relative;
   margin: 80px 20px;
   padding: 20px 50px;

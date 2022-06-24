@@ -2,7 +2,7 @@ import { IForm } from "@/base-ui/form"
 export const modalConfig: IForm = {
   formItems: [
     {
-      field: "name",
+      field: "clinicName",
       type: "input",
       label: "诊所名称",
       placeholder: "请输入诊所名称",
@@ -25,14 +25,14 @@ export const modalConfig: IForm = {
       rules: [{ type: "string", required: true, message: "请输入诊所地址", trigger: "blur" }]
     },
     {
-      field: "detailedAddress",
+      field: "detailAddress",
       type: "input",
       label: "诊所详细地址",
       placeholder: "请输入诊所详细地址",
       rules: [{ type: "string", required: true, message: "请输入诊所详细地址", trigger: "blur" }]
     },
     {
-      field: "tel",
+      field: "phone",
       type: "input",
       label: "联系电话",
       placeholder: "请输入联系电话",

@@ -66,7 +66,7 @@ const handleClose = () => {
 const searchOtherInfo = {
   buk: userInfo.buk,
   clinicId: userInfo.clinicId,
-  type: "search",
+  useAdvanceSelect: true,
   pageNum: 1,
   pageSize: 6
 }

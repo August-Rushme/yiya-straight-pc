@@ -1,8 +1,8 @@
 /*
  * @Author: Kenny
  * @Date: 2022-06-19 19:48:36
- * @LastEditors: error: git config user.name && git config user.email & please set dead value or install git
- * @LastEditTime: 2022-06-23 19:42:38
+ * @LastEditors: Kenny
+ * @LastEditTime: 2022-06-24 09:55:10
  * @FilePath: \yiya-straight-pc\src\views\dashboard\workbench\calendar\config\form.config.ts
  */
 import { IForm } from "@/base-ui/form"
@@ -38,7 +38,8 @@ export const modalConfig: IForm = {
         rangeSeparator: "到",
         startPlaceholder: "开始时间",
         endPlaceholder: "结束时间"
-      }
+      },
+      rules: [{ required: true, message: "请选择预时间", trigger: "blur" }]
     },
     {
       field: "sex",

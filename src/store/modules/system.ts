@@ -82,11 +82,8 @@ export const useSystemStore = defineStore({
       // 判断是请求链接
       if (pageName === "menu") {
         pageUrl = `/${pageName}/all`
-      } else if (payload.queryInfo?.type === "search" || false) {
+      } else if (payload.queryInfo?.useAdvanceSelect || false) {
         pageUrl = `/${pageName}/advanceSelect`
-      }
-      if (pageName === "product") {
-        pageUrl = `/${pageName}/getByClinic`
       }
       // 对页面发送请求
       const { data: res }: any = await getPageList(pageUrl, payload.pageInfo)
@@ -150,7 +147,6 @@ export const useSystemStore = defineStore({
     async editPageDataAction(payload: any) {
       // 1.编辑数据的请求
       const { pageName, editData } = payload
-      console.log(editData)
       const pageUrl = `/${pageName}/edit`
       const res: any = await editPageData(pageUrl, editData)
       if (res.code !== 200) {

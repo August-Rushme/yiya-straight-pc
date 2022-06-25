@@ -1,6 +1,9 @@
-import { getApplyClinic } from "@/api/clinic"
 import store from "@/store"
+import message from "@/utils/message"
+
 import { defineStore } from "pinia"
+
+import { approveClinic, getApplyClinic, clinicApply } from "@/api/clinic"
 
 interface IClinicState {
   applyDetails: {}
@@ -20,7 +23,24 @@ export const useClinicStore = defineStore({
       this.$patch({
         applyDetails: res
       })
-      return res
+    },
+    // 审批操作
+    async setApplyDetailsAction(payload: any) {
+      const pageUrl = "/clinicApply/updateStatus"
+      const res: any = await approveClinic(pageUrl, payload)
+      if (res.code != 200) {
+        return message.error("操作失败请稍后再试")
+      }
+      message.success("操作成功")
+    },
+    // 诊所入驻申请
+    async clinicApplyAction(payload: any) {
+      const pageUrl = "/clinicApply/save"
+      const res: any = await clinicApply(pageUrl, payload)
+      if (res.code != 200) {
+        return message.error("申请失败,请稍后再试")
+      }
+      message.success("申请成功，请等待审批")
     }
   }
 })

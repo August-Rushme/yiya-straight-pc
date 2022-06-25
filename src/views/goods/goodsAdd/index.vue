@@ -20,7 +20,7 @@
                 <el-step title="完成" description="操作成功" />
               </el-steps>
               <template v-if="active == 0">
-                <au-form v-bind="modalConfig" ref="pageFormRef" v-model="formData" />
+                <au-form v-bind="modalConfigRef" ref="pageFormRef" v-model="formData" />
                 <el-button type="primary" @click="handleNextStep(pageFormRef?.formRef)">下一步</el-button>
                 <el-button @click="resetForm(pageFormRef?.formRef)">重置</el-button>
               </template>
@@ -44,7 +44,7 @@
                           </el-col>
                           <el-col :xs="24" :lg="10">
                             <el-form-item>
-                              <el-input v-model="item.name" placeholder="请输入价格" clearable />
+                              <el-input v-model="item.price" placeholder="请输入价格" clearable />
                             </el-form-item>
                           </el-col>
                         </el-row>
@@ -63,7 +63,7 @@
               <template v-else-if="active == 3">
                 <el-result icon="success" title="操作成功" sub-title="请等待平台审核">
                   <template #extra>
-                    <el-button type="primary" size="medium" @click="handleRedo">查看申请</el-button>
+                    <el-button type="primary" @click="handleRedo">查看申请</el-button>
                   </template>
                 </el-result>
               </template>
@@ -83,6 +83,9 @@ import { FormInstance } from "element-plus"
 import { defineComponent, ref } from "vue"
 import { modalConfig, modalFileConfig } from "./config/form.config"
 import ApplyDetails from "@/components/applyDetails"
+import { useSystemStore } from "@/store/modules/system"
+import { computed } from "vue"
+
 export default defineComponent({
   components: {
     AuForm,
@@ -99,6 +102,24 @@ export default defineComponent({
       ]
     })
     const flag = ref(false)
+    const clinicPageInfo = {
+      pageName: "clinic",
+      pageNum: 1,
+      pageSize: 9999
+    }
+    const store = useSystemStore()
+    store.getPageListAction(clinicPageInfo)
+
+    const modalConfigRef = computed(() => {
+      const clinicList = store.clinicList.map((clinic: any) => {
+        return {
+          value: clinic.id,
+          label: clinic.name
+        }
+      })
+      modalConfig.formItems.find((item: any) => item.field === "clinicId")!.options = clinicList
+      return modalConfig
+    })
     const pageFormRef = ref<InstanceType<typeof AuForm>>()
     const active = ref(1)
     const formData = ref<any>({})
@@ -139,7 +160,10 @@ export default defineComponent({
       await formEl.validate(async (valid, fields) => {
         if (valid) {
           active.value = 3
-          console.log(formData.value)
+          console.log({
+            product: formData.value,
+            process: processData.value.processArray
+          })
           return true
         } else {
           console.log("error submit!", fields)
@@ -164,6 +188,7 @@ export default defineComponent({
       flag.value = false
     }
     return {
+      modalConfigRef,
       processData,
       handleRedo,
       addProcess,

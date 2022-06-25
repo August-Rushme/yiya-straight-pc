@@ -2,7 +2,7 @@
  * @Author: Kenny
  * @Date: 2022-06-22 11:02:51
  * @LastEditors: Kenny
- * @LastEditTime: 2022-06-23 15:54:12
+ * @LastEditTime: 2022-06-24 16:23:55
  * @FilePath: \yiya-straight-pc\src\views\goods\goodsManage\config\modal.config.ts
  */
 import { IForm } from "@/base-ui/form"
@@ -70,12 +70,7 @@ export const modalConfig: IForm = {
       type: "select",
       label: "所属诊所",
       placeholder: "请选择所属诊所",
-      options: [
-        {
-          label: "测试",
-          value: "1"
-        }
-      ],
+      options: [],
       rules: [{ required: true, message: "请选择所属诊所", trigger: "change" }]
     },
     {

@@ -104,7 +104,7 @@ defineExpose({
       <!-- 格式化时间 -->
       <template #created="scope">
         <span>
-          {{ formatDateTime(scope.row.createAt) }}
+          {{ formatDateTime(scope.row.createAt ?? scope.row.applyDate) }}
         </span>
       </template>
       <template #updated="scope">

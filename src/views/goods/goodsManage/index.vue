@@ -89,10 +89,8 @@ const { pageModalRef, defaultInfo, handleEditData, handleDeleteData, handleSaveD
               @click="
                 handleSaveData(
                   {
-                    product: {
-                      id: scope.row.id,
-                      status: scope.row.status
-                    }
+                    id: scope.row.id,
+                    status: scope.row.status
                   },
                   pageName
                 )

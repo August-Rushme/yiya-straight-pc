@@ -2,7 +2,7 @@
  * @Author: error: git config user.name && git config user.email & please set dead value or install git
  * @Date: 2022-06-23 18:55:52
  * @LastEditors: error: git config user.name && git config user.email & please set dead value or install git
- * @LastEditTime: 2022-06-25 13:56:25
+ * @LastEditTime: 2022-06-25 14:00:51
  * @FilePath: \yiya-straight-pc\src\views\clinic\overview\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -57,7 +57,7 @@ onMounted(() => {
     </el-card>
     <el-card mt5>
       <div>
-        <div>诊所位置</div>
+        <div class="mapTitle">诊所位置</div>
         <div id="container" />
       </div>
     </el-card>
@@ -69,6 +69,12 @@ onMounted(() => {
   margin-left: 35px;
   font-size: 24px;
   font-weight: 600;
+  color: #1d222a;
+}
+.mapTitle {
+  padding-bottom: 20px;
+  font-size: 24px;
+  font-weight: 700;
   color: #1d222a;
 }
 :deep(.el-form-item) {

@@ -95,11 +95,20 @@ const handleDialogConfirm = () => {
   }
 }
 
+// 事件拖拽
+const handleDropEvents = (e: any) => {
+  console.log(e)
+}
+
 // 弹窗取消
 const handleDialogCancel = () => {
   formData.value = ref()
   pageFormRef.value?.rerestFormDate()
   dialogVisible.value = false
+}
+//事件日期改变
+const handleResizeEvents = (e: any) => {
+  console.log(e)
 }
 // 日历配置
 const calendarOptions = ref<CalendarOptions>({
@@ -129,7 +138,9 @@ const calendarOptions = ref<CalendarOptions>({
   weekends: true,
   select: handleDateSelect,
   eventClick: handleEventClick,
-  eventsSet: handleEvents
+  eventResize: handleResizeEvents,
+  eventsSet: handleEvents,
+  eventDrop: handleDropEvents
 })
 </script>
 

@@ -29,7 +29,7 @@
                   style="width: 100%"
                   v-model="formData[`${item.field}`]"
                 >
-                  <el-option v-for="option in item.options" :key="option.value" :value="option.value">{{
+                  <el-option v-for="option in item.options" :key="option.label" :value="option.value">{{
                     option.label
                   }}</el-option>
                 </el-select>

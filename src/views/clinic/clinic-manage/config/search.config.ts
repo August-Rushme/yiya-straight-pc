@@ -26,13 +26,13 @@ export const searchFormConfig: IForm = {
       placeholder: "请输入电话号码"
     },
     {
-      field: "enable",
+      field: "status",
       type: "select",
       label: "诊所状态",
       placeholder: "请选择诊所状态",
       options: [
-        { label: "启用中", value: "启用中" },
-        { label: "下架中", value: "下架中" }
+        { label: "启用中", value: "1" },
+        { label: "下架中", value: "0" }
       ]
     }
   ]

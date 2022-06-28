@@ -72,6 +72,8 @@ export const useSystemStore = defineStore({
   actions: {
     // 获取表格数据
     async getPageListAction(payload: any) {
+      console.log(payload)
+
       const clinicId = cache.getCache("userInfo").clinicId
       const userId = cache.getCache("userInfo").id
       // 获取pageUrl

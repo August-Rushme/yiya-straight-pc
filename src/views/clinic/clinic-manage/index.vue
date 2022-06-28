@@ -9,8 +9,10 @@ import { modalConfig } from "./config/modal.config"
 
 import { usePageSearch } from "@/hooks/use-page-search"
 import { usePageModal } from "@/hooks/use-page-modal"
+import cache from "@/utils/cache"
 
 const pageName = "clinic"
+const userInfo = cache.getCache("userInfo")
 const { pageContentRef, handleResetClick, handleQueryClick } = usePageSearch()
 // 调用hook获取公共变量和函数
 const { pageModalRef, defaultInfo, handleNewData, handleEditData, handleDeleteData, handleSaveData, modalTitle } =
@@ -27,14 +29,22 @@ const { pageModalRef, defaultInfo, handleNewData, handleEditData, handleDeleteDa
 // const handleOff = () => {
 //   console.log("下架诊所")
 // }
+// 搜索需要的其它参数
+const searchOtherInfo = {
+  buk: userInfo.buk,
+  clinicId: userInfo.clinicId,
+  useAdvanceSelect: true,
+  pageNum: 1,
+  pageSize: 6
+}
 </script>
 <template>
   <div app-container>
     <el-card>
       <page-search
         :searchFormConfig="searchFormConfig"
-        @resetBtnClick="handleResetClick"
-        @queryBtnClick="handleQueryClick"
+        @resetBtnClick="handleResetClick(pageName)"
+        @queryBtnClick="handleQueryClick($event, pageName, searchOtherInfo)"
       />
     </el-card>
     <el-card class="mt-5">

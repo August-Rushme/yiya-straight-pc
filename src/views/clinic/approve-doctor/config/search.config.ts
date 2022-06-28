@@ -15,20 +15,30 @@ export const searchFormConfig: IForm = {
   },
   formItems: [
     {
-      field: "name",
+      field: "userName",
       type: "input",
-      label: "诊所名称",
-      placeholder: "请输入诊所名称"
+      label: "姓名",
+      placeholder: "请输入姓名"
     },
     {
-      field: "label",
-      type: "input",
-      label: "申请编号",
-      placeholder: "请输入申请编号"
+      field: "gender",
+      type: "select",
+      label: "性别",
+      placeholder: "请选择性别",
+      options: [
+        {
+          label: "男",
+          value: "男"
+        },
+        {
+          label: "女",
+          value: "女"
+        }
+      ]
     },
 
     {
-      field: "enable",
+      field: "status",
       type: "select",
       label: "审批状态",
       placeholder: "请选择审批状态",

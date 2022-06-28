@@ -25,3 +25,11 @@ export function clinicApply(url: string, data: any) {
     data
   })
 }
+
+// 获取医生技能列表
+export function getSkills(url: string) {
+  return request({
+    url,
+    method: "get"
+  })
+}

@@ -20,6 +20,7 @@
                   v-bind="item.otherOptions"
                   :show-password="item.type === 'password'"
                   v-model="formData[`${item.field}`]"
+                  clearable
                 />
               </template>
               <template v-else-if="item.type === 'select'">
@@ -28,6 +29,7 @@
                   v-bind="item.otherOptions"
                   style="width: 100%"
                   v-model="formData[`${item.field}`]"
+                  clearable
                 >
                   <el-option v-for="option in item.options" :key="option.label" :value="option.value">{{
                     option.label

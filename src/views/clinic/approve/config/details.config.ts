@@ -1,5 +1,5 @@
 import { IForm } from "@/base-ui/form"
-export const modalConfig: IForm = {
+export const detailsConfig: IForm = {
   formItems: [
     {
       field: "clinicName",

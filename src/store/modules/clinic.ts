@@ -3,16 +3,18 @@ import message from "@/utils/message"
 
 import { defineStore } from "pinia"
 
-import { approveClinic, getApplyClinic, clinicApply } from "@/api/clinic"
+import { approveClinic, getApplyClinic, clinicApply, getSkills } from "@/api/clinic"
 
 interface IClinicState {
   applyDetails: {}
+  skills: string[]
 }
 export const useClinicStore = defineStore({
   id: "clinic",
   state: (): IClinicState => {
     return {
-      applyDetails: {}
+      applyDetails: {},
+      skills: []
     }
   },
   actions: {
@@ -41,6 +43,17 @@ export const useClinicStore = defineStore({
         return message.error("申请失败,请稍后再试")
       }
       message.success("申请成功，请等待审批")
+    },
+    // 获取医生技能列表
+    async getSkillsAction() {
+      const pageUrl = "/qualification/getDoctorLabels"
+      const res: any = await getSkills(pageUrl)
+      if (res.code != 200) {
+        return message.error("获取数据失败,请稍后再试")
+      }
+      this.$patch({
+        skills: res.data
+      })
     }
   }
 })

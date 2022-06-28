@@ -7,6 +7,7 @@ import applyDetails from "@/components/applyDetails"
 import { contentTableConfig } from "./config/content.config"
 import { searchFormConfig } from "./config/search.config"
 import { modalConfig } from "./config/modal.config"
+import { detailsConfig } from "./config/details.config"
 
 import { usePageSearch } from "@/hooks/use-page-search"
 import { usePageModal } from "@/hooks/use-page-modal"
@@ -87,7 +88,7 @@ defineExpose({
       />
     </div>
     <div v-if="flag">
-      <applyDetails @handleBack="handleBack" :form="formData" />
+      <applyDetails @handleBack="handleBack" :form="formData" :contentDetailsConfig="detailsConfig" />
     </div>
   </div>
 </template>

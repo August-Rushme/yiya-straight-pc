@@ -28,7 +28,7 @@ export const searchFormConfig: IForm = {
     },
 
     {
-      field: "enable",
+      field: "status",
       type: "select",
       label: "审批状态",
       placeholder: "请选择审批状态",
@@ -42,8 +42,8 @@ export const searchFormConfig: IForm = {
           label: "待审批"
         },
         {
-          value: "审批中",
-          label: "审批中"
+          value: "已挂起",
+          label: "已挂起"
         },
         {
           value: "审批拒绝",

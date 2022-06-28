@@ -1,8 +1,8 @@
 /*
  * @Author: Kenny
  * @Date: 2022-06-19 19:48:36
- * @LastEditors: Kenny
- * @LastEditTime: 2022-06-24 09:55:10
+ * @LastEditors: error: git config user.name && git config user.email & please set dead value or install git
+ * @LastEditTime: 2022-06-27 21:26:42
  * @FilePath: \yiya-straight-pc\src\views\dashboard\workbench\calendar\config\form.config.ts
  */
 import { IForm } from "@/base-ui/form"
@@ -42,7 +42,7 @@ export const modalConfig: IForm = {
       rules: [{ required: true, message: "请选择预时间", trigger: "blur" }]
     },
     {
-      field: "sex",
+      field: "patientGender",
       type: "treeSelect",
       label: "患者性别:",
       placeholder: "请选择患者性别",
@@ -59,7 +59,7 @@ export const modalConfig: IForm = {
       rules: [{ required: true, message: "请输选择预约时间", trigger: "blur" }]
     },
     {
-      field: "phone",
+      field: "patientPhone",
       type: "input",
       label: "患者手机号:",
       placeholder: "请输入患者手机号",
@@ -82,23 +82,23 @@ export const modalConfig: IForm = {
       placeholder: "请选择预约项目",
       options: [
         {
-          value: "0",
+          value: "种植牙",
           label: "种植牙"
         },
         {
-          value: "1",
+          value: "烤瓷牙",
           label: "烤瓷牙"
         },
         {
-          value: "2",
+          value: "龋齿",
           label: "龋齿"
         },
         {
-          value: "3",
+          value: "牙齿美白",
           label: "牙齿美白"
         },
         {
-          value: "4",
+          value: "牙齿矫正",
           label: "牙齿矫正"
         }
       ],

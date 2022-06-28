@@ -1,10 +1,3 @@
-/*
- * @Author: Kenny
- * @Date: 2022-06-22 15:00:04
- * @LastEditors: Kenny
- * @LastEditTime: 2022-06-22 17:27:54
- * @FilePath: \yiya-straight-pc\src\views\goods\goodsManage\config\search.config.ts
- */
 import { IForm } from "@/base-ui/form"
 
 export const searchFormConfig: IForm = {

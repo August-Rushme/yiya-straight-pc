@@ -92,6 +92,7 @@ export default defineComponent({
     AuForm,
     ApplyDetails
   },
+
   setup() {
     const processData = ref({
       processArray: [

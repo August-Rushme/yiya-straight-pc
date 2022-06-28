@@ -7,16 +7,18 @@ import FullCalendar, { CalendarOptions, EventApi, DateSelectArg, EventClickArg }
 import dayGridPlugin from "@fullcalendar/daygrid"
 import timeGridPlugin from "@fullcalendar/timegrid"
 import interactionPlugin from "@fullcalendar/interaction"
-import { formatUtcTime } from "@/utils"
-import { INITIAL_EVENTS, createEventId } from "./event-utils"
+import dayjs from "dayjs"
+import { INITIAL_EVENTS, createEventId, store } from "./event-utils"
 import { modalConfig } from "./config/form.config"
-
 import { Action, ElMessageBox } from "element-plus"
+import LocalCache from "@/utils/cache"
+console.log(INITIAL_EVENTS)
 const dialogVisible = ref(false)
 const selectInfoRef = ref<DateSelectArg>()
 const formData = ref<any>({})
 const currentEvents = ref<EventApi[]>([])
 const pageFormRef = ref<InstanceType<typeof auForm>>()
+
 let calendarEventApi: any
 const title = ref("新建事件")
 // 编辑事件ID
@@ -60,7 +62,7 @@ const handleEvents = (events: EventApi[]) => {
 // 提交事件
 const handleDialogConfirm = () => {
   if (pageFormRef.value) {
-    pageFormRef.value.formRef?.validate((validate) => {
+    pageFormRef.value.formRef?.validate(async (validate) => {
       if (!validate) {
         return message.error("请正确填写表单")
       } else {
@@ -71,6 +73,7 @@ const handleDialogConfirm = () => {
           calendarEventApi = calendarApi
         }
         if (title.value === "新建事件") {
+          console.log(typeof selectInfoRef.value?.startStr)
           calendarApi?.addEvent({
             id: createEventId(),
             start: selectInfoRef.value?.startStr,
@@ -78,7 +81,15 @@ const handleDialogConfirm = () => {
             allDay: selectInfoRef.value?.allDay,
             formData: formData.value
           })
-          console.log(calendarApi?.getEvents())
+          await store.createCalendarEventAction({
+            startTime: dayjs(selectInfoRef.value?.startStr).format("YYYY-MM-DD HH:mm:ss"),
+            endTime: dayjs(selectInfoRef.value?.endStr).format("YYYY-MM-DD HH:mm:ss"),
+            clinicId: LocalCache.getCache("userInfo").clinicId,
+            isFullday: selectInfoRef.value?.allDay,
+            ...formData.value,
+            appointmentStartDate: dayjs(formData.value.appiontmentTime[0]).format("YYYY-MM-DD HH:mm:ss"),
+            appointmentEndDate: dayjs(formData.value.appiontmentTime[1]).format("YYYY-MM-DD HH:mm:ss")
+          })
           formData.value = ref()
           pageFormRef.value?.rerestFormDate()
           dialogVisible.value = false
@@ -155,7 +166,7 @@ const calendarOptions = ref<CalendarOptions>({
                 <span class="circle" :style="{ 'background-color': !!arg.timeText ? '#21b3a9' : '#ffd55f' }" />
                 <b>{{ arg.timeText }}</b> <i>{{ arg.event.extendedProps.formData?.patientName }}</i>
                 <span pl-3>
-                  {{ arg.event.extendedProps.formData?.sex }}
+                  {{ arg.event.extendedProps.formData?.patientGender }}
                 </span>
                 <span class="eventClose" @click="removeEvents($event, arg.event.id)">
                   <el-icon :size="15"><CircleClose /></el-icon
@@ -166,11 +177,11 @@ const calendarOptions = ref<CalendarOptions>({
             <div>医生姓名: {{ arg.event.extendedProps.formData?.doctorName }}</div>
             <div>
               预约时间:
-              {{ formatUtcTime(arg.event.extendedProps.formData?.appiontmentTime[0]) }} 到
-              {{ formatUtcTime(arg.event.extendedProps.formData?.appiontmentTime[1]) }}
+              {{ dayjs(arg.event.extendedProps.formData?.appiontmentTime[0]).format("YYYY-MM-DD HH:mm:ss") }} 到
+              {{ dayjs(arg.event.extendedProps.formData?.appiontmentTime[1]).format("YYYY-MM-DD HH:mm:ss") }}
             </div>
-            <div>患者性别: {{ arg.event.extendedProps.formData?.sex }}</div>
-            <div>患者手机号: {{ arg.event.extendedProps.formData?.phone }}</div>
+            <div>患者性别: {{ arg.event.extendedProps.formData?.patientGender }}</div>
+            <div>患者手机号: {{ arg.event.extendedProps.formData?.patientPhone }}</div>
             <div>备注: {{ arg.event.extendedProps.formData?.remark }}</div>
           </el-popover>
         </template>

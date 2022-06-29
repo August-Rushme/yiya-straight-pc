@@ -20,20 +20,32 @@ export const searchFormConfig: IForm = {
       placeholder: "请选择商品类型",
       options: [
         {
-          label: "牙齿美白",
-          value: "0"
+          label: "洗牙",
+          value: "洗牙"
         },
         {
-          label: "牙齿矫正",
-          value: "1"
+          label: "补牙",
+          value: "补牙"
         },
         {
-          label: "口腔检查",
-          value: "2"
+          label: "美白",
+          value: "美白"
         },
         {
-          label: "牙齿治疗",
-          value: "3"
+          label: "拔牙",
+          value: "拔牙"
+        },
+        {
+          label: "儿童齿科",
+          value: "儿童齿科"
+        },
+        {
+          label: "检查",
+          value: "检查"
+        },
+        {
+          label: "矫正",
+          value: "矫正"
         }
       ]
     },
@@ -44,11 +56,11 @@ export const searchFormConfig: IForm = {
       placeholder: "请选择商品状态",
       options: [
         {
-          label: "上架",
+          label: "下架",
           value: "0"
         },
         {
-          label: "下架",
+          label: "上架",
           value: "1"
         }
       ]

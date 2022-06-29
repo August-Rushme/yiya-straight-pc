@@ -24,3 +24,18 @@ export function createCalendarEvent(data: any) {
     data
   })
 }
+
+export function deleteCalendarEvent(id: number) {
+  return request({
+    url: `/clinicCalendar/${id}`,
+    method: "delete"
+  })
+}
+
+export function editCalendarEvent(data: any) {
+  return request({
+    url: "clinicCalendar/edit",
+    method: "post",
+    data
+  })
+}

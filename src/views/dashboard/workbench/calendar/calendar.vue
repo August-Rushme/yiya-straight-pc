@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from "vue"
+import { onMounted, ref, watch } from "vue"
 import auForm from "@/base-ui/form"
 import "@fullcalendar/core/vdom" // solve problem with Vite
 import message from "@/utils/message"
@@ -8,31 +8,41 @@ import dayGridPlugin from "@fullcalendar/daygrid"
 import timeGridPlugin from "@fullcalendar/timegrid"
 import interactionPlugin from "@fullcalendar/interaction"
 import dayjs from "dayjs"
-import { INITIAL_EVENTS, createEventId, store } from "./event-utils"
 import { modalConfig } from "./config/form.config"
 import { Action, ElMessageBox } from "element-plus"
+import { EventInput } from "@fullcalendar/vue3"
 import LocalCache from "@/utils/cache"
-console.log(INITIAL_EVENTS)
+import { useCalendarStoreHook } from "@/store/modules/calendar"
+const store = useCalendarStoreHook()
+const titleDate = ref(dayjs().format("YYYY-MM-DD"))
+let eventId = 0
+const INITIAL_EVENTS: EventInput[] = []
 const dialogVisible = ref(false)
-const selectInfoRef = ref<DateSelectArg>()
+const selectInfoRef = ref<any>()
+const clickInfoRef = ref<any>()
 const formData = ref<any>({})
 const currentEvents = ref<EventApi[]>([])
 const pageFormRef = ref<InstanceType<typeof auForm>>()
-
 let calendarEventApi: any
 const title = ref("新建事件")
-// 编辑事件ID
-const editId = ref()
+// 监听datepicker的选择
+watch(titleDate, (val) => {
+  calendarEventApi.gotoDate(val)
+})
 // 新建事件
 const handleDateSelect = (selectInfo: DateSelectArg) => {
   title.value = "新建事件"
   selectInfoRef.value = selectInfo
+  formData.value.appiontmentTime = [
+    dayjs(selectInfoRef.value?.startStr).format("YYYY-MM-DD HH:mm:ss"),
+    dayjs(selectInfoRef.value?.endStr).format("YYYY-MM-DD HH:mm:ss")
+  ]
   dialogVisible.value = true
 }
 // 编辑事件
 const handleEventClick = (clickInfo: EventClickArg) => {
   title.value = "编辑事件"
-  editId.value = parseInt(clickInfo.event.id)
+  clickInfoRef.value = clickInfo
   for (let key in clickInfo.event.extendedProps.formData) {
     formData.value[key] = clickInfo.event.extendedProps.formData[key]
   }
@@ -45,9 +55,10 @@ const removeEvents = (e: any, id: string) => {
   ElMessageBox.alert("是否删除该日历事件", "提示", {
     confirmButtonText: "是",
     showCancelButton: true,
-    callback: (action: Action) => {
+    callback: async (action: Action) => {
       if (action === "confirm") {
         calendarEventApi.getEventById(index).remove()
+        store.deleteCalendarEventAction(index)
         message.success("删除成功")
       } else {
         message.info("删除被取消")
@@ -66,20 +77,13 @@ const handleDialogConfirm = () => {
       if (!validate) {
         return message.error("请正确填写表单")
       } else {
-        const calendarApi = selectInfoRef.value?.view.calendar
-        calendarApi?.unselect()
-
-        if (!calendarEventApi) {
-          calendarEventApi = calendarApi
-        }
         if (title.value === "新建事件") {
-          console.log(typeof selectInfoRef.value?.startStr)
-          calendarApi?.addEvent({
-            id: createEventId(),
-            start: selectInfoRef.value?.startStr,
-            end: selectInfoRef.value?.endStr,
+          calendarEventApi?.addEvent({
+            id: String(eventId++),
+            start: formData.value.appiontmentTime[0],
+            end: formData.value.appiontmentTime[1],
             allDay: selectInfoRef.value?.allDay,
-            formData: formData.value
+            formData: { ...formData.value }
           })
           await store.createCalendarEventAction({
             startTime: dayjs(selectInfoRef.value?.startStr).format("YYYY-MM-DD HH:mm:ss"),
@@ -90,14 +94,22 @@ const handleDialogConfirm = () => {
             appointmentStartDate: dayjs(formData.value.appiontmentTime[0]).format("YYYY-MM-DD HH:mm:ss"),
             appointmentEndDate: dayjs(formData.value.appiontmentTime[1]).format("YYYY-MM-DD HH:mm:ss")
           })
-          formData.value = ref()
-          pageFormRef.value?.rerestFormDate()
           dialogVisible.value = false
           message.success("添加事件成功")
         } else {
-          calendarApi?.getEventById(editId.value)?.setExtendedProp("formData", formData.value)
-          formData.value = ref()
-          pageFormRef.value?.rerestFormDate()
+          const eventInfo = clickInfoRef.value?.event
+          calendarEventApi?.getEventById(eventInfo.id)?.setExtendedProp("formData", { ...formData.value })
+          await store.editCalendarEventAction({
+            id: parseInt(eventInfo.id),
+            startTime: dayjs(eventInfo.extendedProps.formData.appiontmentTime[0]).format("YYYY-MM-DD HH:mm:ss"),
+            endTime: dayjs(eventInfo.extendedProps.formData.appiontmentTime[1]).format("YYYY-MM-DD HH:mm:ss"),
+            isFullday: selectInfoRef.value?.allDay,
+            ...formData.value,
+            appointmentStartDate: dayjs(eventInfo.extendedProps.formData.appiontmentTime[0]).format(
+              "YYYY-MM-DD HH:mm:ss"
+            ),
+            appointmentEndDate: dayjs(eventInfo.extendedProps.formData.appiontmentTime[1]).format("YYYY-MM-DD HH:mm:ss")
+          })
           dialogVisible.value = false
           message.success("编辑事件成功")
         }
@@ -105,21 +117,38 @@ const handleDialogConfirm = () => {
     })
   }
 }
-
 // 事件拖拽
-const handleDropEvents = (e: any) => {
-  console.log(e)
+const handleDropEvents = async (e: any) => {
+  await store.editCalendarEventAction({
+    id: parseInt(e.event.id),
+    startTime: dayjs(e.event.start).format("YYYY-MM-DD HH:mm:ss"),
+    endTime: dayjs(e.event.end).format("YYYY-MM-DD HH:mm:ss"),
+    isFullday: e.event.allDay,
+    appointmentStartDate: dayjs(e.event.start).format("YYYY-MM-DD HH:mm:ss"),
+    appointmentEndDate: dayjs(e.event.end).format("YYYY-MM-DD HH:mm:ss")
+  })
+  message.success("更新事件成功")
 }
-
+// 弹窗关闭
+const handleDialogClose = () => {
+  pageFormRef.value?.formRef?.resetFields()
+}
 // 弹窗取消
 const handleDialogCancel = () => {
-  formData.value = ref()
-  pageFormRef.value?.rerestFormDate()
+  pageFormRef.value?.formRef?.resetFields()
   dialogVisible.value = false
 }
 //事件日期改变
-const handleResizeEvents = (e: any) => {
-  console.log(e)
+const handleResizeEvents = async (e: any) => {
+  await store.editCalendarEventAction({
+    id: parseInt(e.event.id),
+    startTime: dayjs(e.event.start).format("YYYY-MM-DD HH:mm:ss"),
+    endTime: dayjs(e.event.end).format("YYYY-MM-DD HH:mm:ss"),
+    isFullday: e.event.allDay,
+    appointmentStartDate: dayjs(e.event.start).format("YYYY-MM-DD HH:mm:ss"),
+    appointmentEndDate: dayjs(e.event.end).format("YYYY-MM-DD HH:mm:ss")
+  })
+  message.success("更新事件成功")
 }
 // 日历配置
 const calendarOptions = ref<CalendarOptions>({
@@ -131,15 +160,14 @@ const calendarOptions = ref<CalendarOptions>({
   headerToolbar: {
     left: "prev,next today",
     center: "title",
-    right: "dayGridMonth,timeGridWeek,timeGridDay"
+    right: "timeGridDay,timeGridWeek"
   },
   buttonText: {
     today: "今天",
-    month: "月视图",
     week: "周视图",
     day: "日视图"
   },
-  initialView: "dayGridMonth",
+  initialView: "timeGridDay",
   initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
   editable: true,
   selectable: true,
@@ -153,14 +181,26 @@ const calendarOptions = ref<CalendarOptions>({
   eventsSet: handleEvents,
   eventDrop: handleDropEvents
 })
+// 创建日历事件api
+const calendar = ref()
+onMounted(() => {
+  calendarEventApi = calendar.value.calendar
+  store.getCalendarEventsAction().then((list) => {
+    eventId = list[list.length - 1].id
+    calendarEventApi.setOption("events", list)
+  })
+})
 </script>
 
 <template>
   <div class="demo-app">
     <div class="demo-app-main">
-      <FullCalendar class="demo-app-calendar" :options="calendarOptions">
+      <div class="time-picker">
+        <el-date-picker v-model="titleDate" type="date" placeholder="筛选日期" />
+      </div>
+      <FullCalendar class="demo-app-calendar" ref="calendar" :options="calendarOptions">
         <template v-slot:eventContent="arg">
-          <el-popover ref="popover" placement="right" title="详细信息" :width="200" trigger="hover">
+          <el-popover ref="popover" placement="right" title="详细信息" :width="200" :hide-after="0" trigger="hover">
             <template #reference>
               <div flex-y-center relative style="min-height: 4em; height: 100%">
                 <span class="circle" :style="{ 'background-color': !!arg.timeText ? '#21b3a9' : '#ffd55f' }" />
@@ -177,8 +217,17 @@ const calendarOptions = ref<CalendarOptions>({
             <div>医生姓名: {{ arg.event.extendedProps.formData?.doctorName }}</div>
             <div>
               预约时间:
-              {{ dayjs(arg.event.extendedProps.formData?.appiontmentTime[0]).format("YYYY-MM-DD HH:mm:ss") }} 到
-              {{ dayjs(arg.event.extendedProps.formData?.appiontmentTime[1]).format("YYYY-MM-DD HH:mm:ss") }}
+              {{
+                arg.event.extendedProps.formData?.appiontmentTime[0]
+                  ? dayjs(arg.event.extendedProps.formData?.appiontmentTime[0]).format("YYYY-MM-DD HH:mm:ss")
+                  : ""
+              }}
+              到
+              {{
+                arg.event.extendedProps.formData?.appiontmentTime[1]
+                  ? dayjs(arg.event.extendedProps.formData?.appiontmentTime[1]).format("YYYY-MM-DD HH:mm:ss")
+                  : ""
+              }}
             </div>
             <div>患者性别: {{ arg.event.extendedProps.formData?.patientGender }}</div>
             <div>患者手机号: {{ arg.event.extendedProps.formData?.patientPhone }}</div>
@@ -188,7 +237,7 @@ const calendarOptions = ref<CalendarOptions>({
       </FullCalendar>
     </div>
 
-    <el-dialog v-model="dialogVisible" :title="title" center @close="handleDialogCancel">
+    <el-dialog v-model="dialogVisible" :title="title" center @close="handleDialogClose">
       <auForm v-bind="modalConfig" v-model="formData" ref="pageFormRef" />
       <template #footer>
         <span class="dialog-footer">
@@ -200,16 +249,13 @@ const calendarOptions = ref<CalendarOptions>({
   </div>
 </template>
 
-<style lang="css">
+<style lang="scss" scoped>
 .fc .fc-popover {
   z-index: 999;
 }
 .fc .fc-timegrid-slot {
   height: 4em;
 }
-/* :root {
-  --fc-today-bg-color: var(--el-color-info-light-3);
-} */
 .fc .fc-daygrid-event > span {
   display: block !important;
   width: 100%;
@@ -251,8 +297,14 @@ b {
 }
 
 .demo-app-main {
+  position: relative;
   flex-grow: 1;
   padding: 3em;
+  .time-picker {
+    position: absolute;
+    top: 44px;
+    left: 22%;
+  }
 }
 .fc {
   /* the calendar root */

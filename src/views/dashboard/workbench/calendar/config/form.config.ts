@@ -6,6 +6,7 @@
  * @FilePath: \yiya-straight-pc\src\views\dashboard\workbench\calendar\config\form.config.ts
  */
 import { IForm } from "@/base-ui/form"
+import dayjs from "dayjs"
 export const modalConfig: IForm = {
   formItems: [
     {
@@ -33,8 +34,13 @@ export const modalConfig: IForm = {
       type: "datepicker",
       label: "预约时间:",
       otherOptions: {
-        teleported: false,
         type: "datetimerange",
+        disabledDate: (time: any) => {
+          return (
+            time.getTime() > Date.now() ||
+            time.getTime() < new Date(dayjs(Date.now() + 86400000).format("YYYY-MM-DD")).getTime()
+          )
+        },
         rangeSeparator: "到",
         startPlaceholder: "开始时间",
         endPlaceholder: "结束时间"
@@ -56,7 +62,7 @@ export const modalConfig: IForm = {
           label: "女"
         }
       ],
-      rules: [{ required: true, message: "请输选择预约时间", trigger: "blur" }]
+      rules: [{ required: true, message: "请输选择患者性别", trigger: "blur" }]
     },
     {
       field: "patientPhone",

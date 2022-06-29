@@ -222,14 +222,9 @@ const handleAvatarSuccess = (response: any, uploadFile: UploadFile, uploadFiles:
     formData.value[`${field}`] = response.data
   }
 }
-// 重置表单
-const rerestFormDate = () => {
-  formData.value = {}
-}
 defineExpose({
   formData,
-  formRef,
-  rerestFormDate
+  formRef
 })
 </script>
 

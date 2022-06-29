@@ -34,6 +34,8 @@ interface ISystemState {
   clinicCount: number
   clinicApplyList: any[]
   clinicApplyCount: number
+  qualificationList: any[]
+  qualificationCount: number
 }
 export const useSystemStore = defineStore({
   id: "system",
@@ -54,7 +56,9 @@ export const useSystemStore = defineStore({
       clinicList: [],
       clinicCount: 0,
       clinicApplyList: [],
-      clinicApplyCount: 0
+      clinicApplyCount: 0,
+      qualificationList: [],
+      qualificationCount: 0
     }
   },
   getters: {

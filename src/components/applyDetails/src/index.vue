@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
 import AuForm from "@/base-ui/form"
-import { modalConfig } from "./config/details.config"
+
 import message from "@/utils/message"
 import { ElMessageBox } from "element-plus"
 import { useClinicStoreHook } from "@/store/modules/clinic"
@@ -9,6 +9,10 @@ import { useClinicStoreHook } from "@/store/modules/clinic"
 const props = defineProps({
   form: {
     type: Object
+  },
+  contentDetailsConfig: {
+    type: Object,
+    require: true
   }
 })
 const store = useClinicStoreHook()
@@ -162,7 +166,7 @@ const handleGoBack = () => {
         </div>
         <div class="leaveTable">
           <div class="table">
-            <au-form v-bind="modalConfig" v-model="formData" />
+            <au-form v-bind="props.contentDetailsConfig" v-model="formData" />
             <div flex justify-end mt10 style="margin-right: 20%">
               <el-button type="primary" @click="support" size="large" v-permission="['admin']" :disabled="isApproved"
                 >同意</el-button

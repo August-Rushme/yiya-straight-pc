@@ -31,6 +31,7 @@ export const useCalendarStore = defineStore({
           id: item.id,
           start: dayjs(item.appointmentStartDate).format("YYYY-MM-DD HH:mm:ss"),
           end: dayjs(item.appointmentEndDate).format("YYYY-MM-DD HH:mm:ss"),
+          allDay: item.isFullday,
           formData: {
             patientName: item.patientName,
             doctorName: item.doctorName,

@@ -45,7 +45,7 @@
       </el-row>
     </div>
     <div v-if="flag">
-      <apply-details @handleBack="handleBack" :form="applyData" />
+      <apply-details @handleBack="handleBack" :form="applyData" :contentDetailsConfig="detailsConfig" />
     </div>
   </div>
 </template>
@@ -54,6 +54,7 @@ import AuForm from "@/base-ui/form"
 import { FormInstance } from "element-plus"
 import { defineComponent, ref } from "vue"
 import { modalConfig, modalFileConfig } from "./config/form.config"
+import { detailsConfig } from "./config/details.config"
 
 import ApplyDetails from "@/components/applyDetails"
 import { useClinicStoreHook } from "@/store/modules/clinic"
@@ -137,7 +138,9 @@ export default defineComponent({
       if (store.applyDetails !== null) {
         applyData.value = store.applyDetails
       }
+      console.log(applyData.value)
       flag.value = true
+      console.log(flag.value)
     }
     // 处理返回
     const handleBack = () => {
@@ -159,7 +162,8 @@ export default defineComponent({
       formData,
       flag,
       handleBack,
-      applyData
+      applyData,
+      detailsConfig
     }
   }
 })

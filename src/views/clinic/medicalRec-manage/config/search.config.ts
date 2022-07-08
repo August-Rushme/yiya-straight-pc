@@ -1,3 +1,11 @@
+/*
+ * @Author: error: git config user.name && git config user.email & please set dead value or install git
+ * @Date: 2022-07-08 18:23:47
+ * @LastEditors: error: git config user.name && git config user.email & please set dead value or install git
+ * @LastEditTime: 2022-07-08 19:34:06
+ * @FilePath: \yiya-straight-pc\src\views\clinic\medicalRec-manage\config\search.config.ts
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import { IForm } from "@/base-ui/form"
 
 export const searchFormConfig: IForm = {
@@ -10,29 +18,23 @@ export const searchFormConfig: IForm = {
     {
       field: "name",
       type: "input",
-      label: "诊所名称",
-      placeholder: "请输入诊所名称"
+      label: "患者姓名",
+      placeholder: "请输入患者姓名"
     },
     {
       field: "label",
       type: "input",
-      label: "诊所类型",
-      placeholder: "请输入诊所类型"
+      label: "医生姓名",
+      placeholder: "请输入医生姓名"
     },
     {
-      field: "tel",
-      type: "input",
-      label: "电话号码",
-      placeholder: "请输入电话号码"
-    },
-    {
-      field: "status",
+      field: "gender",
       type: "select",
-      label: "诊所状态",
-      placeholder: "请选择诊所状态",
+      label: "患者性别",
+      placeholder: "请选择患者性别",
       options: [
-        { label: "启用中", value: "1" },
-        { label: "下架中", value: "0" }
+        { label: "男", value: "男" },
+        { label: "女", value: "女" }
       ]
     }
   ]

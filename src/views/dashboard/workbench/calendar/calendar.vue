@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, ref, watch } from "vue"
+import { onMounted, ref, watch, nextTick } from "vue"
 import auForm from "@/base-ui/form"
 import "@fullcalendar/core/vdom" // solve problem with Vite
 import message from "@/utils/message"
@@ -181,6 +181,31 @@ const calendarOptions = ref<CalendarOptions>({
         goEvent = true
         dialogVisible.value = true
       }
+    },
+    prev: {
+      click: function () {
+        nextTick(() => {
+          titleDate.value = dayjs(calendarEventApi.view.calendar.currentData.currentDate).format("YYYY-MM-DD")
+        })
+        calendarEventApi.prev()
+      }
+    },
+    next: {
+      click: function () {
+        nextTick(() => {
+          titleDate.value = dayjs(calendarEventApi.view.calendar.currentData.currentDate).format("YYYY-MM-DD")
+        })
+        calendarEventApi.next()
+      }
+    },
+    today: {
+      text: "今天",
+      click: function () {
+        nextTick(() => {
+          titleDate.value = dayjs(calendarEventApi.view.calendar.currentData.currentDate).format("YYYY-MM-DD")
+        })
+        calendarEventApi.today()
+      }
     }
   },
   headerToolbar: {
@@ -330,7 +355,7 @@ b {
   .time-picker {
     position: absolute;
     top: 44px;
-    left: 22%;
+    left: 28%;
   }
 }
 .fc {

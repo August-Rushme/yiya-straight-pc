@@ -43,6 +43,7 @@ const state = reactive({
     <Hamburger :is-active="sidebar.opened" class="hamburger" @toggle-click="state.toggleSideBar" />
     <BreadCrumb class="breadcrumb" />
     <div class="right-menu">
+      <router-link to="/base/app1/file">我的空间</router-link>
       <Screenfull v-if="showScreenfull" class="right-menu-item" />
       <ThemeSwitch v-if="showThemeSwitch" class="right-menu-item" />
       <el-dropdown class="right-menu-item">

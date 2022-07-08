@@ -31,7 +31,7 @@ export default (): UserConfigExport => {
       /** 接口代理 */
       proxy: {
         "/api": {
-          target: "http://127.0.0.1:8083",
+          target: "http://8.129.76.241:9633",
           ws: true,
           /** 是否允许跨域 */
           changeOrigin: true,

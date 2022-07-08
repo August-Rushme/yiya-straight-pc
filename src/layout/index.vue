@@ -2,8 +2,24 @@
 import { computed, onBeforeMount, onBeforeUnmount, onMounted, reactive } from "vue"
 import { useAppStore, DeviceType } from "@/store/modules/app"
 import { useSettingsStore } from "@/store/modules/settings"
-import { AppMain, NavigationBar, Settings, Sidebar, TagsView, RightPanel } from "./components"
+import { NavigationBar, Settings, Sidebar, TagsView, RightPanel } from "./components"
 import useResize from "./useResize"
+import { useRoute } from "vue-router"
+import start from "@/modules/index"
+// import { start } from "qiankun"
+
+onMounted(() => {
+  if (!window.qiankunStarted) {
+    window.qiankunStarted = true
+    console.log("qiankun starting ...")
+    start()
+  }
+})
+
+const route = useRoute()
+const key = computed(() => {
+  return route.path
+})
 
 const appStore = useAppStore()
 const settingsStore = useSettingsStore()
@@ -36,6 +52,7 @@ watchRouter()
 onBeforeMount(() => {
   addEventListenerOnResize()
 })
+
 onMounted(() => {
   resizeMounted()
 })
@@ -53,7 +70,18 @@ onBeforeUnmount(() => {
         <NavigationBar />
         <TagsView v-if="showTagsView" />
       </div>
-      <AppMain />
+      <div class="app-main">
+        <!-- 子应用 -->
+        <div id="app1" />
+        <!-- 主应用容器 -->
+        <router-view v-slot="{ Component }">
+          <transition name="fade-transform" mode="out-in">
+            <!-- <keep-alive> -->
+            <component :is="Component" :key="key" />
+            <!-- </keep-alive> -->
+          </transition>
+        </router-view>
+      </div>
       <RightPanel v-if="false">
         <Settings />
       </RightPanel>
@@ -105,7 +133,7 @@ $sideBarWidth: 220px;
   position: fixed;
   top: 0;
   right: 0;
-  z-index: 9;
+  z-index: 1;
   width: calc(100% - #{$sideBarWidth});
   transition: width 0.28s;
 }
@@ -152,6 +180,29 @@ $sideBarWidth: 220px;
   .main-container,
   .sidebar-container {
     transition: none;
+  }
+}
+.app-main {
+  /* 50 = navbar height  */
+  min-height: calc(100vh - 50px);
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.fixed-header + .app-main {
+  padding-top: 50px;
+  height: 100vh;
+  overflow: auto;
+}
+
+.hasTagsView {
+  .app-main {
+    /* 84 = navbar + tags-view = 50 + 34 */
+    min-height: calc(100vh - 84px);
+  }
+  .fixed-header + .app-main {
+    padding-top: 84px;
   }
 }
 </style>

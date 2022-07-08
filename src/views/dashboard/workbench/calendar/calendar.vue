@@ -25,6 +25,9 @@ const currentEvents = ref<EventApi[]>([])
 const pageFormRef = ref<InstanceType<typeof auForm>>()
 let calendarEventApi: any
 const title = ref("新建事件")
+// 是否转到事件日期
+let goEvent = false
+
 // 监听datepicker的选择
 watch(titleDate, (val) => {
   calendarEventApi.gotoDate(val)
@@ -79,23 +82,31 @@ const handleDialogConfirm = () => {
       } else {
         if (title.value === "新建事件") {
           calendarEventApi?.addEvent({
-            id: String(eventId++),
+            id: String(++eventId),
             start: formData.value.appiontmentTime[0],
             end: formData.value.appiontmentTime[1],
-            allDay: selectInfoRef.value?.allDay,
+            allDay:
+              new Date(formData.value.appiontmentTime[1]).getTime() -
+                new Date(formData.value.appiontmentTime[0]).getTime() >=
+              86400000,
             formData: { ...formData.value }
           })
           await store.createCalendarEventAction({
-            startTime: dayjs(selectInfoRef.value?.startStr).format("YYYY-MM-DD HH:mm:ss"),
-            endTime: dayjs(selectInfoRef.value?.endStr).format("YYYY-MM-DD HH:mm:ss"),
+            startTime: dayjs(formData.value.appiontmentTime[0]).format("YYYY-MM-DD HH:mm:ss"),
+            endTime: dayjs(formData.value.appiontmentTime[1]).format("YYYY-MM-DD HH:mm:ss"),
             clinicId: LocalCache.getCache("userInfo").clinicId,
-            isFullday: selectInfoRef.value?.allDay,
+            isFullday:
+              new Date(formData.value.appiontmentTime[1]).getTime() -
+                new Date(formData.value.appiontmentTime[0]).getTime() >=
+              86400000,
             ...formData.value,
             appointmentStartDate: dayjs(formData.value.appiontmentTime[0]).format("YYYY-MM-DD HH:mm:ss"),
             appointmentEndDate: dayjs(formData.value.appiontmentTime[1]).format("YYYY-MM-DD HH:mm:ss")
           })
-          dialogVisible.value = false
-          message.success("添加事件成功")
+          if (goEvent) {
+            calendarEventApi.gotoDate(dayjs(formData.value.appiontmentTime[0]).format("YYYY-MM-DD"))
+            goEvent = false
+          }
         } else {
           const eventInfo = clickInfoRef.value?.event
           calendarEventApi?.getEventById(eventInfo.id)?.setExtendedProp("formData", { ...formData.value })
@@ -103,31 +114,44 @@ const handleDialogConfirm = () => {
             id: parseInt(eventInfo.id),
             startTime: dayjs(eventInfo.extendedProps.formData.appiontmentTime[0]).format("YYYY-MM-DD HH:mm:ss"),
             endTime: dayjs(eventInfo.extendedProps.formData.appiontmentTime[1]).format("YYYY-MM-DD HH:mm:ss"),
-            isFullday: selectInfoRef.value?.allDay,
+            isFullday: clickInfoRef.value?.allDay,
             ...formData.value,
             appointmentStartDate: dayjs(eventInfo.extendedProps.formData.appiontmentTime[0]).format(
               "YYYY-MM-DD HH:mm:ss"
             ),
             appointmentEndDate: dayjs(eventInfo.extendedProps.formData.appiontmentTime[1]).format("YYYY-MM-DD HH:mm:ss")
           })
-          dialogVisible.value = false
-          message.success("编辑事件成功")
         }
+        dialogVisible.value = false
+        message.success(`${title.value}成功`)
       }
     })
   }
 }
-// 事件拖拽
-const handleDropEvents = async (e: any) => {
+// 事件更新
+const updateEvent = async (e: any) => {
+  const endTime = e.event.end
+    ? dayjs(e.event.end).format("YYYY-MM-DD HH:mm:ss")
+    : e.event.allDay
+    ? dayjs(new Date(dayjs(e.event.start).format("YYYY-MM-DD HH:mm:ss")).getTime() + 86400000).format(
+        "YYYY-MM-DD HH:mm:ss"
+      )
+    : dayjs(e.event.start).format("YYYY-MM-DD HH:mm:ss")
   await store.editCalendarEventAction({
     id: parseInt(e.event.id),
     startTime: dayjs(e.event.start).format("YYYY-MM-DD HH:mm:ss"),
-    endTime: dayjs(e.event.end).format("YYYY-MM-DD HH:mm:ss"),
+    endTime,
     isFullday: e.event.allDay,
     appointmentStartDate: dayjs(e.event.start).format("YYYY-MM-DD HH:mm:ss"),
-    appointmentEndDate: dayjs(e.event.end).format("YYYY-MM-DD HH:mm:ss")
+    appointmentEndDate: endTime
   })
+  e.event.extendedProps.formData.appiontmentTime = [dayjs(e.event.start).format("YYYY-MM-DD HH:mm:ss"), endTime]
   message.success("更新事件成功")
+}
+
+// 事件拖拽
+const handleDropEvents = async (e: any) => {
+  updateEvent(e)
 }
 // 弹窗关闭
 const handleDialogClose = () => {
@@ -140,15 +164,7 @@ const handleDialogCancel = () => {
 }
 //事件日期改变
 const handleResizeEvents = async (e: any) => {
-  await store.editCalendarEventAction({
-    id: parseInt(e.event.id),
-    startTime: dayjs(e.event.start).format("YYYY-MM-DD HH:mm:ss"),
-    endTime: dayjs(e.event.end).format("YYYY-MM-DD HH:mm:ss"),
-    isFullday: e.event.allDay,
-    appointmentStartDate: dayjs(e.event.start).format("YYYY-MM-DD HH:mm:ss"),
-    appointmentEndDate: dayjs(e.event.end).format("YYYY-MM-DD HH:mm:ss")
-  })
-  message.success("更新事件成功")
+  updateEvent(e)
 }
 // 日历配置
 const calendarOptions = ref<CalendarOptions>({
@@ -157,11 +173,22 @@ const calendarOptions = ref<CalendarOptions>({
     timeGridPlugin,
     interactionPlugin // needed for dateClick
   ],
+  customButtons: {
+    myCustomButton: {
+      text: " 新建日程",
+      click: function () {
+        title.value = "新建事件"
+        goEvent = true
+        dialogVisible.value = true
+      }
+    }
+  },
   headerToolbar: {
     left: "prev,next today",
     center: "title",
-    right: "timeGridDay,timeGridWeek"
+    right: "myCustomButton,timeGridDay,timeGridWeek"
   },
+
   buttonText: {
     today: "今天",
     week: "周视图",
@@ -196,7 +223,7 @@ onMounted(() => {
   <div class="demo-app">
     <div class="demo-app-main">
       <div class="time-picker">
-        <el-date-picker v-model="titleDate" type="date" placeholder="筛选日期" />
+        <el-date-picker v-model="titleDate" type="date" placeholder="筛选日期" style="width: 150px" />
       </div>
       <FullCalendar class="demo-app-calendar" ref="calendar" :options="calendarOptions">
         <template v-slot:eventContent="arg">

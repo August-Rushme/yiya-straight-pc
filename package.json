@@ -47,6 +47,7 @@
     "path-browserify": "^1.0.1",
     "path-to-regexp": "^6.2.1",
     "pinia": "^2.0.14",
+    "qiankun": "^2.7.3",
     "screenfull": "^6.0.1",
     "vue": "^3.2.33",
     "vue-router": "^4.0.15"

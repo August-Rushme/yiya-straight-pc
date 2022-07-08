@@ -9,7 +9,10 @@ const key = computed(() => {
 </script>
 
 <template>
-  <section class="app-main">
+  <div class="app-main">
+    <!-- 子应用 -->
+    <div id="app1" />
+    <!-- 主应用容器 -->
     <router-view v-slot="{ Component }">
       <transition name="fade-transform" mode="out-in">
         <!-- <keep-alive> -->
@@ -17,7 +20,7 @@ const key = computed(() => {
         <!-- </keep-alive> -->
       </transition>
     </router-view>
-  </section>
+  </div>
 </template>
 
 <style lang="scss" scoped>

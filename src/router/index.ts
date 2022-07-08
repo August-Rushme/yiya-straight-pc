@@ -1,6 +1,8 @@
+import microApps from "@/microApps"
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router"
 
 const Layout = () => import("@/layout/index.vue")
+const Empty = () => import("@/layout/components/empty.vue")
 
 /** 常驻路由 */
 export const constantRoutes: Array<RouteRecordRaw> = [
@@ -51,7 +53,35 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         }
       }
     ]
+  },
+  {
+    path: "/base/app1/file",
+    name: "base",
+    component: Layout,
+    meta: {
+      title: "我的空间",
+      hidden: true
+    }
+  },
+  {
+    path: "/base/app1/file/preview",
+    component: Empty
+  },
+  {
+    path: "/base/app1/share/:shareBatchNum",
+    name: "Share",
+    component: Empty,
+    meta: {
+      title: "分享",
+      content: {
+        description: "查看他人分享"
+      },
+      hidden: true
+    },
+    props: true
   }
+
+  // { name: "TRY", path: "/base", component: AppMain, meta: { title: "TRY" } }
 ]
 
 /**
@@ -90,12 +120,19 @@ export const asyncRoutes: Array<RouteRecordRaw> = [
     ]
   }
 ]
+const microRoutes: any = [{ name: "系统管理", path: "/base" }]
+microApps.forEach((micro: { activeRule: any }) => {
+  microRoutes.push({
+    path: `${micro.activeRule}/:morePath*`,
+    component: Layout
+  })
+})
 
 const router = createRouter({
   history: createWebHistory(),
-  routes: constantRoutes
+  routes: microRoutes.concat(constantRoutes)
 })
-
+// constantRoutes
 /** 重置路由 */
 export function resetRouter() {
   // 注意：所有动态路由路由必须带有 name 属性，否则可能会不能完全重置干净

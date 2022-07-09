@@ -224,6 +224,7 @@ const handleAvatarSuccess = (response: any, uploadFile: UploadFile, uploadFiles:
     formData.value[`${field}`] = response.data
   }
 }
+
 defineExpose({
   formData,
   formRef

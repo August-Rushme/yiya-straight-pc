@@ -156,6 +156,9 @@ const handleDropEvents = async (e: any) => {
 // 弹窗关闭
 const handleDialogClose = () => {
   pageFormRef.value?.formRef?.resetFields()
+  for (let key in formData.value) {
+    formData.value[key] = ""
+  }
 }
 // 弹窗取消
 const handleDialogCancel = () => {

@@ -31,6 +31,7 @@ import type { FormInstance } from "element-plus"
 
 import { useSystemStore } from "@/store/modules/system"
 import message from "@/utils/message"
+import cache from "@/utils/cache"
 
 const props = defineProps({
   pageModalConfig: {
@@ -61,6 +62,7 @@ const props = defineProps({
 
 const store = useSystemStore()
 const pageFormRef = ref<InstanceType<typeof AuForm>>()
+const userInfo = cache.getCache("userInfo")
 
 // 1.绑定属性
 const formData = ref<any>({})
@@ -92,6 +94,9 @@ const handleConfirmCick = async (formEl: FormInstance | undefined) => {
   } else {
     // 新建
     console.log("新建")
+    if (props.pageName === "doctorOrder") {
+      formData.value.id = userInfo.clinicId
+    }
     if (!formEl) return
     await formEl.validate(async (valid, fields) => {
       if (valid) {

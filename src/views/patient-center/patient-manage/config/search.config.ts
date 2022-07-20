@@ -8,7 +8,7 @@ export const searchFormConfig: IForm = {
   },
   formItems: [
     {
-      field: "userName",
+      field: "name",
       type: "input",
       label: "患者姓名",
       placeholder: "请输入患者姓名"

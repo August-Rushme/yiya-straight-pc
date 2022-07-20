@@ -17,46 +17,46 @@ const options = {
 }
 const titleCardArray = [
   {
-    title: "店铺总销量",
+    title: "诊所总销量",
     value: 14567
   },
   {
-    title: "店铺商品总库存",
+    title: "诊所商品总库存",
     value: 134567
   },
   {
-    title: "店铺昨日营收额",
+    title: "诊所昨日营收额",
     value: 1234
   },
   {
-    title: "店铺总销售额",
+    title: "诊所总销售额",
     value: 481234
   }
 ]
 const broadcast = ref([
   {
-    name: "coderKenny",
+    name: "清合口腔",
     province: "海南"
   },
   {
-    name: "coderKenny",
-    province: "海南"
+    name: "美兰口腔",
+    province: "江西"
   },
   {
-    name: "coderKenny",
-    province: "海南"
+    name: "微笑口腔",
+    province: "湖南"
   },
   {
-    name: "coderKenny",
-    province: "海南"
+    name: "益牙口腔",
+    province: "湖北"
   },
   {
-    name: "coderKenny",
-    province: "海南"
+    name: "博雅口腔",
+    province: "江西"
   },
   {
-    name: "coderKenny",
-    province: "海南"
+    name: "海豚口腔",
+    province: "浙江"
   }
 ])
 setInterval(() => {
@@ -65,7 +65,7 @@ setInterval(() => {
     province: "海南"
   })
   broadcast.value.shift()
-}, 1000)
+}, 10000)
 onMounted(() => {
   const el = document.querySelectorAll(".card-value")
 
@@ -106,7 +106,7 @@ onMounted(() => {
       <el-col :sm="24" :md="10" :lg="8">
         <el-card mb5>
           <div class="pieEcharts">
-            <div class="title">店铺好评率</div>
+            <div class="title">诊所好评率</div>
             <pieEcharts />
           </div>
         </el-card>
@@ -117,14 +117,14 @@ onMounted(() => {
         <el-col :span="24">
           <el-card>
             <div class="mapEcharts">
-              <div class="title">商家店铺分布</div>
+              <div class="title">诊所店铺分布</div>
               <mapEcharts />
               <div class="broadcast">
                 <template v-for="(item, index) in broadcast" :key="index">
                   <div class="broadcast-item">
                     <el-icon><Bell /></el-icon>
                     <div ml3>
-                      恭喜用户<span color="#fec834" px1>{{ item.name }}</span> ({{ item.province }}) 成功申请了店铺
+                      <span color="#fec834" px1>{{ item.name }}</span> ({{ item.province }}) 申请入驻留诊所
                     </div>
                   </div>
                 </template>

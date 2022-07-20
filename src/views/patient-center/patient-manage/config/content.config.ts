@@ -1,13 +1,13 @@
 import { ITablePropsType } from "@/base-ui/table/types"
 
 export const contentTableConfig: ITablePropsType = {
-  title: "病历列表",
+  title: "患者列表",
   propList: [
-    { prop: "userName", label: "姓名", minWidth: "100" },
+    { prop: "name", label: "姓名", minWidth: "100" },
     { prop: "gender", label: "性别", minWidth: "80" },
     { prop: "age", label: "年龄", minWidth: "80" },
+    { prop: "phone", label: "电话号码", minWidth: "80" },
     { prop: "doctor", label: "医生", minWidth: "100" },
-    { prop: "type", label: "阶段", minWidth: "80", slotName: "type" },
     {
       prop: "status",
       label: "状态",

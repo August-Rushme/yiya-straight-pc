@@ -13,6 +13,10 @@ const props = defineProps({
   pageName: {
     type: String,
     required: true
+  },
+  isShowBtn: {
+    type: Boolean,
+    default: true
   }
 })
 
@@ -123,7 +127,13 @@ defineExpose({
             <el-icon mr1><edit /></el-icon>
             编辑</el-button
           >
-          <el-button style="font-size: 10px" size="default" type="danger" @click="handleDeleteClick(scope.row)">
+          <el-button
+            v-if="props.isShowBtn"
+            style="font-size: 10px"
+            size="default"
+            type="danger"
+            @click="handleDeleteClick(scope.row)"
+          >
             <el-icon mr1><delete /></el-icon>
             删除</el-button
           >

@@ -14,19 +14,19 @@ const currentTime = dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss")
 const titleCardArray = [
   {
     title: "新增患者",
-    value: 14567
+    value: 45
   },
   {
     title: "新增预约",
-    value: 134567
+    value: 134
   },
   {
     title: "预约已到店",
-    value: 1234
+    value: 30
   },
   {
     title: "新增回访",
-    value: 481234
+    value: 25
   }
 ]
 </script>

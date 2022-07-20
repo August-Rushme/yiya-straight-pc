@@ -1,11 +1,3 @@
-<!--
- * @Author: error: git config user.name && git config user.email & please set dead value or install git
- * @Date: 2022-07-04 20:00:05
- * @LastEditors: error: git config user.name && git config user.email & please set dead value or install git
- * @LastEditTime: 2022-07-08 18:47:21
- * @FilePath: \yiya-straight-pc\src\views\clinic\medicalRec-manage\index.vue
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
--->
 <script setup lang="ts">
 import PageContent from "@/components/page-content"
 import PageSearch from "@/components/page-search"
@@ -51,6 +43,7 @@ const searchOtherInfo = {
         @editBtnClick="handleEditData($event, { mode: 'dialog' })"
         @saveBtnClick="handleSaveData($event, pageName)"
         @deleteBtnClick="handleDeleteData($event, pageName, { otherInfo: { tip: '诊所' } })"
+        :isShowBtn="true"
         ref="pageContentRef"
       >
         <template #handlerHeader>
@@ -59,14 +52,14 @@ const searchOtherInfo = {
         <!-- 状态 -->
         <template #status="scope">
           <el-tag size="small" :type="scope.row.status == 1 ? 'success' : 'danger'">
-            {{ scope.row.status == 1 ? "启用中" : "下架中" }}
+            {{ scope.row.status == 1 ? "已写" : "未写" }}
           </el-tag>
         </template>
-        <!-- <template #default>
-          <el-button type="warning" style="font-size: 10px" size="default" @click="handleOff">
-            <el-icon mr1><Hide /></el-icon>下架
-          </el-button>
-        </template> -->
+        <template #type="scope">
+          <el-tag size="small" :type="scope.row.type == 1 ? 'success' : 'danger'">
+            {{ scope.row.type == 1 ? "初诊" : "复诊" }}
+          </el-tag>
+        </template>
       </page-content>
     </el-card>
     <page-modal

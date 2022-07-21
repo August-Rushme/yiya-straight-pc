@@ -26,11 +26,11 @@ const titleCardArray = [
   },
   {
     title: "诊所昨日营收额",
-    value: 1234
+    value: 654784
   },
   {
     title: "诊所总销售额",
-    value: 481234
+    value: 4981234
   }
 ]
 const broadcast = ref([
